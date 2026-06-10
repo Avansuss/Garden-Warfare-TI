@@ -7,7 +7,7 @@ namespace DefaultNamespace
         private GridTileType tileType;
 
         /// <summary>
-        /// A grid tile that housese its position and type of tile, set to Inactive by default
+        /// A grid tile that houses its position and type of tile, set to Inactive by default
         /// </summary>
         /// <param name="placement">The position and section to place the tile on a grid</param>
         /// <param name="type">The type of tile to set the tile to, optional</param>
