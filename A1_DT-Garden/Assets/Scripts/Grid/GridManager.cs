@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     private Dictionary<Coordinate, GridTile> tiles;
-    public Vector2 Size;
+    public Vector2Int Size;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool SetTile(Coordinate placement, GridTileType type)
