@@ -1,4 +1,4 @@
-namespace DefaultNamespace
+namespace Grid
 {
     public class GridTile
     {

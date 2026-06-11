@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DefaultNamespace;
+using Grid;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
