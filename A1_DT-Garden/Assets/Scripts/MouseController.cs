@@ -1,5 +1,4 @@
-using System;
-using DefaultNamespace;
+using Grid;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,9 +25,8 @@ public class MouseController : MonoBehaviour
         
         // Don't update the position outside of the bounds
         if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
-            coordinate.Position.y > 0 && coordinate.Position.y < manager.Size.y)
+            coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
         {
-
             testObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle() + 90, 0);
             testObj.transform.position = coordinate.Position;
         }
@@ -38,7 +36,7 @@ public class MouseController : MonoBehaviour
     {
         var cursorPos = cam.ScreenToWorldPoint(mouse.position.ReadValue());
         
-            cursorPos.y = 0;
+        cursorPos.y = 0;
 
         // Get the decimals of the cursor position, centered aroudn the middle
         var decX = cursorPos.x % 1 - 0.5f;
@@ -51,7 +49,7 @@ public class MouseController : MonoBehaviour
         cursorPos.z = math.floor(cursorPos.z) + 0.5f;
 
         // Calculate what triangle the mouse is in
-        Coordinate coordinate = new(cursorPos);
+        Coordinate coordinate = new(cursorPos.x, cursorPos.z);
         if (getFullTile)
         {
             coordinate.Section = Section.Full;
@@ -64,7 +62,7 @@ public class MouseController : MonoBehaviour
             }
             else
             {
-                coordinate.Section = decX < 0 ? Section.West : Section.East; 
+                coordinate.Section = decX < 0 ? Section.East : Section.West; 
             }
         }
         return coordinate;  
