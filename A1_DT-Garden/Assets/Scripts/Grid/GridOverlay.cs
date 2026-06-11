@@ -11,7 +11,7 @@ namespace DefaultNamespace
     {
         public GridManager GridManager;
 
-        private Vector2 size;
+        private Vector2Int size;
 
         private void Start()
         {
