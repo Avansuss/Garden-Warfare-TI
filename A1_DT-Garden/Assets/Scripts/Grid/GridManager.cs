@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    private Dictionary<Coordinate, GridTile> tiles;
+    Dictionary<Coordinate, GridTile> tiles;
+    
+    private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
     
     public Vector2Int Size;
@@ -16,6 +18,7 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         tiles = new();
+        tileObjects = new();
         oldtiles = new();
         
         for (int x = 0; x < Size.x; x++)
@@ -25,15 +28,13 @@ public class GridManager : MonoBehaviour
                 for (int s = 0; s < 5; s++)
                 {
                     Coordinate coord = new(x, y, (Section)s);
-                    if (!tiles.ContainsKey(coord))
+                    if (!tiles.ContainsKey(coord) && (Section)s != Section.Full)
                     {
                         SetTile(coord, GridTileType.Inactive);
                     }
                 }
             }
         }
-        
-        RedrawGrid();
     }
 
     void RedrawGrid()
@@ -41,14 +42,20 @@ public class GridManager : MonoBehaviour
         foreach (var tile in tiles)
         {
             // Skip if its the same as the previous redraw
-            if (oldtiles.ContainsKey(tile.Key) && oldtiles[tile.Key].TileType == tile.Value.TileType) continue;
+            if (oldtiles.ContainsKey(tile.Key))
+            {
+                if(oldtiles[tile.Key].TileType == tile.Value.TileType) continue;
+                Destroy(tileObjects[tile.Key]);
+            }
+            // Only add the new tile after the check has been done
+            oldtiles[tile.Key] = tile.Value;
             
             var tileObj = Instantiate(TileTypeToObject(tile.Value.TileType), transform, true);
             tileObj.transform.position = tile.Key.Position;
             tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle(), 0);
+            
+            tileObjects[tile.Key] = tileObj;
         }
-
-        oldtiles = tiles;
     }
 
     public GameObject TileTypeToObject(GridTileType type)
@@ -64,27 +71,32 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public bool SetTile(Coordinate placement, GridTileType type, bool isAi=false)
+    public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false)
     {
         // Placement out of bounds
-        if (placement.Position.x < 0 || placement.Position.x > Size.x || 
-            placement.Position.y < 0 || placement.Position.y > Size.y)
+        if (coordinate.Position.x < 0 || coordinate.Position.x > Size.x || 
+            coordinate.Position.y < 0 || coordinate.Position.y > Size.y)
         {
             return false;
         }
 
-        if (tiles.ContainsKey(placement))
+        // Check if tile already occupies a space
+        // Cannot do a simple key lookup due to position floating point imprecision
+        foreach (var checkTile in tiles)
         {
-            // Position occupied
-            if (tiles[placement].TileType == type) return false;
+            if (coordinate.IsEqualTo(checkTile.Key))
+            {
+                if (checkTile.Value.TileType == type) return false;
+            }
         }
         
-        var tile = new GridTile(placement, type);
+        var tile = new GridTile(coordinate, type);
         
         // Tiletype forbidden for AIs
         if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
 
-        tiles[placement] = tile;
+        tiles[coordinate] = tile;
+        RedrawGrid();
         return true;
     }
 }
