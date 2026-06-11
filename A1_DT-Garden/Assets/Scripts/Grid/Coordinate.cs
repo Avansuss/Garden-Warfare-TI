@@ -12,14 +12,12 @@ namespace Grid
         /// <summary>
         /// The coordinate system for a tile. houses the position and what section of a tile it occupies
         /// </summary>
-        public Coordinate()
-        {
-            Position = new();
-            Section = Section.Full;
-        }
-
+        public Coordinate() : this(new(), Section.Full){}
+        
         /// <summary>
         /// The coordinate system for a tile. houses the position and what section of a tile it occupies
+        /// <param name="x">The X position of the tile</param>
+        /// <param name="y">The Y position of the tile</param>
         /// </summary>
         public Coordinate(float x, float y) : this(new(x, y), Section.North) {}
 
@@ -47,7 +45,7 @@ namespace Grid
             position.x = math.floor(position.x) + 0.5f;
             position.y = math.floor(position.y) + 0.5f;
             
-            this.Position = new(position.x, 0, position.y);
+            this.Position = new(position.x, 1, position.y);
             this.Section = section; 
         }
 
