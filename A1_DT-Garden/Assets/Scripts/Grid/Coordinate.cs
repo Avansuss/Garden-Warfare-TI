@@ -1,10 +1,12 @@
+using Unity.Mathematics;
+using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
-namespace DefaultNamespace
+namespace Grid
 {
     public class Coordinate
     {
-        public Vector2 Position;
+        public Vector3 Position;
         public Section Section;
 
         /// <summary>
@@ -19,7 +21,7 @@ namespace DefaultNamespace
         /// <summary>
         /// The coordinate system for a tile. houses the position and what section of a tile it occupies
         /// </summary>
-        public Coordinate(int x, int y) : this(new(), Section.North) {}
+        public Coordinate(float x, float y) : this(new(x, y), Section.North) {}
 
         /// <summary>
         /// The coordinate system for a tile. houses the position and what section of a tile it occupies
@@ -33,7 +35,7 @@ namespace DefaultNamespace
         /// <param name="x">The X position of the tile</param>
         /// <param name="y">The Y position of the tile</param>
         /// <param name="section">The section of the tile</param>
-        public Coordinate(int x, int y, Section section) : this(new Vector2(x, y), section) {}
+        public Coordinate(float x, float y, Section section) : this(new Vector2(x, y), section) {}
 
         /// <summary>
         /// The coordinate system for a tile. houses the position and what section of a tile it occupies
@@ -42,7 +44,10 @@ namespace DefaultNamespace
         /// <param name="section">The section of the tile</param>
         public Coordinate(Vector2 position, Section section)
         {
-            this.Position = position;
+            position.x = math.floor(position.x) + 0.5f;
+            position.y = math.floor(position.y) + 0.5f;
+            
+            this.Position = new(position.x, 0, position.y);
             this.Section = section; 
         }
 
