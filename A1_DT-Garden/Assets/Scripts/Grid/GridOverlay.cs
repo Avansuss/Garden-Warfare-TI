@@ -10,7 +10,6 @@ namespace DefaultNamespace
     public class GridOverlay : MonoBehaviour
     {
         public GridManager GridManager;
-        public Color gridcolor;
 
         private Vector2Int size;
 
@@ -92,7 +91,7 @@ namespace DefaultNamespace
 
             MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
             meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
-            meshRenderer.material.color = gridcolor;
+            meshRenderer.material.color = Color.lightGray;
         }
     }
 }
