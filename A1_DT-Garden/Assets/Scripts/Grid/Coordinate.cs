@@ -76,5 +76,18 @@ namespace Grid
             return angle;
         }
 
+        /// <summary>
+        /// Used to compare coordinates since floating point imprecision cannot do a more direct approach
+        /// </summary>
+        /// <param name="coord">the coordinate to compare against</param>
+        /// <returns></returns>
+        public bool IsEqualTo(Coordinate coord)
+        {
+            var position = coord.Position;
+            return Mathf.Approximately(position.x, this.Position.x) &&
+                Mathf.Approximately(position.y, this.Position.y) &&
+                Mathf.Approximately(position.z, this.Position.z) &&
+                coord.Section == this.Section;
+        }
     }
 }
