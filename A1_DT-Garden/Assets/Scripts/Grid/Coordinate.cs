@@ -46,5 +46,32 @@ namespace DefaultNamespace
             this.Section = section; 
         }
 
+        /// <summary>
+        /// Get the section angle in degrees
+        /// </summary>
+        /// <returns></returns>
+        public int GetAngle()
+        {
+            var angle = 0;
+            switch (this.Section)
+            {
+                case Section.Full:
+                case Section.North:
+                    angle = 0;
+                    break;
+                case Section.East:
+                    angle = 90;
+                    break;
+                case Section.South:
+                    angle = 180;
+                    break;
+                case Section.West:
+                    angle = 270;
+                    break;
+            }
+
+            return angle;
+        }
+
     }
 }
