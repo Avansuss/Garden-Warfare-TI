@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public bool SetTile(Coordinate placement, GridTileType type)
