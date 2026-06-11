@@ -1,3 +1,4 @@
+using System;
 using Grid;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class MouseController : MonoBehaviour
 
     public GridManager manager;
     private GameObject currentTileObj;
+    private GridTileType currentTileType;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,11 +36,18 @@ public class MouseController : MonoBehaviour
             coordinate.Position.y = 1.001f;
             currentTileObj.transform.position = coordinate.Position;
         }
-    }
 
+        if (mouse.leftButton.isPressed)
+        {
+            coordinate.Position.y = 1;
+            manager.SetTile(coordinate, currentTileType);
+        }
+    }
+    
     private void SetcurrentTile(GridTileType type)
     { 
-        Destroy(currentTileObj); 
+        Destroy(currentTileObj);
+        currentTileType = type;
         currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
     }
     
