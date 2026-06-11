@@ -435,6 +435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.GridOverlay
   GridManager: {fileID: 1176453872}
+  gridcolor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 0}
 --- !u!33 &1016838987
 MeshFilter:
   m_ObjectHideFlags: 0
