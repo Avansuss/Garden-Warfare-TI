@@ -29,33 +29,33 @@ namespace DefaultNamespace
             
             for (int i = 0; i <= math.max(size.x, size.y); i++)
             {
-                // Draw from horizontal line
+                // Draw along x axis
                 if (i <= size.x)
                 {
+                    var xRightCappedAtYSize = math.min(size.x, i + size.y);
+                    var yTopCappedAtXSize = math.min(size.x - i, size.y);
+                    
                     // Vertical
                     verticies.Add(new Vector3(i, 0, 0));
                     verticies.Add(new Vector3(i, 0, size.y));
                     
-                    // // //Diagonals right
-                    // verticies.Add(new Vector3(i, 0, 0));
-                    //
-                    // var xCappedAtTopEdge = math.min(i + size.y, size.x);
-                    // var yMinusRemainingSize = math.max(i - (size.x - size.y), 0); //Capped at 0 until it exceeds the y width
-                    // verticies.Add(new Vector3(xCappedAtTopEdge, 0, size.y - yMinusRemainingSize));
+                    //Diagonals towards up right
+                    verticies.Add(new Vector3(i, 0, 0));
+                    verticies.Add(new Vector3(xRightCappedAtYSize, 0, yTopCappedAtXSize));
 
                     // Prevent drawing out of bounds
                     if (i < size.x)
                     {
-                        // Diagonals left
-                        // verticies.Add(new Vector3(i + 1, 0, 0));
-                        //
-                        // var xCappedAtLeftEdge = math.max(i + 1 - size.y, 0);
-                        // var yMinusStartingSize = math.min(size.y, i + 1);
-                        // verticies.Add(new Vector3(xCappedAtLeftEdge, 0, yMinusStartingSize));
+                        // Diagonals towards up left
+                        var xLeftCappedAtYSizeOffsetOne = math.max(0, i - size.y + 1);
+                        var yTopCappedAtLeftSizeOffsetOne = math.min(i + 1, size.y);
+                        
+                        verticies.Add(new Vector3(i + 1, 0, 0));
+                        verticies.Add(new Vector3(xLeftCappedAtYSizeOffsetOne, 0, yTopCappedAtLeftSizeOffsetOne));
                     }
                 }
 
-                // Draw from the vertical line
+                // Draw along z axis (y in 2d)
                 if (i <= size.y)
                 {
                     verticies.Add(new Vector3(0, 0, i));
@@ -64,16 +64,17 @@ namespace DefaultNamespace
                     // Prevent overlap or out of bounds
                     if (i != 0 && i < size.y)
                     {
+                        var xRightCappedAtYSize = math.min(size.x, size.y - i);
+                        var xLeftCappedAtYSize = math.max(0, size.x - (size.y - i));
+                        var yCappedAtTop = math.min(i + size.x, size.y);
+                        
                         // Diagonal top left corner
                         verticies.Add(new Vector3(0, 0, i));
-
-                        var xCappedAtRightEdge = math.max(size.y - i, size.x);
-                        
-                        verticies.Add(new Vector3(xCappedAtRightEdge, 0, size.y));
+                        verticies.Add(new Vector3(xRightCappedAtYSize, 0, yCappedAtTop));
                         
                         // Diagonal top right corner
-                        // verticies.Add(new Vector3(size.x, 0, i));
-                        // verticies.Add(new Vector3(size.x + i - size.y, 0, size.y));
+                        verticies.Add(new Vector3(size.x, 0, i));
+                        verticies.Add(new Vector3(xLeftCappedAtYSize, 0, yCappedAtTop));
                     }
                 }
                 
