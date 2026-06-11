@@ -9,13 +9,16 @@ public class MouseController : MonoBehaviour
     private Mouse mouse;
 
     public GridManager manager;
-    public GameObject testObj;
+    private GameObject currentTileObj;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
+        SetcurrentTile(GridTileType.Empty);
+        
+        cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
 
     // Update is called once per frame
@@ -27,11 +30,18 @@ public class MouseController : MonoBehaviour
         if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
             coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
         {
-            testObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle() + 90, 0);
-            testObj.transform.position = coordinate.Position;
+            currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle() + 90, 0);
+            coordinate.Position.y = 1.001f;
+            currentTileObj.transform.position = coordinate.Position;
         }
     }
 
+    private void SetcurrentTile(GridTileType type)
+    { 
+        Destroy(currentTileObj); 
+        currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
+    }
+    
     private Coordinate GetGridSnappedMousePos(bool getFullTile = false)
     {
         var cursorPos = cam.ScreenToWorldPoint(mouse.position.ReadValue());
