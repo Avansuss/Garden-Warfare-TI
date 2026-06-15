@@ -4,5 +4,6 @@ namespace Grid
     {
         Inactive = 0,
         Empty = 1,
+        Grass = 2,
     }
 }
