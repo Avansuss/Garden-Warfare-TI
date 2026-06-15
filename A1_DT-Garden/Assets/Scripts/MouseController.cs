@@ -18,7 +18,7 @@ public class MouseController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
-        SetcurrentTile(GridTileType.Empty);
+        SetcurrentTile(GridTileType.Grass);
         
         cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
@@ -39,8 +39,12 @@ public class MouseController : MonoBehaviour
 
         if (mouse.leftButton.isPressed)
         {
-            coordinate.Position.y = 1;
             manager.SetTile(coordinate, currentTileType);
+        }
+
+        if (mouse.rightButton.isPressed)
+        {
+            manager.SetTile(coordinate, GridTileType.Empty);
         }
     }
     

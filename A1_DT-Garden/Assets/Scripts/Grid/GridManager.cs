@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Grid;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -11,8 +12,11 @@ public class GridManager : MonoBehaviour
     private Dictionary<Coordinate, GridTile> oldtiles;
     
     public Vector2Int Size;
+    
     public GameObject inactiveObject;
     public GameObject emptyObject;
+    public GameObject grassObject;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,7 +56,7 @@ public class GridManager : MonoBehaviour
             
             var tileObj = Instantiate(TileTypeToObject(tile.Value.TileType), transform, true);
             tileObj.transform.position = tile.Key.Position;
-            tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle(), 0);
+            tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle() + 90, 0);
             
             tileObjects[tile.Key] = tileObj;
         }
@@ -66,6 +70,8 @@ public class GridManager : MonoBehaviour
                 return inactiveObject;
             case GridTileType.Empty:
                 return emptyObject;
+            case GridTileType.Grass:
+                return grassObject;
             default:
                 return emptyObject;
         }
@@ -73,30 +79,45 @@ public class GridManager : MonoBehaviour
 
     public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false)
     {
+        coordinate.Position.y = 1;
+        
         // Placement out of bounds
         if (coordinate.Position.x < 0 || coordinate.Position.x > Size.x || 
-            coordinate.Position.y < 0 || coordinate.Position.y > Size.y)
+            coordinate.Position.z < 0 || coordinate.Position.z > Size.y)
         {
             return false;
         }
 
         // Check if tile already occupies a space
-        // Cannot do a simple key lookup due to position floating point imprecision
-        foreach (var checkTile in tiles)
+        
+        if (FindCoordinate(coordinate, out var foundTile))
         {
-            if (coordinate.IsEqualTo(checkTile.Key))
-            {
-                if (checkTile.Value.TileType == type) return false;
-            }
+            if (foundTile?.Value.TileType == type) return false;
+            tiles.Remove(foundTile?.Key);
         }
         
         var tile = new GridTile(coordinate, type);
         
         // Tiletype forbidden for AIs
         if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
-
+ 
         tiles[coordinate] = tile;
         RedrawGrid();
         return true;
+    }
+
+    private bool FindCoordinate(Coordinate coordinate, out KeyValuePair<Coordinate, GridTile>? tile)
+    {
+        tile = null;
+        foreach (var checkTile in tiles)
+        {
+            if (coordinate.IsEqualTo(checkTile.Key))
+            {
+                tile = checkTile;
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -397,7 +397,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseController
   manager: {fileID: 1176453872}
-  testObj: {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
 --- !u!1 &1016838985
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +533,7 @@ MonoBehaviour:
   Size: {x: 18, y: 15}
   inactiveObject: {fileID: 7659006563712087241, guid: 30cf3273c055afdebbc003768f667297, type: 3}
   emptyObject: {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
+  grassObject: {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
 --- !u!4 &1176453873
 Transform:
   m_ObjectHideFlags: 0
