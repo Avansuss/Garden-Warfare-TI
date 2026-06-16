@@ -19,7 +19,6 @@ public class MouseController : MonoBehaviour
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
         SetcurrentTile(GridTileType.Grass);
-        SetCursor(GridTileType.Grass);
         
         cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
@@ -28,7 +27,7 @@ public class MouseController : MonoBehaviour
     void Update()
     {
         var coordinate = GetGridSnappedMousePos();
-        
+
         // Don't update the position outside of the bounds
         if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
             coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
@@ -38,28 +37,47 @@ public class MouseController : MonoBehaviour
             currentTileObj.transform.position = coordinate.Position;
         }
 
-        if (mouse.leftButton.isPressed)
+        if (mouse.leftButton.wasPressedThisFrame)
         {
             SetcurrentTile(currentTileType);
-            manager.SetTile(coordinate, currentTileType, redraw:true);
+        }
+
+        if (mouse.rightButton.wasPressedThisFrame)
+        {
+            SetCursor(GridTileType.Empty);
+        }
+
+
+        if (mouse.leftButton.isPressed)
+        {
+            manager.SetTile(coordinate, currentTileType, redraw: true);
         }
 
         if (mouse.rightButton.isPressed)
         {
-            SetCursor(GridTileType.Empty);
-            manager.SetTile(coordinate, GridTileType.Empty, redraw:true);
+            manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
         }
     }
 
+    /// <summary>
+    /// Doesnt change the current tile type, only visually change the cursor
+    /// </summary>
+    /// <param name="type">The new visual tile type</param>
     private void SetCursor(GridTileType type)
     {
+        Destroy(currentTileObj);
         currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
+        currentTileObj.transform.position = GetGridSnappedMousePos().Position;
     }
     
+    /// <summary>
+    /// Change the current tile and cursor to a different type
+    /// </summary>
+    /// <param name="type">The new current tile</param>
     private void SetcurrentTile(GridTileType type)
     { 
-        Destroy(currentTileObj);
         currentTileType = type;
+        SetCursor(type);
     }
     
     private Coordinate GetGridSnappedMousePos(bool getFullTile = false)
