@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 412281587}
   - component: {fileID: 412281586}
   - component: {fileID: 412281589}
+  - component: {fileID: 412281590}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -370,7 +371,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -445,6 +446,19 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &412281590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412281585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc989af3906884c4aa51a0458e1ddcdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseController
+  manager: {fileID: 1176453872}
 --- !u!1 &1016838985
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +592,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc46e9928b566ea183e962fe0b38179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
-  Size: {x: 18, y: 15}
+  Size: {x: 5, y: 3}
+  inactiveObject: {fileID: 7659006563712087241, guid: 30cf3273c055afdebbc003768f667297, type: 3}
+  emptyObject: {fileID: 7659006563712087241, guid: 81164f80a74e393468aede9ba80a91d3, type: 3}
+  grassObject: {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
 --- !u!4 &1176453873
 Transform:
   m_ObjectHideFlags: 0
