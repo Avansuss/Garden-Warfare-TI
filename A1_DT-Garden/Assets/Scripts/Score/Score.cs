@@ -44,10 +44,14 @@ public static class ScoreCalculate
     public static float ShrubberyScore => Score.Shrub + Score.Hedge + Score.PickingGarden;
     public static float TotalSurfaceArea => HardeningScore + PermeabilityScore + NotHardenedWithoutPlantsScore + SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
 
+
+    //P2
+    public static float VegetationAmount => SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
 }
 
 public static class ScoreModifier
 {
+    //P1
     public static float HardeningScoreModifier = 0f;
     public static float PermeabilityScoreModifier = 2f;
     public static float NotHardenedWithoutPlantsModifier = 3f;
@@ -56,3 +60,29 @@ public static class ScoreModifier
     public static float ShrubberyModifier = 10f;
     public static float BigTreeModifier = 15f;
 }
+
+//P2
+public static class Fertilizer
+{
+    public enum None
+    {
+        None = 7,
+        Half = 2,
+        Full = 0
+    }
+
+    public enum Artificial
+    {
+        None = 5,
+        Half = 4,
+        Full = 3
+    }
+
+    public enum Organic
+    {
+        None = 10,
+        Half = 9,
+        Full = 8
+    }
+}
+

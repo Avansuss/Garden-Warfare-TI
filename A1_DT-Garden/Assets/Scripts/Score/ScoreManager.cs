@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -14,5 +15,14 @@ public class ScoreManager : MonoBehaviour
                          Score.BigTree * ScoreModifier.BigTreeModifier;
 
         return ScoreCalculate.TotalSurfaceArea / surfaceAreaWaterValue;
+
     }
+
+    public float HealthySoil(int fertilizerScore)
+    {
+        float modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
+        return fertilizerScore/ modifier;
+    }
+
+
 }
