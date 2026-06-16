@@ -1,6 +1,7 @@
 using System;
 using Grid;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,8 +27,24 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var coordinate = GetGridSnappedMousePos();
+        // Camera zoom
+        if (math.abs(mouse.scroll.value.y) > 0)
+        {
+            // Calculate how much we will have to move towards the zoomTowards position
+            float multiplier = (1.0f / cam.orthographicSize * mouse.scroll.value.y);
 
+            // Move camera
+            transform.position += (cam.ScreenToWorldPoint(mouse.position.value) - transform.position) * multiplier; 
+
+            // Zoom camera
+            cam.orthographicSize -= mouse.scroll.value.y;
+
+            // Limit zoom
+            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 0, 100);
+        }
+        
+        
+        var coordinate = GetGridSnappedMousePos();
         // Don't update the position outside of the bounds
         if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
             coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
@@ -36,24 +53,20 @@ public class MouseController : MonoBehaviour
             coordinate.Position.y = 1.001f;
             currentTileObj.transform.position = coordinate.Position;
         }
-
         if (mouse.leftButton.wasPressedThisFrame)
         {
             SetcurrentTile(currentTileType);
         }
-
-        if (mouse.rightButton.wasPressedThisFrame)
+        else if (mouse.rightButton.wasPressedThisFrame)
         {
             SetCursor(GridTileType.Empty);
         }
-
 
         if (mouse.leftButton.isPressed)
         {
             manager.SetTile(coordinate, currentTileType, redraw: true);
         }
-
-        if (mouse.rightButton.isPressed)
+        else if (mouse.rightButton.isPressed)
         {
             manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
         }
