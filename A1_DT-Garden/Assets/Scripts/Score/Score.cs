@@ -6,33 +6,33 @@ public static class Score
     //P1
     // Surface areas in m2
     // Hardening
-    public static float AreaPond { get; set; }
-    public static float AreaSwimmingPool { get; set; }
-    public static float AreaPavement { get; set; }
+    public static float AreaPond { get; set; } = -1f;
+    public static float AreaSwimmingPool { get; set; } = -1f;
+    public static float AreaPavement { get; set; } = -1f;
 
     // Permeability
-    public static float Gravel { get; set; }
-    public static float PermeableTiles { get; set; }
+    public static float Gravel { get; set; } = -1f;
+    public static float PermeableTiles { get; set; } = -1f;
 
     // Not hardened without plants
-    public static float RootBarrierFabric { get; set; }
-    public static float ArtificialGrass { get; set; }
-    public static float Trampoline { get; set;  }
-    public static float PlayGround { get; set; }
+    public static float RootBarrierFabric { get; set; } = -1f;
+    public static float ArtificialGrass { get; set; } = -1f;
+    public static float Trampoline { get; set;  } = -1f;
+    public static float PlayGround { get; set; } = -1f;
 
     // Small green
-    public static float Flowers { get; set; }
-    public static float TreeBark { get; set; }
-    public static float VegetableGarden { get; set; }
+    public static float Flowers { get; set; } = -1f;
+    public static float TreeBark { get; set; } = -1f;
+    public static float VegetableGarden { get; set; } = -1f;
 
     // Shrubbery
-    public static float Shrub { get; set; }
-    public static float Hedge { get; set; }
-    public static float PickingGarden { get; set; }
+    public static float Shrub { get; set; } = -1f;
+    public static float Hedge { get; set; } = -1f;
+    public static float PickingGarden { get; set; } = -1f;
 
     // Grass and big trees are scored separately, as they have a higher score modifier than the other categories
-    public static float Grass { get; set; }
-    public static float BigTree { get; set; }
+    public static float Grass { get; set; } = -1f;
+    public static float BigTree { get; set; } = -1f;
 }
 
 public static class ScoreCalculate
