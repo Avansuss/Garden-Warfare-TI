@@ -18,10 +18,21 @@ public class ScoreManager : MonoBehaviour
 
     }
 
+    //P2
     public float HealthySoil(int fertilizerScore)
     {
         return fertilizerScore / ScoreModifier.Modifier;
     }
 
+    //P3
+    public float AnimalFriendliness()
+    {
+        float beesButterflyScore = GardenAnimals.SpottedBeesAndButterflies ? ScoreModifier.BeesAndButterfliesModifier * ScoreModifier.Modifier : 0;
+        float birdsScore = GardenAnimals.SpottedBirds ? ScoreModifier.BirdsModifier * ScoreModifier.Modifier : 0;
+        float spiderScore = GardenAnimals.SpottedSpiders ? ScoreModifier.SpiderModifier * ScoreModifier.Modifier : 0;
+        float otherAnimalsScore = GardenAnimals.SpottedOtherAnimals ? ScoreModifier.OtherAnimalsModifier * ScoreModifier.Modifier : 0;
+
+        return beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore;
+    }
 
 }

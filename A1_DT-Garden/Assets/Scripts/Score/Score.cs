@@ -45,7 +45,6 @@ public static class ScoreCalculate
     public static float ShrubberyScore => Score.Shrub + Score.Hedge + Score.PickingGarden;
     public static float TotalSurfaceArea => HardeningScore + PermeabilityScore + NotHardenedWithoutPlantsScore + SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
 
-
     //P2
     public static float VegetationAmount => SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
 }
@@ -95,4 +94,14 @@ public static class Fertilizer
         Full = 8
     }
 }
+
+public static class GardenAnimals
+{
+    public static bool SpottedBeesAndButterflies { get; set; } = false;
+    public static bool SpottedBirds { get; set; } = false;
+    public static bool SpottedSpiders { get; set; } = false;    
+    public static bool SpottedOtherAnimals { get; set; } = false;
+}
+
+
 
