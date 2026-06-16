@@ -14,8 +14,7 @@ public class ScoreManager : MonoBehaviour
                          ScoreCalculate.ShrubberyScore * ScoreModifier.ShrubberyModifier +
                          Score.BigTree * ScoreModifier.BigTreeModifier;
 
-        return (float)Math.Round(ScoreCalculate.TotalSurfaceArea / surfaceAreaWaterValue, 2);
-
+        return (float)Math.Round(surfaceAreaWaterValue / ScoreCalculate.TotalSurfaceArea, 2);
     }
 
     //P2
