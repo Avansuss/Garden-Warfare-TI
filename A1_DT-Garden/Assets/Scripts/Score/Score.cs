@@ -37,6 +37,14 @@ public static class Score
 
 public static class ScoreCalculate
 {
+    //input validation
+    public static bool AllScoresFilled => Score.AreaPond >= 0 && Score.AreaSwimmingPool >= 0 && Score.AreaPavement >= 0 &&
+                              Score.Gravel >= 0 && Score.PermeableTiles >= 0 &&
+                              Score.RootBarrierFabric >= 0 && Score.ArtificialGrass >= 0 && Score.Trampoline >= 0 && Score.PlayGround >= 0 &&
+                              Score.Flowers >= 0 && Score.TreeBark >= 0 && Score.VegetableGarden >= 0 &&
+                              Score.Shrub >= 0 && Score.Hedge >= 0 && Score.PickingGarden >= 0 &&
+                              Score.Grass >= 0 && Score.BigTree >= 0;
+
     //P1
     public static float HardeningScore => Score.AreaPond + Score.AreaSwimmingPool + Score.AreaPavement;
     public static float PermeabilityScore => Score.Gravel + Score.PermeableTiles;
