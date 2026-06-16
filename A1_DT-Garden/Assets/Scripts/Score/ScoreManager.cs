@@ -19,6 +19,11 @@ public class ScoreManager : MonoBehaviour
     }
 
     //P2
+    /// <summary>
+    /// Calculates the healthy soil score based on the fertilizer score and a modifier.
+    /// </summary>
+    /// <param name="fertilizerScore">Enum of fertiziler type and capacity converted to int <br>for example (int)Fertilizer.Artificial.Half.</br></param>
+    /// <returns></returns>
     public float HealthySoil(int fertilizerScore)
     {
         return fertilizerScore / ScoreModifier.Modifier;
@@ -33,6 +38,24 @@ public class ScoreManager : MonoBehaviour
         float otherAnimalsScore = GardenAnimals.SpottedOtherAnimals ? ScoreModifier.OtherAnimalsModifier * ScoreModifier.Modifier : 0;
 
         return beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore;
+    }
+
+    //P4
+    public float PlantDiversity(int plantAmount)
+    {
+        int plantDiversityModifier = ScoreCalculate.GetPlantDiversityModifier(plantAmount);
+
+        float smallGreenSurfaceRatio = ScoreCalculate.SmallGreenScore / ScoreCalculate.TotalSurfaceArea;
+        float grassSurfaceRatio = Score.Grass / ScoreCalculate.TotalSurfaceArea;
+        float shrubberySurfaceRatio = ScoreCalculate.ShrubberyScore / ScoreCalculate.TotalSurfaceArea;
+        float bigTreeSurfaceRatio = Score.BigTree / ScoreCalculate.TotalSurfaceArea;
+
+        float smallGreenValue = plantDiversityModifier * smallGreenSurfaceRatio * ScoreModifier.diversityFlowersModifier;
+        float grassValue = plantDiversityModifier * grassSurfaceRatio * ScoreModifier.diversityGrassModifier;
+        float shrubberyValue = plantDiversityModifier * shrubberySurfaceRatio * ScoreModifier.diversityShrubModifier;
+        float bigTreeValue = plantDiversityModifier * bigTreeSurfaceRatio * ScoreModifier.diversityBigTreeModifier;
+
+        return smallGreenValue + grassValue + shrubberyValue + bigTreeValue;
     }
 
 }

@@ -47,6 +47,33 @@ public static class ScoreCalculate
 
     //P2
     public static float VegetationAmount => SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
+
+    //P4
+    public static int GetPlantDiversityModifier(int amount)
+    {
+        int returnAmount;
+
+        switch (amount)
+        {
+            case <= 0:
+                returnAmount = 0;
+                break;
+            case >= 1 and <= 3:
+                returnAmount = 2;
+                break;
+            case >= 4 and <= 10:
+                returnAmount = 5;
+                break;
+            case >= 11 and <= 25:
+                returnAmount = 8;
+                break;
+            case >= 26:
+                returnAmount = 12;
+                break;
+        }
+
+        return returnAmount;
+    }
 }
 
 public static class ScoreModifier
@@ -68,6 +95,12 @@ public static class ScoreModifier
     public readonly static float BirdsModifier = 2.5f;
     public readonly static float SpiderModifier = 2.5f;
     public readonly static float OtherAnimalsModifier = 2.5f;
+
+    //P4
+    public readonly static float diversityFlowersModifier = 1;
+    public readonly static float diversityGrassModifier = 0.25f;
+    public readonly static float diversityShrubModifier = 2;
+    public readonly static float diversityBigTreeModifier = 3;
 }
 
 //P2
@@ -95,6 +128,7 @@ public static class Fertilizer
     }
 }
 
+//P3
 public static class GardenAnimals
 {
     public static bool SpottedBeesAndButterflies { get; set; } = false;
