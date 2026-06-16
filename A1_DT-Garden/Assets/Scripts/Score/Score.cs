@@ -1,0 +1,58 @@
+using UnityEngine;
+
+public static class Score
+{
+    //P1
+    // Surface areas in m2
+    // Hardening
+    public static float AreaPond { get; set; }
+    public static float AreaSwimmingPool { get; set; }
+    public static float AreaPavement { get; set; }
+
+    // Permeability
+    public static float Gravel { get; set; }
+    public static float PermeableTiles { get; set; }
+
+    // Not hardened without plants
+    public static float RootBarrierFabric { get; set; }
+    public static float ArtificialGrass { get; set; }
+    public static float Trampoline { get; set;  }
+    public static float PlayGround { get; set; }
+
+    // Small green
+    public static float Flowers { get; set; }
+    public static float TreeBark { get; set; }
+    public static float VegetableGarden { get; set; }
+
+    // Shrubbery
+    public static float Shrub { get; set; }
+    public static float Hedge { get; set; }
+    public static float PickingGarden { get; set; }
+
+    // Grass and big trees are scored separately, as they have a higher score modifier than the other categories
+    public static float Grass { get; set; }
+    public static float BigTree { get; set; }
+}
+
+public static class ScoreCalculate
+{
+    //P1
+    public static float HardeningScore => Score.AreaPond + Score.AreaSwimmingPool + Score.AreaPavement;
+    public static float PermeabilityScore => Score.Gravel + Score.PermeableTiles;
+    public static float NotHardenedWithoutPlantsScore => Score.RootBarrierFabric + Score.ArtificialGrass + Score.Trampoline + Score.PlayGround;
+    public static float SmallGreenScore => Score.Flowers + Score.TreeBark + Score.VegetableGarden;
+    public static float ShrubberyScore => Score.Shrub + Score.Hedge + Score.PickingGarden;
+    public static float TotalSurfaceArea => HardeningScore + PermeabilityScore + NotHardenedWithoutPlantsScore + SmallGreenScore + ShrubberyScore + Score.Grass + Score.BigTree;
+
+}
+
+public static class ScoreModifier
+{
+    public static float HardeningScoreModifier = 0f;
+    public static float PermeabilityScoreModifier = 2f;
+    public static float NotHardenedWithoutPlantsModifier = 3f;
+    public static float SmallGreenModifier = 3.5f;
+    public static float GrassModifier = 5f;
+    public static float ShrubberyModifier = 10f;
+    public static float BigTreeModifier = 15f;
+}
