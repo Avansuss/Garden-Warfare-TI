@@ -112,28 +112,18 @@ public static class ScoreModifier
 }
 
 //P2
-public static class Fertilizer
+public enum FertilizerType
 {
-    public enum None
-    {
-        None = 7,
-        Half = 2,
-        Full = 0
-    }
+    None = 1,
+    Artificial = 2,
+    Organic = 3
+}
 
-    public enum Artificial
-    {
-        None = 5,
-        Half = 4,
-        Full = 3
-    }
-
-    public enum Organic
-    {
-        None = 10,
-        Half = 9,
-        Full = 8
-    }
+public enum GreenWasteLeftInGarden
+{
+    None = 4,
+    Half = 5,
+    Everything = 6
 }
 
 //P3

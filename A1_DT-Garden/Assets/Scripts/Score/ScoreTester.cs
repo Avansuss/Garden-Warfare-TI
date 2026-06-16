@@ -16,6 +16,7 @@ public class ScoreTester : MonoBehaviour
     [SerializeField] private float smallGreenScore;
     [SerializeField] private float shrubberyScore;
     [SerializeField] private float totalSurfaceArea;
+    [SerializeField] private float scoreModifier;
     [SerializeField] private float vegetationAmount;
 
     private ScoreManager scoreManager;
@@ -65,6 +66,7 @@ public class ScoreTester : MonoBehaviour
         this.smallGreenScore = ScoreCalculate.SmallGreenScore;
         this.shrubberyScore = ScoreCalculate.ShrubberyScore;
         this.totalSurfaceArea = ScoreCalculate.TotalSurfaceArea;
+        this.scoreModifier = ScoreModifier.Modifier;
         this.vegetationAmount = ScoreCalculate.VegetationAmount;
     }
 
@@ -73,7 +75,7 @@ public class ScoreTester : MonoBehaviour
         if (ScoreCalculate.AllScoresFilled)
         {
             soilWaterScore = scoreManager.SoilWater();
-            healthySoilScore = scoreManager.HealthySoil((int)Fertilizer.Artificial.Half);
+            healthySoilScore = scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);
             animalFriendlinessScore = scoreManager.AnimalFriendliness();
             plantDiversityScore = scoreManager.PlantDiversity(13);
         }

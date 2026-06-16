@@ -23,10 +23,44 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     /// <param name="fertilizerScore">Enum of fertiziler type and capacity converted to int <br>for example (int)Fertilizer.Artificial.Half.</br></param>
     /// <returns></returns>
-    public float HealthySoil(int fertilizerScore)
+    public float HealthySoil(FertilizerType fertilizerType , GreenWasteLeftInGarden greenWasteLeftInGarden)
     {
-        return (float)Math.Round(fertilizerScore / ScoreModifier.Modifier, 2);
+        int soilValue = (fertilizerType, greenWasteLeftInGarden) switch
+        {
+            // FertilizerType.None
+            (FertilizerType.None, GreenWasteLeftInGarden.None) => 7,
+            (FertilizerType.None, GreenWasteLeftInGarden.Half) => 2,
+            (FertilizerType.None, GreenWasteLeftInGarden.Everything) => 0,
+
+            // FertilizerType.Artificial
+            (FertilizerType.Artificial, GreenWasteLeftInGarden.None) => 5,
+            (FertilizerType.Artificial, GreenWasteLeftInGarden.Half) => 4,
+            (FertilizerType.Artificial, GreenWasteLeftInGarden.Everything) => 3,
+
+            // FertilizerType.Organic
+            (FertilizerType.Organic, GreenWasteLeftInGarden.None) => 10,
+            (FertilizerType.Organic, GreenWasteLeftInGarden.Half) => 9,
+            (FertilizerType.Organic, GreenWasteLeftInGarden.Everything) => 8,
+
+            // Default / Fallback case (the underscore acts as a catch-all)
+            _ => -1
+        };
+
+        if(soilValue == -1)
+        {
+            Debug.LogError($"Invalid combination of FertilizerType: {fertilizerType} and GreenWasteLeftInGarden: {greenWasteLeftInGarden}. Please check the input values.");
+        }
+
+        return (float)Math.Round(soilValue * ScoreModifier.Modifier, 2);
     }
+
+
+    //public enum Organic
+    //{
+    //    None = 10,
+    //    Half = 9,
+    //    Full = 8
+    //}
 
     //P3
     public float AnimalFriendliness()
