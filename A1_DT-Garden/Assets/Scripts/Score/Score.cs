@@ -87,7 +87,7 @@ public static class ScoreModifier
     public readonly static float ShrubberyModifier = 10f;
     public readonly static float BigTreeModifier = 15f;
 
-    //P2
+    //P2 and P3
     public readonly static float Modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
 
     //P3
