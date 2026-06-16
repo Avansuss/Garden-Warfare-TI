@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-
+    //P1
     public float SoilWater()
     {
         float surfaceAreaWaterValue = ScoreCalculate.HardeningScore * ScoreModifier.HardeningScoreModifier +
@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour
                          ScoreCalculate.ShrubberyScore * ScoreModifier.ShrubberyModifier +
                          Score.BigTree * ScoreModifier.BigTreeModifier;
 
-        return ScoreCalculate.TotalSurfaceArea / surfaceAreaWaterValue;
+        return (float)Math.Round(ScoreCalculate.TotalSurfaceArea / surfaceAreaWaterValue, 2);
 
     }
 
