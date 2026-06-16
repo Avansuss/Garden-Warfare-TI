@@ -32,31 +32,46 @@ public class GridManager : MonoBehaviour
                 for (int s = 0; s < 5; s++)
                 {
                     Coordinate coord = new(x, y, (Section)s);
-                    if (!tiles.ContainsKey(coord) && (Section)s != Section.Full)
+                    if (!FindCoordinate(coord, tiles, out var foundTile) && (Section)s != Section.Full)
                     {
-                        SetTile(coord, GridTileType.Inactive);
+                        SetTile(coord, GridTileType.Inactive, redraw:false);
                     }
                 }
             }
         }
+        
+        RedrawGrid();
     }
 
     void RedrawGrid()
     {
         foreach (var tile in tiles)
         {
-            // Skip if its the same as the previous redraw
-            if (oldtiles.ContainsKey(tile.Key))
+            if (FindCoordinate(tile.Key, oldtiles, out var foundTile))
             {
-                if(oldtiles[tile.Key].TileType == tile.Value.TileType) continue;
-                Destroy(tileObjects[tile.Key]);
+                // If the tile did previously exist, skip
+                if (foundTile!.Value.Value.TileType == tile.Value.TileType) continue;
+                
+                // The specific found tile coordinate has to be used due to floating point imprecision
+                oldtiles[foundTile.Value.Key] = tile.Value;
             }
-            // Only add the new tile after the check has been done
-            oldtiles[tile.Key] = tile.Value;
-            
+            else
+            {
+                oldtiles[tile.Key] = tile.Value;
+            }
+
+            // Have to do this seperately for the tile objects, due to...floating point imprecision
+            if (FindCoordinate(tile.Key, tileObjects, out var foundObject))
+            {
+                // Otherwise, remove it for the list so a new one can take its place
+                Destroy(tileObjects[foundObject!.Value.Key]);
+                tileObjects.Remove(foundObject.Value.Key);
+            }
+
+            // Create the new tile
             var tileObj = Instantiate(TileTypeToObject(tile.Value.TileType), transform, true);
             tileObj.transform.position = tile.Key.Position;
-            tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle() + 90, 0);
+            tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle(), 0);
             
             tileObjects[tile.Key] = tileObj;
         }
@@ -77,7 +92,15 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false)
+    /// <summary>
+    /// Places down or edits a tile on a certain location. Will return false if an illegal move was made
+    /// </summary>
+    /// <param name="coordinate">The coordinate to set the tile to</param>
+    /// <param name="type">The tile type to place on the coordinate</param>
+    /// <param name="isAi">Whether the caller of this function is an AI</param>
+    /// <param name="redraw">Whether to force a redraw of the grid. Don't use this if you change a lot of tiles at once</param>
+    /// <returns></returns>
+    public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false, bool redraw=false)
     {
         coordinate.Position.y = 1;
         
@@ -89,10 +112,9 @@ public class GridManager : MonoBehaviour
         }
 
         // Check if tile already occupies a space
-        
-        if (FindCoordinate(coordinate, out var foundTile))
+        if (FindCoordinate(coordinate, tiles, out var foundTile))
         {
-            if (foundTile?.Value.TileType == type) return false;
+            if (foundTile!.Value.Value.TileType == type) return false;
             tiles.Remove(foundTile?.Key);
         }
         
@@ -102,14 +124,25 @@ public class GridManager : MonoBehaviour
         if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
  
         tiles[coordinate] = tile;
-        RedrawGrid();
+        if (redraw)
+        {
+            RedrawGrid();
+        }
         return true;
     }
 
-    private bool FindCoordinate(Coordinate coordinate, out KeyValuePair<Coordinate, GridTile>? tile)
+    /// <summary>
+    /// Used to find a coordinate match since it has floating point imprecision on the vector 3's
+    /// This method uses a workaround that does work with these positions
+    /// </summary>
+    /// <param name="coordinate">The coordinate to look for</param>
+    /// <param name="tile">The found tile that matches the coordinate. Can be null</param>
+    /// <param name="lookupTable"></param>
+    /// <returns></returns>
+    private bool FindCoordinate<T>(Coordinate coordinate, Dictionary<Coordinate, T> lookupTable, out KeyValuePair<Coordinate, T>? tile)
     {
         tile = null;
-        foreach (var checkTile in tiles)
+        foreach (var checkTile in lookupTable)
         {
             if (coordinate.IsEqualTo(checkTile.Key))
             {

@@ -1,3 +1,4 @@
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
@@ -73,7 +74,7 @@ namespace Grid
                     break;
             }
 
-            return angle;
+            return angle + 90;
         }
 
         /// <summary>

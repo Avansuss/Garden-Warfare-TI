@@ -19,6 +19,7 @@ public class MouseController : MonoBehaviour
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
         SetcurrentTile(GridTileType.Grass);
+        SetCursor(GridTileType.Grass);
         
         cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
@@ -32,27 +33,33 @@ public class MouseController : MonoBehaviour
         if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
             coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
         {
-            currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle() + 90, 0);
+            currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
             coordinate.Position.y = 1.001f;
             currentTileObj.transform.position = coordinate.Position;
         }
 
         if (mouse.leftButton.isPressed)
         {
-            manager.SetTile(coordinate, currentTileType);
+            SetcurrentTile(currentTileType);
+            manager.SetTile(coordinate, currentTileType, redraw:true);
         }
 
         if (mouse.rightButton.isPressed)
         {
-            manager.SetTile(coordinate, GridTileType.Empty);
+            SetCursor(GridTileType.Empty);
+            manager.SetTile(coordinate, GridTileType.Empty, redraw:true);
         }
+    }
+
+    private void SetCursor(GridTileType type)
+    {
+        currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
     }
     
     private void SetcurrentTile(GridTileType type)
     { 
         Destroy(currentTileObj);
         currentTileType = type;
-        currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
     }
     
     private Coordinate GetGridSnappedMousePos(bool getFullTile = false)
