@@ -56,6 +56,11 @@ public class ScoreTester : MonoBehaviour
         Score.PickingGarden = 15f;
 
         Score.BigTree = 16f;
+
+        GardenAnimals.SpottedBeesAndButterflies = true;
+        GardenAnimals.SpottedBirds = true;
+        GardenAnimals.SpottedSpiders = true;
+        GardenAnimals.SpottedOtherAnimals = true;
     }
 
     private void setLocalVar()
