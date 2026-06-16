@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public static class Score
@@ -52,16 +53,22 @@ public static class ScoreCalculate
 public static class ScoreModifier
 {
     //P1
-    public static float HardeningScoreModifier = 0f;
-    public static float PermeabilityScoreModifier = 2f;
-    public static float NotHardenedWithoutPlantsModifier = 3f;
-    public static float SmallGreenModifier = 3.5f;
-    public static float GrassModifier = 5f;
-    public static float ShrubberyModifier = 10f;
-    public static float BigTreeModifier = 15f;
+    public readonly static float HardeningScoreModifier = 0f;
+    public readonly static float PermeabilityScoreModifier = 2f;
+    public readonly static float NotHardenedWithoutPlantsModifier = 3f;
+    public readonly static float SmallGreenModifier = 3.5f;
+    public readonly static float GrassModifier = 5f;
+    public readonly static float ShrubberyModifier = 10f;
+    public readonly static float BigTreeModifier = 15f;
 
-    public static float Modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
+    //P2
+    public readonly static float Modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
 
+    //P3
+    public readonly static float BeesAndButterfliesModifier = 2.5f;
+    public readonly static float BirdsModifier = 2.5f;
+    public readonly static float SpiderModifier = 2.5f;
+    public readonly static float OtherAnimalsModifier = 2.5f;
 }
 
 //P2
