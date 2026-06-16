@@ -20,8 +20,7 @@ public class ScoreManager : MonoBehaviour
 
     public float HealthySoil(int fertilizerScore)
     {
-        float modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
-        return fertilizerScore/ modifier;
+        return fertilizerScore / ScoreModifier.Modifier;
     }
 
 

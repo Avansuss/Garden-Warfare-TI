@@ -59,6 +59,9 @@ public static class ScoreModifier
     public static float GrassModifier = 5f;
     public static float ShrubberyModifier = 10f;
     public static float BigTreeModifier = 15f;
+
+    public static float Modifier = ScoreCalculate.VegetationAmount / ScoreCalculate.TotalSurfaceArea;
+
 }
 
 //P2
