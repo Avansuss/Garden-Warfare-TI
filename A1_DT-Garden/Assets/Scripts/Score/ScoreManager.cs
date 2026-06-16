@@ -26,7 +26,7 @@ public class ScoreManager : MonoBehaviour
     /// <returns></returns>
     public float HealthySoil(int fertilizerScore)
     {
-        return fertilizerScore / ScoreModifier.Modifier;
+        return (float)Math.Round(fertilizerScore / ScoreModifier.Modifier, 2);
     }
 
     //P3
@@ -37,7 +37,7 @@ public class ScoreManager : MonoBehaviour
         float spiderScore = GardenAnimals.SpottedSpiders ? ScoreModifier.SpiderModifier * ScoreModifier.Modifier : 0;
         float otherAnimalsScore = GardenAnimals.SpottedOtherAnimals ? ScoreModifier.OtherAnimalsModifier * ScoreModifier.Modifier : 0;
 
-        return beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore;
+        return (float)Math.Round(beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore, 2);
     }
 
     //P4
@@ -55,7 +55,7 @@ public class ScoreManager : MonoBehaviour
         float shrubberyValue = plantDiversityModifier * shrubberySurfaceRatio * ScoreModifier.diversityShrubModifier;
         float bigTreeValue = plantDiversityModifier * bigTreeSurfaceRatio * ScoreModifier.diversityBigTreeModifier;
 
-        return smallGreenValue + grassValue + shrubberyValue + bigTreeValue;
+        return (float)Math.Round(smallGreenValue + grassValue + shrubberyValue + bigTreeValue, 2);
     }
 
 }
