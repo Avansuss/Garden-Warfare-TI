@@ -7,12 +7,14 @@ using UnityEngine.InputSystem;
 
 public class MouseController : MonoBehaviour
 {
-    private Camera cam;
-    private Mouse mouse;
-
     public GridManager manager;
+
+    private Mouse mouse;
+    private Camera cam;
     private GameObject currentTileObj;
     private GridTileType currentTileType;
+    private Vector2 initCamPos;
+    private Vector3 dragOrigin;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,46 +32,81 @@ public class MouseController : MonoBehaviour
         // Camera zoom
         if (math.abs(mouse.scroll.value.y) > 0)
         {
-            // Calculate how much we will have to move towards the zoomTowards position
-            float multiplier = (1.0f / cam.orthographicSize * mouse.scroll.value.y);
-
-            // Move camera
-            transform.position += (cam.ScreenToWorldPoint(mouse.position.value) - transform.position) * multiplier; 
-
-            // Zoom camera
-            cam.orthographicSize -= mouse.scroll.value.y;
-
-            // Limit zoom
-            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 0, 100);
+            ZoomOrthoToMouse(mouse.scroll.value.y);
         }
         
-        
-        var coordinate = GetGridSnappedMousePos();
-        // Don't update the position outside of the bounds
-        if (coordinate.Position.x > 0 && coordinate.Position.x < manager.Size.x &&
-            coordinate.Position.z > 0 && coordinate.Position.z < manager.Size.y)
+        // Camera move
+        if (mouse.middleButton.wasPressedThisFrame)
         {
-            currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-            coordinate.Position.y = 1.001f;
-            currentTileObj.transform.position = coordinate.Position;
+            dragOrigin = ScreenToWorld(mouse.position.value);
         }
-        if (mouse.leftButton.wasPressedThisFrame)
+        if (mouse.middleButton.isPressed)
         {
-            SetcurrentTile(currentTileType);
+            Vector3 current = ScreenToWorld(mouse.position.value);
+            Vector3 delta = dragOrigin - current;
+            cam.transform.position += delta;
+            // Recalculate so next frame's delta is relative, not cumulative
+            dragOrigin = ScreenToWorld(mouse.position.value);
         }
-        else if (mouse.rightButton.wasPressedThisFrame)
+        else
         {
-            SetCursor(GridTileType.Empty);
-        }
+            var coordinate = GetGridSnappedMousePos();
+            // Don't update the position outside of the bounds
+            if (WithinBounds(coordinate.Position))
+            {
+                currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
+                coordinate.Position.y = 1.001f;
+                currentTileObj.transform.position = coordinate.Position;
+            }
+            
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                SetcurrentTile(currentTileType);
+            }
+            else if (mouse.rightButton.wasPressedThisFrame)
+            {
+                SetCursor(GridTileType.Empty);
+            }
 
-        if (mouse.leftButton.isPressed)
-        {
-            manager.SetTile(coordinate, currentTileType, redraw: true);
+            if (mouse.leftButton.isPressed)
+            {
+                manager.SetTile(coordinate, currentTileType, redraw: true);
+            }
+            else if (mouse.rightButton.isPressed)
+            {
+                manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
+            }
         }
-        else if (mouse.rightButton.isPressed)
-        {
-            manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
-        }
+    }
+
+    private Vector3 ScreenToWorld(Vector2 screenPos)
+    {
+        // For your isometric-style ortho camera on Y axis,
+        // use a raycast against the Y=0 plane
+        Ray ray = cam.ScreenPointToRay(new Vector3(screenPos.x, screenPos.y, 0));
+        float t = -ray.origin.y / ray.direction.y;
+        return ray.origin + ray.direction * t;
+    }
+    
+    private void ZoomOrthoToMouse(float amount)
+    {
+        // Calculate how much we will have to move towards the zoomTowards position
+        float multiplier = (1.0f / cam.orthographicSize * amount);
+
+        // Move camera
+        transform.position += (cam.ScreenToWorldPoint(mouse.position.value) - transform.position) * multiplier; 
+
+        // Zoom camera
+        cam.orthographicSize -= amount;
+
+        // Limit zoom
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 1, 100);
+    }
+
+    private bool WithinBounds(Vector3 position)
+    {
+        return position.x > 0 && position.x < manager.Size.x &&
+               position.z > 0 && position.z < manager.Size.y;
     }
 
     /// <summary>
@@ -79,7 +116,7 @@ public class MouseController : MonoBehaviour
     private void SetCursor(GridTileType type)
     {
         Destroy(currentTileObj);
-        currentTileObj = Instantiate(manager.TileTypeToObject(type), transform, true);
+        currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
         currentTileObj.transform.position = GetGridSnappedMousePos().Position;
     }
     
