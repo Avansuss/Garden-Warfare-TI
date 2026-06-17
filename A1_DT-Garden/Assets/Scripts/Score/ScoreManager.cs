@@ -4,6 +4,10 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     //P1
+    /// <summary>
+    /// Calculates the first pillar. 
+    /// </summary>
+    /// <returns>Rounded grade (max 2 decimals) for the amount of water that can be found in the soil</returns>
     public float SoilWater()
     {
         float surfaceAreaWaterValue = ScoreCalculate.HardeningScore * ScoreModifier.HardeningScoreModifier +
@@ -20,9 +24,14 @@ public class ScoreManager : MonoBehaviour
     //P2
     /// <summary>
     /// Calculates the healthy soil score based on the fertilizer score and a modifier.
+    /// Second pillar. Calculates the healthy soil score based on the fertilizer score and a modifier.
     /// </summary>
-    /// <param name="fertilizerScore">Enum of fertiziler type and capacity converted to int <br>for example (int)Fertilizer.Artificial.Half.</br></param>
-    /// <returns></returns>
+    /// <param name="fertilizerType">Enum variable that needs to be given as first parameter.
+    /// <br>Example: scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);</br></param>
+    /// <param name="greenWasteLeftInGarden">Enum variable of the green waste that gets left behind in the garden.
+    /// <br>Example: scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);</br>
+    /// </param>
+    /// <returns>Rounded grade (max 2 decimals) for how healthy the soil is</returns>
     public float HealthySoil(FertilizerType fertilizerType , GreenWasteLeftInGarden greenWasteLeftInGarden)
     {
         int soilValue = (fertilizerType, greenWasteLeftInGarden) switch
@@ -56,6 +65,11 @@ public class ScoreManager : MonoBehaviour
 
     //P3
     public float AnimalFriendliness()
+    /// <summary>
+    /// Third pillar. Calculates the healthyness above the soil.
+    /// </summary>
+    /// <returns>Rounded grade (max 2 decimals) about how much life there is above the soil.</returns>
+    public float LifeAboveTheSoil()
     {
         float beesButterflyScore = GardenAnimals.SpottedBeesAndButterflies ? ScoreModifier.BeesAndButterfliesModifier * ScoreModifier.Modifier : 0;
         float birdsScore = GardenAnimals.SpottedBirds ? ScoreModifier.BirdsModifier * ScoreModifier.Modifier : 0;
@@ -66,6 +80,11 @@ public class ScoreManager : MonoBehaviour
     }
 
     //P4
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="plantAmount">The amount of plant species that can be found in the users garden</param>
+    /// <returns>Rounded grade (max 2 decimals) about how much diversity there is in terms of plants</returns>
     public float PlantDiversity(int plantAmount)
     {
         int plantDiversityModifier = ScoreCalculate.GetPlantDiversityModifier(plantAmount);
