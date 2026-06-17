@@ -23,7 +23,6 @@ public class ScoreManager : MonoBehaviour
 
     //P2
     /// <summary>
-    /// Calculates the healthy soil score based on the fertilizer score and a modifier.
     /// Second pillar. Calculates the healthy soil score based on the fertilizer score and a modifier.
     /// </summary>
     /// <param name="fertilizerType">Enum variable that needs to be given as first parameter.
@@ -64,7 +63,6 @@ public class ScoreManager : MonoBehaviour
     }
 
     //P3
-    public float AnimalFriendliness()
     /// <summary>
     /// Third pillar. Calculates the healthyness above the soil.
     /// </summary>

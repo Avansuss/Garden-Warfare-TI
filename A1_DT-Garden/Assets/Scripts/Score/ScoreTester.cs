@@ -81,7 +81,7 @@ public class ScoreTester : MonoBehaviour
         {
             soilWaterScore = scoreManager.SoilWater();
             healthySoilScore = scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);
-            animalFriendlinessScore = scoreManager.AnimalFriendliness();
+            animalFriendlinessScore = scoreManager.LifeAboveTheSoil();
             plantDiversityScore = scoreManager.PlantDiversity(13);
         }
     }
