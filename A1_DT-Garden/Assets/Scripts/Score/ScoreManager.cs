@@ -54,14 +54,6 @@ public class ScoreManager : MonoBehaviour
         return (float)Math.Round(soilValue * ScoreModifier.Modifier, 2);
     }
 
-
-    //public enum Organic
-    //{
-    //    None = 10,
-    //    Half = 9,
-    //    Full = 8
-    //}
-
     //P3
     public float AnimalFriendliness()
     {
