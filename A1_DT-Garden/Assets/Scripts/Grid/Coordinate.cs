@@ -60,13 +60,13 @@ namespace Grid
             switch (this.Section)
             {
                 case Section.Full:
-                case Section.North:
+                case Section.South:
                     angle = 0;
                     break;
                 case Section.East:
                     angle = 90;
                     break;
-                case Section.South:
+                case Section.North:
                     angle = 180;
                     break;
                 case Section.West:

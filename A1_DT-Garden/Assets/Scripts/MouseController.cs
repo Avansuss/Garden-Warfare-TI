@@ -175,11 +175,11 @@ public class MouseController : MonoBehaviour
         {
             if (decZAbs > decXAbs)
             {
-                coordinate.Section = decZ < 0 ? Section.North : Section.South;
+                targetedSection = decZ < 0 ? Section.South: Section.North;
             }
             else
             {
-                coordinate.Section = decX < 0 ? Section.East : Section.West; 
+                targetedSection = decX < 0 ? Section.East : Section.West; 
             }
         }
         return coordinate;  
