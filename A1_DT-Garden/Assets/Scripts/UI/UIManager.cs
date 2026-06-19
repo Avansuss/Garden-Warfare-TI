@@ -9,8 +9,10 @@ public class UIManager : MonoBehaviour
     //https://www.flaticon.com/free-icon/paint-bucket_483918
     //https://www.flaticon.com/free-icon/download_724933
 
-    public List<Button> drawingTypeButtons;
     public int chosenId = 0;
+
+    [SerializeField]
+    private MouseController mouseController;
 
     public void SelectDrawingType()
     {
@@ -19,13 +21,18 @@ public class UIManager : MonoBehaviour
 
     public void SelectTileType(int btnTextureID)
     {
-        switch(btnTextureID)
+        chosenId = btnTextureID;
+
+        switch (btnTextureID)
         {
             case 2:
-                chosenId = btnTextureID;
                 Debug.Log("Selected grass tile type");
                 break;
-
+            case 3:
+                Debug.Log("Selected rocky tile type");
+                break;
         }
+        
+        mouseController.SetTileType(btnTextureID);
     }
 }

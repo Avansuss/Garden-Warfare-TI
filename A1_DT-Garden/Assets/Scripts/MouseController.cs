@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class MouseController : MonoBehaviour
 {
     public GridManager manager;
-
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
@@ -79,6 +78,11 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    public void SetTileType(int chosenID)
+    {
+        this.currentTileType = (GridTileType)chosenID;
+    }
+
     private Vector3 ScreenToWorld(Vector2 screenPos)
     {
         // For your isometric-style ortho camera on Y axis,
@@ -118,8 +122,9 @@ public class MouseController : MonoBehaviour
         Destroy(currentTileObj);
         currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
         currentTileObj.transform.position = GetGridSnappedMousePos().Position;
+        Debug.Log($"Set current tile to {currentTileType} ({currentTileObj.transform.position.x}, {currentTileObj.transform.position.y})");
     }
-    
+
     /// <summary>
     /// Change the current tile and cursor to a different type
     /// </summary>
