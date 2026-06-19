@@ -81,6 +81,16 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Prevents drawing tiles when the mouse is over a UI element
+    /// </summary>
+    /// <param name="isBlocked"></param>
+    public void BlockClick(bool isBlocked)
+    {
+        //Debug.Log(isBlocked ? "Blocking clicks" : "Unblocking clicks");
+        this.blockClick = isBlocked;
+    }
+
     public void SetTileType(int chosenID)
     {
         this.currentTileType = (GridTileType)chosenID;
