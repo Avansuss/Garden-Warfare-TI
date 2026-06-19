@@ -5,5 +5,6 @@ namespace Grid
         Inactive = 0,
         Empty = 1,
         Grass = 2,
+        Rock = 3,
     }
 }
