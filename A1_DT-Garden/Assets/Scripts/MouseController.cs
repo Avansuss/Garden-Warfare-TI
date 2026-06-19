@@ -81,6 +81,7 @@ public class MouseController : MonoBehaviour
     public void SetTileType(int chosenID)
     {
         this.currentTileType = (GridTileType)chosenID;
+        SetCursor((GridTileType)chosenID);
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
