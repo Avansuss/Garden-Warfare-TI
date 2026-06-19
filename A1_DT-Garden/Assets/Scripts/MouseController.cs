@@ -12,6 +12,7 @@ public class MouseController : MonoBehaviour
     private Camera cam;
     private GameObject currentTileObj;
     private GridTileType currentTileType;
+    private int drawingType = 1;
     private Vector2 initCamPos;
     private Vector3 dragOrigin;
 
@@ -53,6 +54,19 @@ public class MouseController : MonoBehaviour
         {
             if(blockClick) return;
 
+            Coordinate coordinate = new Coordinate();
+            switch(drawingType)
+            {
+                case 0:
+                    coordinate = GetGridSnappedMousePos(true);
+                    break;
+                case 1:
+                    coordinate = GetGridSnappedMousePos(false);
+                    break;
+
+            }
+            //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
+
             // Don't update the position outside of the bounds
             if (WithinBounds(coordinate.Position))
             {
@@ -72,7 +86,22 @@ public class MouseController : MonoBehaviour
 
             if (mouse.leftButton.isPressed)
             {
-                manager.SetTile(coordinate, currentTileType, redraw: true);
+                if (coordinate.Section == Section.Full)
+                {
+                    for (int direction = 1; direction <= 4; direction++)
+                    {
+                        // Now uses .z instead of .y for the vertical grid position
+                        var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
+
+                        // Only redraw on the last triangle to avoid redundant updates and flickering
+                        manager.SetTile(newCoordinate, currentTileType, redraw: direction == 4);
+                    }
+                }
+                else
+                {
+                    manager.SetTile(coordinate, currentTileType, redraw: true);
+
+                }
             }
             else if (mouse.rightButton.isPressed)
             {
@@ -87,7 +116,6 @@ public class MouseController : MonoBehaviour
     /// <param name="isBlocked"></param>
     public void BlockClick(bool isBlocked)
     {
-        //Debug.Log(isBlocked ? "Blocking clicks" : "Unblocking clicks");
         this.blockClick = isBlocked;
     }
 
@@ -95,6 +123,12 @@ public class MouseController : MonoBehaviour
     {
         this.currentTileType = (GridTileType)chosenID;
         SetCursor((GridTileType)chosenID);
+    }
+
+    public void SetDrawingType(int chosenDrawingID)
+    {
+        // 0 = single square, 1 = single triangle
+        drawingType = chosenDrawingID;
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
@@ -155,7 +189,7 @@ public class MouseController : MonoBehaviour
         
         cursorPos.y = 0;
 
-        // Get the decimals of the cursor position, centered aroudn the middle
+        // Get the decimals of the cursor position, centered around the middle
         var decX = cursorPos.x % 1 - 0.5f;
         var decXAbs = math.abs(decX);
         var decZ = cursorPos.z % 1 - 0.5f;
@@ -166,13 +200,11 @@ public class MouseController : MonoBehaviour
         cursorPos.z = math.floor(cursorPos.z) + 0.5f;
 
         // Calculate what triangle the mouse is in
-        Coordinate coordinate = new(cursorPos.x, cursorPos.z);
-        if (getFullTile)
-        {
-            coordinate.Section = Section.Full;
-        }
-        else
-        {
+        //Coordinate coordinate = new(cursorPos.x, cursorPos.z);
+        Section targetedSection = Section.Full;
+
+        if(!getFullTile)
+        {   
             if (decZAbs > decXAbs)
             {
                 targetedSection = decZ < 0 ? Section.South: Section.North;
@@ -182,6 +214,7 @@ public class MouseController : MonoBehaviour
                 targetedSection = decX < 0 ? Section.East : Section.West; 
             }
         }
-        return coordinate;  
+        //return coordinate;
+        return new Coordinate(cursorPos.x, cursorPos.z, targetedSection);
     }
 }
