@@ -14,6 +14,8 @@ public class MouseController : MonoBehaviour
     private GridTileType currentTileType;
     private Vector2 initCamPos;
     private Vector3 dragOrigin;
+
+    private bool blockClick = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,7 +51,8 @@ public class MouseController : MonoBehaviour
         }
         else
         {
-            var coordinate = GetGridSnappedMousePos();
+            if(blockClick) return;
+
             // Don't update the position outside of the bounds
             if (WithinBounds(coordinate.Position))
             {
