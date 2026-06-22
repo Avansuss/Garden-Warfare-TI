@@ -1,3 +1,4 @@
+using Grid;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,9 @@ public class UIManager : MonoBehaviour
                 break;
             case 3:
                 Debug.Log("Selected rocky tile type");
+                break;
+            case 4:
+                Debug.Log("Selected water tile type");
                 break;
         }
         

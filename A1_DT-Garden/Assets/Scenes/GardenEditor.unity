@@ -2428,7 +2428,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2819,6 +2819,7 @@ MonoBehaviour:
   emptyObject: {fileID: 7659006563712087241, guid: 81164f80a74e393468aede9ba80a91d3, type: 3}
   grassObject: {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
   rockObject: {fileID: 5803311116616926156, guid: d6c5b132b5fdcbb498a7fd64a77e5dd3, type: 3}
+  waterObject: {fileID: 5803311116616926156, guid: 253454cf3b3f5774b93c197f04e1f00e, type: 3}
 --- !u!4 &1176453873
 Transform:
   m_ObjectHideFlags: 0
@@ -2942,8 +2943,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 106008854}
-  - {fileID: 844923005}
   - {fileID: 81600002}
+  - {fileID: 844923005}
   m_Father: {fileID: 1995599933}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

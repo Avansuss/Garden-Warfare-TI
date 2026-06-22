@@ -17,7 +17,7 @@ public class GridManager : MonoBehaviour
     public GameObject emptyObject;
     public GameObject grassObject;
     public GameObject rockObject;
-    
+    public GameObject waterObject;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -90,6 +90,8 @@ public class GridManager : MonoBehaviour
                 return grassObject;
             case GridTileType.Rock:
                 return rockObject;
+            case GridTileType.Water:
+                return waterObject;
             default:
                 return emptyObject;
         }
