@@ -26,10 +26,7 @@ public class MouseController : MonoBehaviour
         mouse = Mouse.current;
         SetcurrentTile(GridTileType.Grass);
         
-        cam.transform.position = new Vector3(
-            (manager.Size.x + manager.transform.position.x) / 2f, 
-            manager.transform.position.y + 10,
-            (manager.Size.y + manager.transform.position.z) / 2f);;
+        cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
 
     // Update is called once per frame
@@ -67,6 +64,7 @@ public class MouseController : MonoBehaviour
                 case DrawingType.Triangle:
                     coordinate = GetGridSnappedMousePos(false);
                     break;
+
             }
             //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
 
@@ -74,7 +72,7 @@ public class MouseController : MonoBehaviour
             if (WithinBounds(coordinate.Position))
             {
                 currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = manager.transform.position.y + .001f;
+                coordinate.Position.y = 1.001f;
                 currentTileObj.transform.position = coordinate.Position;
             }
             
@@ -151,8 +149,8 @@ public class MouseController : MonoBehaviour
 
     private bool WithinBounds(Vector3 position)
     {
-        return position.x > manager.transform.position.x && position.x < manager.Size.x + manager.transform.position.x &&
-               position.z > manager.transform.position.z && position.z < manager.Size.y + manager.transform.position.z;
+        return position.x > 0 && position.x < manager.Size.x &&
+               position.z > 0 && position.z < manager.Size.y;
     }
 
     /// <summary>
