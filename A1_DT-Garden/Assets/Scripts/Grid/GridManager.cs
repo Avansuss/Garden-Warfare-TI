@@ -12,13 +12,9 @@ public class GridManager : MonoBehaviour
     private Dictionary<Coordinate, GridTile> oldtiles;
     
     public Vector2Int Size;
-    
-    public GameObject inactiveObject;
-    public GameObject emptyObject;
-    public GameObject grassObject;
-    public GameObject rockObject;
-    public GameObject waterObject;
-    
+
+    public List<GameObject> lstGridObjects;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -80,21 +76,9 @@ public class GridManager : MonoBehaviour
 
     public GameObject TileTypeToObject(GridTileType type)
     {
-        switch (type)
-        {
-            case GridTileType.Inactive:
-                return inactiveObject;
-            case GridTileType.Empty:
-                return emptyObject;
-            case GridTileType.Grass:
-                return grassObject;
-            case GridTileType.Rock:
-                return rockObject;
-            case GridTileType.Water:
-                return waterObject;
-            default:
-                return emptyObject;
-        }
+        if ((int)type >= lstGridObjects.Count) return null;
+
+        return lstGridObjects[(int)type];
     }
 
     /// <summary>
