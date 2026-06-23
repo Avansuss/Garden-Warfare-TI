@@ -8,7 +8,7 @@ public class ScoreData
     // Hardening
     public float AreaPond { get; set; } = -1f;
     public float AreaSwimmingPool { get; set; } = -1f;
-    public float AreaPavement { get; set; } = -1f;
+    public float AreaTiles { get; set; } = -1f;
 
     // Permeability
     public float Gravel { get; set; } = -1f;
@@ -22,7 +22,7 @@ public class ScoreData
 
     // Small green
     public float Flowers { get; set; } = -1f;
-    public float TreeBark { get; set; } = -1f;
+    public float WoodChips { get; set; } = -1f;
     public float VegetableGarden { get; set; } = -1f;
 
     // Shrubbery

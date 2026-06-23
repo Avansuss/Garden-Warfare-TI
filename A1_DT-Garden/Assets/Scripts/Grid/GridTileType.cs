@@ -20,7 +20,7 @@ namespace Grid
         VegetableGarden = 15,
         Hedge = 16,
         Bush = 17,
-        PluckingGarden = 18,
+        PickingGarden = 18,
         Tree = 19
     }
 }

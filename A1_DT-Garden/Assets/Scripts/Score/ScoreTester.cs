@@ -43,7 +43,7 @@ public class ScoreTester : MonoBehaviour
     {
         scoreData.AreaPond = 1f;
         scoreData.AreaSwimmingPool = 2f;
-        scoreData.AreaPavement = 3f;
+        scoreData.AreaTiles = 3f;
 
         scoreData.PermeableTiles = 3f;
         scoreData.Gravel = 4f;
@@ -54,7 +54,7 @@ public class ScoreTester : MonoBehaviour
         scoreData.PlayGround = 8f;
 
         scoreData.Flowers = 9f;
-        scoreData.TreeBark = 10f;
+        scoreData.WoodChips = 10f;
         scoreData.VegetableGarden = 11f;
 
         scoreData.Grass = 12f;
