@@ -1,4 +1,5 @@
 using System;
+using DrawingTypes;
 using Grid;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -12,7 +13,7 @@ public class MouseController : MonoBehaviour
     private Camera cam;
     private GameObject currentTileObj;
     private GridTileType currentTileType;
-    private int drawingType = 1;
+    private DrawingType drawingType = DrawingType.Triangle;
     private Vector2 initCamPos;
     private Vector3 dragOrigin;
 
@@ -57,10 +58,10 @@ public class MouseController : MonoBehaviour
             Coordinate coordinate = new Coordinate();
             switch(drawingType)
             {
-                case 0:
+                case DrawingType.Square:
                     coordinate = GetGridSnappedMousePos(true);
                     break;
-                case 1:
+                case DrawingType.Triangle:
                     coordinate = GetGridSnappedMousePos(false);
                     break;
 
@@ -119,16 +120,16 @@ public class MouseController : MonoBehaviour
         this.blockClick = isBlocked;
     }
 
-    public void SetTileType(int chosenID)
+    public void SetTileType(GridTileType chosenTileType)
     {
-        this.currentTileType = (GridTileType)chosenID;
-        SetCursor((GridTileType)chosenID);
+        this.currentTileType = chosenTileType;
+        SetCursor(chosenTileType);
     }
 
-    public void SetDrawingType(int chosenDrawingID)
+    public void SetDrawingType(DrawingType chosenDrawingType)
     {
         // 0 = single square, 1 = single triangle
-        drawingType = chosenDrawingID;
+        drawingType = chosenDrawingType;
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
