@@ -91,7 +91,7 @@ namespace DefaultNamespace
 
             MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
             meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
-            meshRenderer.material.color = Color.white;
+            meshRenderer.material.color = Color.lightGray;
         }
     }
 }
