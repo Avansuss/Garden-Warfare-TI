@@ -32,81 +32,72 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Camera zoom
-        if (math.abs(mouse.scroll.value.y) > 0)
+        // No mouse controls if its outside of the game window
+        Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
+        bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+        if (!isOutside)
         {
-            ZoomOrthoToMouse(mouse.scroll.value.y);
-        }
-        
-        // Camera move
-        if (mouse.middleButton.wasPressedThisFrame)
-        {
-            dragOrigin = ScreenToWorld(mouse.position.value);
-        }
-        if (mouse.middleButton.isPressed)
-        {
-            Vector3 current = ScreenToWorld(mouse.position.value);
-            Vector3 delta = dragOrigin - current;
-            cam.transform.position += delta;
-            // Recalculate so next frame's delta is relative, not cumulative
-            dragOrigin = ScreenToWorld(mouse.position.value);
-        }
-        else
-        {
-            if(blockClick) return;
-
-            Coordinate coordinate = new Coordinate();
-            switch(drawingType)
+            // Camera zoom
+            if (math.abs(mouse.scroll.value.y) > 0)
             {
-                case DrawingType.Square:
-                    coordinate = GetGridSnappedMousePos(true);
-                    break;
-                case DrawingType.Triangle:
-                    coordinate = GetGridSnappedMousePos(false);
-                    break;
-
-            }
-            //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
-
-            // Don't update the position outside of the bounds
-            if (WithinBounds(coordinate.Position))
-            {
-                currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = 1.001f;
-                currentTileObj.transform.position = coordinate.Position;
+                ZoomOrthoToMouse(mouse.scroll.value.y);
             }
             
-            if (mouse.leftButton.wasPressedThisFrame)
+            // Camera move
+            if (mouse.middleButton.wasPressedThisFrame)
             {
-                SetcurrentTile(currentTileType);
+                dragOrigin = ScreenToWorld(mouse.position.value);
             }
-            else if (mouse.rightButton.wasPressedThisFrame)
+            if (mouse.middleButton.isPressed)
             {
-                SetCursor(GridTileType.Empty);
+                Vector3 current = ScreenToWorld(mouse.position.value);
+                Vector3 delta = dragOrigin - current;
+                cam.transform.position += delta;
+                // Recalculate so next frame's delta is relative, not cumulative
+                dragOrigin = ScreenToWorld(mouse.position.value);
             }
+            else
+            {
+                if(blockClick) return;
 
-            if (mouse.leftButton.isPressed)
-            {
-                if (coordinate.Section == Section.Full)
+                Coordinate coordinate = new Coordinate();
+                switch(drawingType)
                 {
-                    for (int direction = 1; direction <= 4; direction++)
-                    {
-                        // Now uses .z instead of .y for the vertical grid position
-                        var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
+                    case DrawingType.Square:
+                        coordinate = GetGridSnappedMousePos(true);
+                        break;
+                    case DrawingType.Triangle:
+                        coordinate = GetGridSnappedMousePos(false);
+                        break;
 
-                        // Only redraw on the last triangle to avoid redundant updates and flickering
-                        manager.SetTile(newCoordinate, currentTileType, redraw: direction == 4);
-                    }
                 }
-                else
+                //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
+
+                // Don't update the position outside of the bounds
+                if (WithinBounds(coordinate.Position))
+                {
+                    currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
+                    coordinate.Position.y = 1.001f;
+                    currentTileObj.transform.position = coordinate.Position;
+                }
+
+                if (mouse.leftButton.wasPressedThisFrame)
+                {
+                    SetcurrentTile(currentTileType);
+                }
+                else if (mouse.rightButton.wasPressedThisFrame)
+                {
+                    SetCursor(GridTileType.Empty);
+                }
+
+                if (mouse.leftButton.isPressed)
                 {
                     manager.SetTile(coordinate, currentTileType, redraw: true);
-
                 }
-            }
-            else if (mouse.rightButton.isPressed)
-            {
-                manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
+                else if (mouse.rightButton.isPressed)
+                {
+                    manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
+                }
             }
         }
     }
