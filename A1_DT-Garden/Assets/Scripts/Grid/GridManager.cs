@@ -26,12 +26,17 @@ public class GridManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        tiles = new();
-        tileObjects = new();
-        oldtiles = new();
         _gridOverlay = this.AddComponent<GridOverlay>();
         _gridOverlay.GridManager = this;
         _origin = transform.position;
+        ResetGrid();
+    }
+
+    public void ResetGrid()
+    {
+        tiles = new();
+        tileObjects = new();
+        oldtiles = new();
         
         for (int x = 0; x < Size.x; x++)
         {
@@ -134,6 +139,7 @@ public class GridManager : MonoBehaviour
                 if (!SetTile(newCoordinate, type, redraw: direction == 4)) falseNum++;
             }
 
+            // If all tile draw methods fail (none can be drawn on)
             if (falseNum == 4) return false;
         }
         else
