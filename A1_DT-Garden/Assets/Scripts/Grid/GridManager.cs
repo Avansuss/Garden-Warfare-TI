@@ -16,7 +16,8 @@ public class GridManager : MonoBehaviour
     public GameObject inactiveObject;
     public GameObject emptyObject;
     public GameObject grassObject;
-    
+    public GameObject rockObject;
+    public GameObject waterObject;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -87,6 +88,10 @@ public class GridManager : MonoBehaviour
                 return emptyObject;
             case GridTileType.Grass:
                 return grassObject;
+            case GridTileType.Rock:
+                return rockObject;
+            case GridTileType.Water:
+                return waterObject;
             default:
                 return emptyObject;
         }
@@ -117,17 +122,19 @@ public class GridManager : MonoBehaviour
             if (foundTile!.Value.Value.TileType == type) return false;
             tiles.Remove(foundTile?.Key);
         }
-        
+
         var tile = new GridTile(coordinate, type);
-        
+
         // Tiletype forbidden for AIs
         if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
- 
+
+
         tiles[coordinate] = tile;
         if (redraw)
         {
             RedrawGrid();
         }
+
         return true;
     }
 
