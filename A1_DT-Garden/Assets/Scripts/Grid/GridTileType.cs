@@ -14,17 +14,13 @@ namespace Grid
         ArtificialGrass = 9,
         Trampoline = 10,
         Playground = 11,
-        PlaygroundSand = 13,
-        Flowers = 14,
-        WoodChips = 15,
-        VegetableGarden = 16,
-        Hedge = 17,
-        Bush = 18,
-        PluckingGarden = 19,
-        Tree = 20
-
-        //Rock = 3,
-        //Water = 4,
-
+        PlaygroundSand = 12,
+        Flowers = 13,
+        WoodChips = 14,
+        VegetableGarden = 15,
+        Hedge = 16,
+        Bush = 17,
+        PluckingGarden = 18,
+        Tree = 19
     }
 }
