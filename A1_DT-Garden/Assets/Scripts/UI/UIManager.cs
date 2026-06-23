@@ -17,8 +17,11 @@ public class UIManager : MonoBehaviour
     private GridTileType chosenGridTileType = GridTileType.Inactive;
     private DrawingType chosenDrawingType = DrawingType.Triangle;
 
-    [SerializeField]
-    private MouseController mouseController;
+
+
+    [SerializeField] private MouseController mouseController;
+    [SerializeField] private GridManager gridManager;
+
 
     public void SelectDrawingType(int drawingID)
     {
@@ -42,5 +45,10 @@ public class UIManager : MonoBehaviour
         chosenGridTileType = (GridTileType)textureID;
                 
         mouseController.SetTileType(chosenGridTileType);
+    }
+
+    public void SetTileScore()
+    {
+        gridManager.PassGridTilesToScore();
     }
 }
