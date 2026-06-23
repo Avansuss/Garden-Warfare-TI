@@ -23,7 +23,6 @@ public class ScoreTesting
         _scoreCalculate = new ScoreCalculation(_scoreData);
         _scoreModifier = new ScoreModifier(_scoreCalculate);
         _scoreManager = new ScoreManager(_scoreData, _scoreCalculate, _scoreModifier, _gardenAnimalsData);
-
     }
 
     [Test]
