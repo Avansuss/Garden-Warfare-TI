@@ -33,7 +33,7 @@ public class MouseController : MonoBehaviour
     void Update()
     {
         // No mouse controls if its outside of the game window
-        Vector2 view = cam.ScreenToViewportPoint( Input.mousePosition );
+        Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
         bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
         if (!isOutside)
         {
