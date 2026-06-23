@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class MouseController : MonoBehaviour
 {
     public GridManager manager;
+    public bool CanDraw;
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
@@ -24,7 +25,7 @@ public class MouseController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
-        SetcurrentTile(GridTileType.Grass);
+        if(CanDraw) SetcurrentTile(GridTileType.Grass);
         
         cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
@@ -53,51 +54,57 @@ public class MouseController : MonoBehaviour
         }
         else
         {
-            if(blockClick) return;
+            // No mouse controls if its outside of the game window
+            Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
+            bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+            if (!isOutside && CanDraw)
+            {
+                if (blockClick) return;
 
-            Coordinate coordinate = new Coordinate();
-            switch(drawingType)
-            {
-                case DrawingType.Square:
-                    coordinate = GetGridSnappedMousePos(true);
-                    break;
-                case DrawingType.Triangle:
-                    coordinate = GetGridSnappedMousePos(false);
-                    break;
+                Coordinate coordinate = new Coordinate();
+                switch (drawingType)
+                {
+                    case DrawingType.Square:
+                        coordinate = GetGridSnappedMousePos(true);
+                        break;
+                    case DrawingType.Triangle:
+                        coordinate = GetGridSnappedMousePos(false);
+                        break;
 
-            }
-            //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
+                }
+                //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
 
-            // Don't update the position outside of the bounds
-            if (WithinBounds(coordinate.Position))
-            {
-                currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = 1.001f;
-                currentTileObj.transform.position = coordinate.Position;
-            }
-            
-            if (mouse.leftButton.wasPressedThisFrame)
-            {
-                SetcurrentTile(currentTileType);
-            }
-            else if (mouse.rightButton.wasPressedThisFrame)
-            {
-                SetCursor(GridTileType.Empty);
-            }
+                // Don't update the position outside of the bounds
+                if (WithinBounds(coordinate.Position))
+                {
+                    currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
+                    coordinate.Position.y = 1.001f;
+                    currentTileObj.transform.position = coordinate.Position;
+                }
 
-            if (mouse.leftButton.isPressed)
-            {
-                // Make the mouse coord relative
-                var relativeCoord = manager.transform.position;
-                coordinate.Position -= relativeCoord;
-                manager.SetTile(coordinate, currentTileType, redraw: true);
-            }
-            else if (mouse.rightButton.isPressed)
-            {
-                // Make the mouse coord relative
-                var relativeCoord = manager.transform.position;
-                coordinate.Position -= relativeCoord;
-                manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
+                if (mouse.leftButton.wasPressedThisFrame)
+                {
+                    SetcurrentTile(currentTileType);
+                }
+                else if (mouse.rightButton.wasPressedThisFrame)
+                {
+                    SetCursor(GridTileType.Empty);
+                }
+
+                if (mouse.leftButton.isPressed)
+                {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
+                    manager.SetTile(coordinate, currentTileType, redraw: true);
+                }
+                else if (mouse.rightButton.isPressed)
+                {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
+                    manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
+                }
             }
         }
     }
