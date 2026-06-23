@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Grid;
-using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -18,6 +17,11 @@ public class GridManager : MonoBehaviour
     public GameObject grassObject;
     public GameObject rockObject;
     public GameObject waterObject;
+
+    private Vector3 _origin;
+    private GridOverlay _gridOverlay;
+    private Camera _cam;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,6 +29,9 @@ public class GridManager : MonoBehaviour
         tiles = new();
         tileObjects = new();
         oldtiles = new();
+        _gridOverlay = this.AddComponent<GridOverlay>();
+        _gridOverlay.GridManager = this;
+        _origin = transform.position;
         
         for (int x = 0; x < Size.x; x++)
         {
@@ -71,7 +78,7 @@ public class GridManager : MonoBehaviour
 
             // Create the new tile
             var tileObj = Instantiate(TileTypeToObject(tile.Value.TileType), transform, true);
-            tileObj.transform.position = tile.Key.Position;
+            tileObj.transform.position = tile.Key.Position + new Vector3(_origin.x, 0, _origin.z);
             tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle(), 0);
             
             tileObjects[tile.Key] = tileObj;
@@ -107,7 +114,7 @@ public class GridManager : MonoBehaviour
     /// <returns></returns>
     public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false, bool redraw=false)
     {
-        coordinate.Position.y = 1;
+        coordinate.Position.y = _origin.y;
         
         // Placement out of bounds
         if (coordinate.Position.x < 0 || coordinate.Position.x > Size.x || 
@@ -116,26 +123,51 @@ public class GridManager : MonoBehaviour
             return false;
         }
 
-        // Check if tile already occupies a space
-        if (FindCoordinate(coordinate, tiles, out var foundTile))
+        if (coordinate.Section == Section.Full)
         {
-            if (foundTile!.Value.Value.TileType == type) return false;
-            tiles.Remove(foundTile?.Key);
+            var falseNum = 0;
+            for (int direction = 1; direction <= 4; direction++)
+            {
+                var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
+
+                // Only redraw on the last triangle to avoid redundant updates and flickering
+                if (!SetTile(newCoordinate, type, redraw: direction == 4)) falseNum++;
+            }
+
+            if (falseNum == 4) return false;
         }
-
-        var tile = new GridTile(coordinate, type);
-
-        // Tiletype forbidden for AIs
-        if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
-
-
-        tiles[coordinate] = tile;
-        if (redraw)
+        else
         {
-            RedrawGrid();
-        }
+            // Check if tile already occupies a space
+            if (FindCoordinate(coordinate, tiles, out var foundTile))
+            {
+                if (foundTile!.Value.Value.TileType == type) return false;
+                tiles.Remove(foundTile?.Key);
+            }
 
+            var tile = new GridTile(coordinate, type);
+
+            // Tiletype forbidden for AIs
+            if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
+
+
+            tiles[coordinate] = tile;
+            if (redraw)
+            {
+                RedrawGrid();
+            }
+        }
         return true;
+    }
+
+    public Dictionary<Coordinate, GridTileType> GetGrid()
+    {
+        var dict = new Dictionary<Coordinate, GridTileType>();
+        foreach (var tile in tiles)
+        {
+            dict[tile.Key] = tile.Value.TileType;
+        }
+        return dict;
     }
 
     /// <summary>

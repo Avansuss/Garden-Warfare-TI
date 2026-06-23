@@ -26,7 +26,10 @@ public class MouseController : MonoBehaviour
         mouse = Mouse.current;
         SetcurrentTile(GridTileType.Grass);
         
-        cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+        cam.transform.position = new Vector3(
+            (manager.Size.x + manager.transform.position.x) / 2f, 
+            manager.transform.position.y + 10,
+            (manager.Size.y + manager.transform.position.z) / 2f);;
     }
 
     // Update is called once per frame
@@ -64,7 +67,6 @@ public class MouseController : MonoBehaviour
                 case DrawingType.Triangle:
                     coordinate = GetGridSnappedMousePos(false);
                     break;
-
             }
             //Debug.Log($"Mouse position: {coordinate.Position.x}, {coordinate.Position.z} | Section: {coordinate.Section}");
 
@@ -72,7 +74,7 @@ public class MouseController : MonoBehaviour
             if (WithinBounds(coordinate.Position))
             {
                 currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = 1.001f;
+                coordinate.Position.y = manager.transform.position.y + .001f;
                 currentTileObj.transform.position = coordinate.Position;
             }
             
@@ -87,25 +89,16 @@ public class MouseController : MonoBehaviour
 
             if (mouse.leftButton.isPressed)
             {
-                if (coordinate.Section == Section.Full)
-                {
-                    for (int direction = 1; direction <= 4; direction++)
-                    {
-                        // Now uses .z instead of .y for the vertical grid position
-                        var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
-
-                        // Only redraw on the last triangle to avoid redundant updates and flickering
-                        manager.SetTile(newCoordinate, currentTileType, redraw: direction == 4);
-                    }
-                }
-                else
-                {
-                    manager.SetTile(coordinate, currentTileType, redraw: true);
-
-                }
+                // Make the mouse coord relative
+                var relativeCoord = manager.transform.position;
+                coordinate.Position -= relativeCoord;
+                manager.SetTile(coordinate, currentTileType, redraw: true);
             }
             else if (mouse.rightButton.isPressed)
             {
+                // Make the mouse coord relative
+                var relativeCoord = manager.transform.position;
+                coordinate.Position -= relativeCoord;
                 manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
             }
         }
@@ -158,8 +151,8 @@ public class MouseController : MonoBehaviour
 
     private bool WithinBounds(Vector3 position)
     {
-        return position.x > 0 && position.x < manager.Size.x &&
-               position.z > 0 && position.z < manager.Size.y;
+        return position.x > manager.transform.position.x && position.x < manager.Size.x + manager.transform.position.x &&
+               position.z > manager.transform.position.z && position.z < manager.Size.y + manager.transform.position.z;
     }
 
     /// <summary>
