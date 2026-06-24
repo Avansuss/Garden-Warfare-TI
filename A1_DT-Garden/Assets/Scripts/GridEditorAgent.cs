@@ -36,6 +36,9 @@ public class GridEditorAgent : Agent
         sensor.AddObservation(gridSummary[GridTileType.Rock]);
         sensor.AddObservation(gridSummary[GridTileType.Water]);
         sensor.AddObservation(gridSummary[GridTileType.Empty]);
+        
+        // Remaining steps
+        sensor.AddObservation(MAXSTEPS - step);
 
         var typesNum = Enum.GetValues(typeof(GridTileType)).Length;
         
@@ -65,12 +68,19 @@ public class GridEditorAgent : Agent
         
         // Per-step punishment
         AddReward(-0.01f);
+
+        var tileBeforechange = manager.GetGrid()[coord];
+        var wasCorrect = tileBeforechange == GridTileType.Grass;
         
         // If the tile placement is correct or not
         if (manager.SetTile(coord, type, true, true))
         {
-            if(type == GridTileType.Grass) AddReward(10);
-            else AddReward(-5); 
+            var isCorrect = type == GridTileType.Grass;
+            
+            if(!wasCorrect && isCorrect) AddReward(10);
+            else if (wasCorrect && isCorrect) AddReward(-1);
+            else if (!isCorrect && wasCorrect) AddReward(-5);
+            else AddReward(-2); 
         }
         else
         {
