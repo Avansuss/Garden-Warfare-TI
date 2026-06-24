@@ -38,7 +38,9 @@ public class ScoreManager
                          this.ScoreCalculate.ShrubberyScore * ScoreModifier.ShrubberyModifier +
                          ScoreData.BigTree * ScoreModifier.BigTreeModifier;
 
-        return (float)Math.Round(surfaceAreaWaterValue / this.ScoreCalculate.TotalSurfaceArea, 2);
+        float soilWaterValue = (float)Math.Round(surfaceAreaWaterValue / this.ScoreCalculate.TotalSurfaceArea, 2);
+
+        return soilWaterValue >= 0 ? soilWaterValue : 0;
     }
 
     //P2
@@ -79,7 +81,9 @@ public class ScoreManager
             Debug.LogError($"Invalid combination of FertilizerType: {fertilizerType} and GreenWasteLeftInGarden: {greenWasteLeftInGarden}. Please check the input values.");
         }
 
-        return (float)Math.Round(soilValue * ScoreModifier.Modifier, 2);
+        float healthySoilValue = (float)Math.Round(soilValue * ScoreModifier.Modifier, 2);
+
+        return healthySoilValue >= 0 ? healthySoilValue : 0;
     }
 
     //P3
@@ -100,7 +104,9 @@ public class ScoreManager
         float spiderScore = GardenAnimals.SpottedSpiders ? ScoreModifier.SpiderModifier * ScoreModifier.Modifier : 0;
         float otherAnimalsScore = GardenAnimals.SpottedOtherAnimals ? ScoreModifier.OtherAnimalsModifier * ScoreModifier.Modifier : 0;
 
-        return (float)Math.Round(beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore, 2);
+        float lifeAboveSoilValue = (float)Math.Round(beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore, 2);
+
+        return lifeAboveSoilValue >= 0 ? lifeAboveSoilValue : 0;
     }
 
     //P4
@@ -123,7 +129,9 @@ public class ScoreManager
         float shrubberyValue = plantDiversityModifier * shrubberySurfaceRatio * ScoreModifier.diversityShrubModifier;
         float bigTreeValue = plantDiversityModifier * bigTreeSurfaceRatio * ScoreModifier.diversityBigTreeModifier;
 
-        return (float)Math.Round(smallGreenValue + grassValue + shrubberyValue + bigTreeValue, 2);
+        float plantDiversityValue = (float)Math.Round(smallGreenValue + grassValue + shrubberyValue + bigTreeValue, 2);
+
+        return plantDiversityValue >= 0 ? plantDiversityValue : 0;
     }
 
 }
