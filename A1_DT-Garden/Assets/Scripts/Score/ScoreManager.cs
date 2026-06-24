@@ -10,10 +10,17 @@ public class ScoreManager
 
     public ScoreManager(ScoreData scoreData, ScoreCalculation scoreCalculate, ScoreModifier scoreModifier, GardenAnimalsData gardenAnimals)
     {
-        this.ScoreData = scoreData;
-        this.ScoreCalculate = scoreCalculate;
-        this.ScoreModifier = scoreModifier;
-        this.GardenAnimals = gardenAnimals;
+        if (scoreData == null) Debug.LogError("ScoreData is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (scoreCalculate == null) Debug.LogError("ScoreCalculation is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (scoreModifier == null) Debug.LogError("ScoreModifier is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (gardenAnimals == null) Debug.LogError("GardenAnimalsData is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else
+        {
+            this.ScoreData = scoreData;
+            this.ScoreCalculate = scoreCalculate;
+            this.ScoreModifier = scoreModifier;
+            this.GardenAnimals = gardenAnimals;
+        }
     }
 
     //P1
@@ -82,6 +89,12 @@ public class ScoreManager
     /// <returns>Rounded grade (max 2 decimals) about how much life there is above the soil.</returns>
     public float LifeAboveTheSoil()
     {
+        if(GardenAnimals == null)
+        {
+            Debug.LogError("GardenAnimalsData is null. Please ensure it is properly initialized before calling LifeAboveTheSoil().");
+            return -1f; // Return a default value or handle the error as needed
+        }
+
         float beesButterflyScore = GardenAnimals.SpottedBeesAndButterflies ? ScoreModifier.BeesAndButterfliesModifier * ScoreModifier.Modifier : 0;
         float birdsScore = GardenAnimals.SpottedBirds ? ScoreModifier.BirdsModifier * ScoreModifier.Modifier : 0;
         float spiderScore = GardenAnimals.SpottedSpiders ? ScoreModifier.SpiderModifier * ScoreModifier.Modifier : 0;

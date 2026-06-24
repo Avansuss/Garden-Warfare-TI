@@ -8,18 +8,18 @@ public class ScoreCalculation
         this._score = scoreData;
     }
 
-    public bool AllScoresFilled => _score.AreaPond >= 0 && _score.AreaSwimmingPool >= 0 && _score.AreaPavement >= 0 &&
+    public bool AllScoresFilled => _score.AreaPond >= 0 && _score.AreaSwimmingPool >= 0 && _score.AreaTiles >= 0 &&
                               _score.Gravel >= 0 && _score.PermeableTiles >= 0 &&
                               _score.RootBarrierFabric >= 0 && _score.ArtificialGrass >= 0 && _score.Trampoline >= 0 && _score.PlayGround >= 0 &&
-                              _score.Flowers >= 0 && _score.TreeBark >= 0 && _score.VegetableGarden >= 0 &&
+                              _score.Flowers >= 0 && _score.WoodChips >= 0 && _score.VegetableGarden >= 0 &&
                               _score.Shrub >= 0 && _score.Hedge >= 0 && _score.PickingGarden >= 0 &&
                               _score.Grass >= 0 && _score.BigTree >= 0;
 
     //P1
-    public float HardeningScore => _score.AreaPond + _score.AreaSwimmingPool + _score.AreaPavement;
+    public float HardeningScore => _score.AreaPond + _score.AreaSwimmingPool + _score.AreaTiles;
     public float PermeabilityScore => _score.Gravel + _score.PermeableTiles;
     public float NotHardenedWithoutPlantsScore => _score.RootBarrierFabric + _score.ArtificialGrass + _score.Trampoline + _score.PlayGround;
-    public float SmallGreenScore => _score.Flowers + _score.TreeBark + _score.VegetableGarden;
+    public float SmallGreenScore => _score.Flowers + _score.WoodChips + _score.VegetableGarden;
     public float ShrubberyScore => _score.Shrub + _score.Hedge + _score.PickingGarden;
     public float TotalSurfaceArea => HardeningScore + PermeabilityScore + NotHardenedWithoutPlantsScore + SmallGreenScore + ShrubberyScore + _score.Grass + _score.BigTree;
 

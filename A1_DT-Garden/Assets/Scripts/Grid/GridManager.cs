@@ -11,6 +11,8 @@ public class GridManager : MonoBehaviour
     private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
     
+    private GridToScore gridToScore;
+
     public Vector2Int Size;
 
     public List<GameObject> lstGridObjects;
@@ -21,6 +23,7 @@ public class GridManager : MonoBehaviour
         tiles = new();
         tileObjects = new();
         oldtiles = new();
+        gridToScore = new();
         
         for (int x = 0; x < Size.x; x++)
         {
@@ -72,6 +75,11 @@ public class GridManager : MonoBehaviour
             
             tileObjects[tile.Key] = tileObj;
         }
+    }
+
+    public void PassGridTilesToScore()
+    {
+        gridToScore.SetScore(tiles);
     }
 
     public GameObject TileTypeToObject(GridTileType type)
