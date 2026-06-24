@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using Unity.VisualScripting;
@@ -118,6 +119,26 @@ public class GridManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Shows a summary of how many times each tile exists
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<GridTileType, int> GetGridSummary()
+    {
+        Dictionary<GridTileType, int> summary = new();
+        for (int i = 0; i < Enum.GetNames(typeof(GridTileType)).Length; i++)
+        {
+            summary[(GridTileType)i] = 0;
+        }
+        
+        foreach (var tile in tiles)
+        {
+            summary[tile.Value.TileType]++;
+        }
+
+        return summary;
+    }
+
+    /// <summary>
     /// Places down or edits a tile on a certain location. Will return false if an illegal move was made
     /// </summary>
     /// <param name="coordinate">The coordinate to set the tile to</param>
@@ -148,7 +169,7 @@ public class GridManager : MonoBehaviour
                 var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
 
                 // Only redraw on the last triangle to avoid redundant updates and flickering
-                if (!SetTile(newCoordinate, type, redraw: direction == 4)) falseNum++;
+                if (!SetTile(newCoordinate, type, redraw: direction == 4, isAi:isAi)) falseNum++;
             }
 
             // If all tile draw methods fail (none can be drawn on)

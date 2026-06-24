@@ -1,0 +1,38 @@
+{
+    "GridEditorAgent": {
+        "checkpoints": [
+            {
+                "steps": 499995,
+                "file_path": "results/Iteration1.1.2/GridEditorAgent/GridEditorAgent-499995.onnx",
+                "reward": -150.0,
+                "creation_time": 1782297991.1901455,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.2/GridEditorAgent/GridEditorAgent-499995.pt"
+                ]
+            },
+            {
+                "steps": 500085,
+                "file_path": "results/Iteration1.1.2/GridEditorAgent/GridEditorAgent-500085.onnx",
+                "reward": -150.0,
+                "creation_time": 1782297991.232406,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.2/GridEditorAgent/GridEditorAgent-500085.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500085,
+            "file_path": "results/Iteration1.1.2/GridEditorAgent.onnx",
+            "reward": -150.0,
+            "creation_time": 1782297991.232406,
+            "auxillary_file_paths": [
+                "results/Iteration1.1.2/GridEditorAgent/GridEditorAgent-500085.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

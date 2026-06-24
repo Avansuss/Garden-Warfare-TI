@@ -10,7 +10,7 @@ public class GridEditorAgent : Agent
     public GridManager manager;
 
     private int step;
-    private const int MAXSTEPS = 300;
+    private const int MAXSTEPS = 600;
     
     private void Start()
     {
@@ -26,6 +26,13 @@ public class GridEditorAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         var gridData = manager.GetGrid();
+        var gridSummary = manager.GetGridSummary();
+        
+        sensor.AddObservation(gridSummary[GridTileType.Grass]);
+        sensor.AddObservation(gridSummary[GridTileType.Rock]);
+        sensor.AddObservation(gridSummary[GridTileType.Water]);
+        sensor.AddObservation(gridSummary[GridTileType.Empty]);
+        
         foreach (var gridDate in gridData)
         {
             // tile xy pos
@@ -52,12 +59,15 @@ public class GridEditorAgent : Agent
         if (manager.SetTile(coord, type, true, true))
         {
             if(type == GridTileType.Grass) SetReward(100);
-            else SetReward(-1); 
+            else SetReward(-3); 
         }
         else
         {
             SetReward(-5);
         }
+        
+        SetReward(10 * manager.GetGridSummary()[GridTileType.Grass]);
+        SetReward(-5 * math.pow(manager.GetGridSummary()[GridTileType.Empty], 1.05f));
         
         if(step > MAXSTEPS) EndEpisode();
     }

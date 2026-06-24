@@ -1412,6 +1412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseController
   manager: {fileID: 1176453872}
+  CanDraw: 1
 --- !u!1 &418795371
 GameObject:
   m_ObjectHideFlags: 0
