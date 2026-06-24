@@ -58,7 +58,7 @@ public class GridEditorAgent : Agent
 
         if (manager.SetTile(coord, type, true, true))
         {
-            if(type == GridTileType.Grass) SetReward(100);
+            if(type == GridTileType.Grass) SetReward(1000);
             else SetReward(-3); 
         }
         else
