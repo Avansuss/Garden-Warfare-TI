@@ -77,9 +77,9 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void PassGridTilesToScore(int plantAmount)
+    public void PassGridTilesToScore(int plantAmount, bool[] animalQuestions, byte[] answersDropdown)
     {
-        gridToScore.SetScore(tiles, plantAmount);
+        gridToScore.CalculateScore(tiles, plantAmount, animalQuestions, answersDropdown);
     }
 
     public GameObject TileTypeToObject(GridTileType type)
