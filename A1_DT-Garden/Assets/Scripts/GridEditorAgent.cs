@@ -1,14 +1,16 @@
 using Grid;
+using Unity.Mathematics;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEngine;
 
 public class GridEditorAgent : Agent
 {
     public GridManager manager;
 
     private int step;
-    private const int MAXSTEPS = 1000;
+    private const int MAXSTEPS = 300;
     
     private void Start()
     {
@@ -17,6 +19,7 @@ public class GridEditorAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        step = 0;
         manager.ResetGrid();
     }
 
@@ -25,27 +28,31 @@ public class GridEditorAgent : Agent
         var gridData = manager.GetGrid();
         foreach (var gridDate in gridData)
         {
+            // tile xy pos
             sensor.AddObservation(gridDate.Key.Position.x);
             sensor.AddObservation(gridDate.Key.Position.y);
+            
+            // Tile type
             sensor.AddObservation((int)gridDate.Value);
         }
-        sensor.AddObservation(manager.Size.x);
-        sensor.AddObservation(manager.Size.y);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         step++;
-        var posX = actions.ContinuousActions[0];
-        var posy = actions.ContinuousActions[0];
-        GridTileType type = (GridTileType)actions.DiscreteActions[0];
+        var posX = actions.DiscreteActions[0];
+        var posY = actions.DiscreteActions[1];
+        GridTileType type = (GridTileType)actions.DiscreteActions[2];
 
-        var coord = new Coordinate(posX, posX, Section.Full);
+        posX = math.clamp(posX, 0, manager.Size.x);
+        posY = math.clamp(posY, 0, manager.Size.y);
+        
+        var coord = new Coordinate(posX, posY, Section.Full);
 
         if (manager.SetTile(coord, type, true, true))
         {
-            if(type == GridTileType.Grass) SetReward(1);
-            else SetReward(-1);
+            if(type == GridTileType.Grass) SetReward(100);
+            else SetReward(-1); 
         }
         else
         {

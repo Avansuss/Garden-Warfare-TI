@@ -34,6 +34,14 @@ public class GridManager : MonoBehaviour
 
     public void ResetGrid()
     {
+        if (tileObjects?.Count > 0)
+        {
+            foreach (var tileObject in tileObjects)
+            {
+                Destroy(tileObject.Value);
+            }
+        }
+        
         tiles = new();
         tileObjects = new();
         oldtiles = new();
@@ -47,7 +55,7 @@ public class GridManager : MonoBehaviour
                     Coordinate coord = new(x, y, (Section)s);
                     if (!FindCoordinate(coord, tiles, out var foundTile) && (Section)s != Section.Full)
                     {
-                        SetTile(coord, GridTileType.Inactive, redraw:false);
+                        SetTile(coord, GridTileType.Empty, redraw:false);
                     }
                 }
             }
@@ -119,6 +127,10 @@ public class GridManager : MonoBehaviour
     /// <returns></returns>
     public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false, bool redraw=false)
     {
+        // Tiletype forbidden for AIs
+        if (isAi && type == GridTileType.Inactive) return false;
+        if (isAi && type == GridTileType.Empty) return false;
+        
         coordinate.Position.y = _origin.y;
         
         // Placement out of bounds
@@ -147,16 +159,15 @@ public class GridManager : MonoBehaviour
             // Check if tile already occupies a space
             if (FindCoordinate(coordinate, tiles, out var foundTile))
             {
+                if (isAi && foundTile!.Value.Value.TileType != GridTileType.Empty) return false;
+                
                 if (foundTile!.Value.Value.TileType == type) return false;
                 tiles.Remove(foundTile?.Key);
             }
-
+            
+            
             var tile = new GridTile(coordinate, type);
-
-            // Tiletype forbidden for AIs
-            if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
-
-
+            
             tiles[coordinate] = tile;
             if (redraw)
             {
