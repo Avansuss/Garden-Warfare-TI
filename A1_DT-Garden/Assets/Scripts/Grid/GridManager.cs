@@ -12,6 +12,7 @@ public class GridManager : MonoBehaviour
     private Dictionary<Coordinate, GridTile> oldtiles;
     
     public Vector2Int Size;
+    public bool DisableGrid;
     
     public GameObject inactiveObject;
     public GameObject emptyObject;
@@ -27,8 +28,11 @@ public class GridManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _gridOverlay = this.AddComponent<GridOverlay>();
-        _gridOverlay.GridManager = this;
+        if (!DisableGrid)
+        {
+            _gridOverlay = this.AddComponent<GridOverlay>();
+            _gridOverlay.GridManager = this;
+        }
         _origin = transform.position;
         ResetGrid();
     }
@@ -54,7 +58,7 @@ public class GridManager : MonoBehaviour
                 for (int s = 0; s < 5; s++)
                 {
                     Coordinate coord = new(x, y, (Section)s);
-                    if (!FindCoordinate(coord, tiles, out var foundTile) && (Section)s != Section.Full)
+                    if (!tiles.TryGetValue(coord, out _) && (Section)s != Section.Full)
                     {
                         SetTile(coord, GridTileType.Empty, redraw:false);
                     }
@@ -69,25 +73,18 @@ public class GridManager : MonoBehaviour
     {
         foreach (var tile in tiles)
         {
-            if (FindCoordinate(tile.Key, oldtiles, out var foundTile))
+            if (oldtiles.TryGetValue(tile.Key, out var foundTile))
             {
                 // If the tile did previously exist, skip
-                if (foundTile!.Value.Value.TileType == tile.Value.TileType) continue;
+                if (foundTile.TileType == tile.Value.TileType) continue;
                 
-                // The specific found tile coordinate has to be used due to floating point imprecision
-                oldtiles[foundTile.Value.Key] = tile.Value;
+                oldtiles[tile.Key] = tile.Value;
+                Destroy(tileObjects[tile.Key]);
+                tileObjects.Remove(tile.Key);
             }
             else
             {
                 oldtiles[tile.Key] = tile.Value;
-            }
-
-            // Have to do this seperately for the tile objects, due to...floating point imprecision
-            if (FindCoordinate(tile.Key, tileObjects, out var foundObject))
-            {
-                // Otherwise, remove it for the list so a new one can take its place
-                Destroy(tileObjects[foundObject!.Value.Key]);
-                tileObjects.Remove(foundObject.Value.Key);
             }
 
             // Create the new tile
@@ -155,8 +152,8 @@ public class GridManager : MonoBehaviour
         coordinate.Position.y = _origin.y;
         
         // Placement out of bounds
-        if (coordinate.Position.x < 0 || coordinate.Position.x > Size.x || 
-            coordinate.Position.z < 0 || coordinate.Position.z > Size.y)
+        if (coordinate.Position.x < 0 || coordinate.Position.x >= Size.x || 
+            coordinate.Position.z < 0 || coordinate.Position.z >= Size.y)
         {
             return false;
         }
@@ -178,12 +175,12 @@ public class GridManager : MonoBehaviour
         else
         {
             // Check if tile already occupies a space
-            if (FindCoordinate(coordinate, tiles, out var foundTile))
+            if (tiles.TryGetValue(coordinate, out var foundTile))
             {
-                if (isAi && foundTile!.Value.Value.TileType != GridTileType.Empty) return false;
+                if (isAi && foundTile.TileType != GridTileType.Empty) return false;
                 
-                if (foundTile!.Value.Value.TileType == type) return false;
-                tiles.Remove(foundTile?.Key);
+                if (foundTile.TileType == type) return false;
+                tiles.Remove(coordinate);
             }
             
             
@@ -206,28 +203,5 @@ public class GridManager : MonoBehaviour
             dict[tile.Key] = tile.Value.TileType;
         }
         return dict;
-    }
-
-    /// <summary>
-    /// Used to find a coordinate match since it has floating point imprecision on the vector 3's
-    /// This method uses a workaround that does work with these positions
-    /// </summary>
-    /// <param name="coordinate">The coordinate to look for</param>
-    /// <param name="tile">The found tile that matches the coordinate. Can be null</param>
-    /// <param name="lookupTable"></param>
-    /// <returns></returns>
-    private bool FindCoordinate<T>(Coordinate coordinate, Dictionary<Coordinate, T> lookupTable, out KeyValuePair<Coordinate, T>? tile)
-    {
-        tile = null;
-        foreach (var checkTile in lookupTable)
-        {
-            if (coordinate.IsEqualTo(checkTile.Key))
-            {
-                tile = checkTile;
-                return true;
-            }
-        }
-
-        return false;
     }
 }

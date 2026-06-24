@@ -1,3 +1,4 @@
+using System;
 using Grid;
 using Unity.Mathematics;
 using Unity.MLAgents;
@@ -10,7 +11,9 @@ public class GridEditorAgent : Agent
     public GridManager manager;
 
     private int step;
-    private const int MAXSTEPS = 600;
+    private const int MAXSTEPS = 1200;
+    private static readonly Section[] TriangleSections = 
+        { Section.North, Section.East, Section.South, Section.West };
     
     private void Start()
     {
@@ -28,19 +31,26 @@ public class GridEditorAgent : Agent
         var gridData = manager.GetGrid();
         var gridSummary = manager.GetGridSummary();
         
+        // How many of each type there are
         sensor.AddObservation(gridSummary[GridTileType.Grass]);
         sensor.AddObservation(gridSummary[GridTileType.Rock]);
         sensor.AddObservation(gridSummary[GridTileType.Water]);
         sensor.AddObservation(gridSummary[GridTileType.Empty]);
+
+        var typesNum = Enum.GetValues(typeof(GridTileType)).Length;
         
-        foreach (var gridDate in gridData)
+        // dictionaries can be prone to not being the same order, which is critical for this observation
+        for (int x = 0; x < manager.Size.x; x++)
         {
-            // tile xy pos
-            sensor.AddObservation(gridDate.Key.Position.x);
-            sensor.AddObservation(gridDate.Key.Position.y);
-            
-            // Tile type
-            sensor.AddObservation((int)gridDate.Value);
+            for (int y = 0; y < manager.Size.y; y++)
+            {
+                foreach(var section in TriangleSections)
+                {
+                    var coord = new Coordinate(x, y, section);
+                    gridData.TryGetValue(coord, out var type);
+                    sensor.AddOneHotObservation((int)type, typesNum);
+                }
+            }
         }
     }
 
@@ -49,26 +59,35 @@ public class GridEditorAgent : Agent
         step++;
         var posX = actions.DiscreteActions[0];
         var posY = actions.DiscreteActions[1];
-        GridTileType type = (GridTileType)actions.DiscreteActions[2];
-
-        posX = math.clamp(posX, 0, manager.Size.x);
-        posY = math.clamp(posY, 0, manager.Size.y);
+        GridTileType type = (GridTileType)(actions.DiscreteActions[2] + 2);
         
         var coord = new Coordinate(posX, posY, Section.Full);
-
+        
+        // Per-step punishment
+        AddReward(-0.01f);
+        
+        // If the tile placement is correct or not
         if (manager.SetTile(coord, type, true, true))
         {
-            if(type == GridTileType.Grass) SetReward(1000);
-            else SetReward(-3); 
+            if(type == GridTileType.Grass) AddReward(10);
+            else AddReward(-5); 
         }
         else
         {
-            SetReward(-5);
+            AddReward(-5);
         }
         
-        SetReward(10 * manager.GetGridSummary()[GridTileType.Grass]);
-        SetReward(-5 * manager.GetGridSummary()[GridTileType.Empty]);
+        // Read the number of some tiles in the grid
+        var summary = manager.GetGridSummary();
+        AddReward(-.1f * summary[GridTileType.Empty]);
+
+        // If the whole grid is filled
+        if (summary[GridTileType.Empty] == 0)
+        {
+            AddReward(50);
+            EndEpisode();
+        }
         
-        if(step > MAXSTEPS) EndEpisode();
+        if(step >= MAXSTEPS) EndEpisode();
     }
 }

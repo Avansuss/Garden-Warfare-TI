@@ -96,7 +96,7 @@ public class MouseController : MonoBehaviour
                     // Make the mouse coord relative
                     var relativeCoord = manager.transform.position;
                     coordinate.Position -= relativeCoord;
-                    manager.SetTile(coordinate, currentTileType, redraw: true, isAi:true);
+                    manager.SetTile(coordinate, currentTileType, redraw: true);
                 }
                 else if (mouse.rightButton.isPressed)
                 {
