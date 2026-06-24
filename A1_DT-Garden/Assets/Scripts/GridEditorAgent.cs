@@ -67,7 +67,7 @@ public class GridEditorAgent : Agent
         }
         
         SetReward(10 * manager.GetGridSummary()[GridTileType.Grass]);
-        SetReward(-5 * math.pow(manager.GetGridSummary()[GridTileType.Empty], 1.05f));
+        SetReward(-5 * manager.GetGridSummary()[GridTileType.Empty]);
         
         if(step > MAXSTEPS) EndEpisode();
     }
