@@ -18,12 +18,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TMP_InputField inpfPlantAmount;
 
-
     private GridTileType chosenGridTileType = GridTileType.Inactive;
     private DrawingType chosenDrawingType = DrawingType.Triangle;
     private int plantAmount = 0;
-
-
 
     [SerializeField] private MouseController mouseController;
     [SerializeField] private GridManager gridManager;
