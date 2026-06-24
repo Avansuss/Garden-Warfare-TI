@@ -40,20 +40,7 @@ public class UIManager : MonoBehaviour
     public void SelectTileType(int textureID)
     {
         chosenGridTileType = (GridTileType)textureID;
-
-        switch (chosenGridTileType)
-        {
-            case GridTileType.Grass:
-                Debug.Log("Selected grass tile type");
-                break;
-            case GridTileType.Rock:
-                Debug.Log("Selected rocky tile type");
-                break;
-            case GridTileType.Water:
-                Debug.Log("Selected water tile type");
-                break;
-        }
-        
+                
         mouseController.SetTileType(chosenGridTileType);
     }
 }
