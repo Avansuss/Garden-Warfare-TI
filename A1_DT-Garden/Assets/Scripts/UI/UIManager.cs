@@ -4,6 +4,8 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +26,12 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private MouseController mouseController;
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private GameObject pnlQuestions;
+    [SerializeField] private Toggle[] questionsToggle;
+    [SerializeField] private TMP_Dropdown[] questionsDropdowns;
+    
+    private bool[] questionsAnimals = new bool[4];
+    private byte[] answersDropdown = new byte[2];
 
     public void Start()
     {
@@ -81,6 +89,27 @@ public class UIManager : MonoBehaviour
 
     public void SetTileScore()
     {
-        gridManager.PassGridTilesToScore(plantAmount);
+        for(int i = 0; i < questionsToggle.Length; i++)
+        {
+            questionsAnimals[i] = questionsToggle[i].isOn;
+        }
+
+        for(int i = 0; i < questionsDropdowns.Length; i++)
+        {
+            answersDropdown[i] = (byte)questionsDropdowns[i].value;
+        }
+
+        gridManager.PassGridTilesToScore(plantAmount, questionsAnimals, answersDropdown);
+    }
+
+
+    public void OpenQuestions()
+    {
+        pnlQuestions.SetActive(true);
+    }
+
+    public void CloseQuestions()
+    {
+        pnlQuestions.SetActive(false);
     }
 }
