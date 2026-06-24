@@ -1,9 +1,11 @@
+using DrawingTypes;
 using Grid;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DrawingTypes;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,14 +16,47 @@ public class UIManager : MonoBehaviour
     //triangle https://www.flaticon.com/free-icon/bleach_481099
     //square https://www.flaticon.com/free-icon/stop_545666
 
+    [SerializeField] private TMP_InputField inpfPlantAmount;
+
+
     private GridTileType chosenGridTileType = GridTileType.Inactive;
     private DrawingType chosenDrawingType = DrawingType.Triangle;
+    private int plantAmount = 0;
 
 
 
     [SerializeField] private MouseController mouseController;
     [SerializeField] private GridManager gridManager;
 
+    public void Start()
+    {
+        //inpfText = inpfPlantAmount.GetComponent<TMP_Text>();
+        inpfPlantAmount.onValueChanged.AddListener(delegate { OnTextChanged(); });
+    }
+
+    public void OnTextChanged()
+    {
+        Debug.Log(inpfPlantAmount.text);
+        //[^0-9]+
+
+        if (Regex.IsMatch(inpfPlantAmount.text, "[^0-9]+"))
+        {
+            Debug.Log("Non-numeric characters detected. Removing them.");
+            inpfPlantAmount.text = Regex.Replace(inpfPlantAmount.text, "[^0-9]+", "");
+        }
+        else
+        {
+            if (int.TryParse(inpfPlantAmount.text, out int plantAmount))
+            {
+                this.plantAmount = plantAmount;
+            }
+            else
+            {
+                Debug.LogWarning("Failed to parse plant amount from input field.");
+            }
+        }
+
+    }
 
     public void SelectDrawingType(int drawingID)
     {
@@ -49,6 +84,6 @@ public class UIManager : MonoBehaviour
 
     public void SetTileScore()
     {
-        gridManager.PassGridTilesToScore();
+        gridManager.PassGridTilesToScore(plantAmount);
     }
 }

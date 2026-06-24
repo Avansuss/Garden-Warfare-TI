@@ -13,6 +13,8 @@ public class GridToScore
     ScoreModifier scoreModifier;
     ScoreManager scoreManager;
 
+    private int plantAmount = 0;
+
 
     public GridToScore()
     {
@@ -23,10 +25,13 @@ public class GridToScore
 
     }
 
-    public void SetScore(Dictionary<Coordinate, GridTile> drawnTiles)
+    public void SetScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount)
     {
         this.tiles = drawnTiles;
+        this.plantAmount = plantAmount;
+
         var differentTiles = this.tiles.Values.GroupBy(tile => tile.TileType);
+
 
         int maxEnumValue = System.Enum.GetValues(typeof(GridTileType)).Cast<int>().Max();
         int[] tileCounts = new int[maxEnumValue + 1];
@@ -70,7 +75,8 @@ public class GridToScore
         Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
         Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half)}"); //fix amount of fertilizer and green waste in garden
         Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
-        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(11)}"); //fix amount of plants in garden
+        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
+        Debug.Log("Plant Amount: " + plantAmount);
     }
 
     private void TempSetGardenAnimals()

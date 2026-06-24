@@ -77,9 +77,9 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void PassGridTilesToScore()
+    public void PassGridTilesToScore(int plantAmount)
     {
-        gridToScore.SetScore(tiles);
+        gridToScore.SetScore(tiles, plantAmount);
     }
 
     public GameObject TileTypeToObject(GridTileType type)
