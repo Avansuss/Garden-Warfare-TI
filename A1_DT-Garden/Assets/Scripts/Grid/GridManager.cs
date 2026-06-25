@@ -187,13 +187,5 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    public Dictionary<Coordinate, GridTileType> GetGrid()
-    {
-        var dict = new Dictionary<Coordinate, GridTileType>();
-        foreach (var tile in tiles)
-        {
-            dict[tile.Key] = tile.Value.TileType;
-        }
-        return dict;
-    }
+    public Dictionary<Coordinate, GridTile> GetGrid() => tiles;
 }
