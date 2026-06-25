@@ -1,8 +1,28 @@
 using System;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager
 {
+    public ScoreData ScoreData;
+    public GardenAnimalsData GardenAnimals;
+    public ScoreCalculation ScoreCalculate;
+    public ScoreModifier ScoreModifier;
+
+    public ScoreManager(ScoreData scoreData, ScoreCalculation scoreCalculate, ScoreModifier scoreModifier, GardenAnimalsData gardenAnimals)
+    {
+        if (scoreData == null) Debug.LogError("ScoreData is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (scoreCalculate == null) Debug.LogError("ScoreCalculation is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (scoreModifier == null) Debug.LogError("ScoreModifier is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else if (gardenAnimals == null) Debug.LogError("GardenAnimalsData is null. Please ensure it is properly initialized before creating ScoreManager.");
+        else
+        {
+            this.ScoreData = scoreData;
+            this.ScoreCalculate = scoreCalculate;
+            this.ScoreModifier = scoreModifier;
+            this.GardenAnimals = gardenAnimals;
+        }
+    }
+
     //P1
     /// <summary>
     /// Calculates the first pillar. 
@@ -10,15 +30,15 @@ public class ScoreManager : MonoBehaviour
     /// <returns>Rounded grade (max 2 decimals) for the amount of water that can be found in the soil</returns>
     public float SoilWater()
     {
-        float surfaceAreaWaterValue = ScoreCalculate.HardeningScore * ScoreModifier.HardeningScoreModifier +
-                         ScoreCalculate.PermeabilityScore * ScoreModifier.PermeabilityScoreModifier +
-                         ScoreCalculate.NotHardenedWithoutPlantsScore * ScoreModifier.NotHardenedWithoutPlantsModifier +
-                         ScoreCalculate.SmallGreenScore * ScoreModifier.SmallGreenModifier +
-                         Score.Grass * ScoreModifier.GrassModifier +
-                         ScoreCalculate.ShrubberyScore * ScoreModifier.ShrubberyModifier +
-                         Score.BigTree * ScoreModifier.BigTreeModifier;
+        float surfaceAreaWaterValue = this.ScoreCalculate.HardeningScore * ScoreModifier.HardeningScoreModifier +
+                         this.ScoreCalculate.PermeabilityScore * ScoreModifier.PermeabilityScoreModifier +
+                         this.ScoreCalculate.NotHardenedWithoutPlantsScore * ScoreModifier.NotHardenedWithoutPlantsModifier +
+                         this.ScoreCalculate.SmallGreenScore * ScoreModifier.SmallGreenModifier +
+                         ScoreData.Grass * ScoreModifier.GrassModifier +
+                         this.ScoreCalculate.ShrubberyScore * ScoreModifier.ShrubberyModifier +
+                         ScoreData.BigTree * ScoreModifier.BigTreeModifier;
 
-        return (float)Math.Round(surfaceAreaWaterValue / ScoreCalculate.TotalSurfaceArea, 2);
+        return (float)Math.Round(surfaceAreaWaterValue / this.ScoreCalculate.TotalSurfaceArea, 2);
     }
 
     //P2
@@ -31,7 +51,7 @@ public class ScoreManager : MonoBehaviour
     /// <br>Example: scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);</br>
     /// </param>
     /// <returns>Rounded grade (max 2 decimals) for how healthy the soil is</returns>
-    public float HealthySoil(FertilizerType fertilizerType , GreenWasteLeftInGarden greenWasteLeftInGarden)
+    public float HealthySoil(FertilizerType fertilizerType, GreenWasteLeftInGarden greenWasteLeftInGarden)
     {
         int soilValue = (fertilizerType, greenWasteLeftInGarden) switch
         {
@@ -54,7 +74,7 @@ public class ScoreManager : MonoBehaviour
             _ => -1
         };
 
-        if(soilValue == -1)
+        if (soilValue == -1)
         {
             Debug.LogError($"Invalid combination of FertilizerType: {fertilizerType} and GreenWasteLeftInGarden: {greenWasteLeftInGarden}. Please check the input values.");
         }
@@ -69,6 +89,12 @@ public class ScoreManager : MonoBehaviour
     /// <returns>Rounded grade (max 2 decimals) about how much life there is above the soil.</returns>
     public float LifeAboveTheSoil()
     {
+        if(GardenAnimals == null)
+        {
+            Debug.LogError("GardenAnimalsData is null. Please ensure it is properly initialized before calling LifeAboveTheSoil().");
+            return -1f; // Return a default value or handle the error as needed
+        }
+
         float beesButterflyScore = GardenAnimals.SpottedBeesAndButterflies ? ScoreModifier.BeesAndButterfliesModifier * ScoreModifier.Modifier : 0;
         float birdsScore = GardenAnimals.SpottedBirds ? ScoreModifier.BirdsModifier * ScoreModifier.Modifier : 0;
         float spiderScore = GardenAnimals.SpottedSpiders ? ScoreModifier.SpiderModifier * ScoreModifier.Modifier : 0;
@@ -88,9 +114,9 @@ public class ScoreManager : MonoBehaviour
         int plantDiversityModifier = ScoreCalculate.GetPlantDiversityModifier(plantAmount);
 
         float smallGreenSurfaceRatio = ScoreCalculate.SmallGreenScore / ScoreCalculate.TotalSurfaceArea;
-        float grassSurfaceRatio = Score.Grass / ScoreCalculate.TotalSurfaceArea;
+        float grassSurfaceRatio = ScoreData.Grass / ScoreCalculate.TotalSurfaceArea;
         float shrubberySurfaceRatio = ScoreCalculate.ShrubberyScore / ScoreCalculate.TotalSurfaceArea;
-        float bigTreeSurfaceRatio = Score.BigTree / ScoreCalculate.TotalSurfaceArea;
+        float bigTreeSurfaceRatio = ScoreData.BigTree / ScoreCalculate.TotalSurfaceArea;
 
         float smallGreenValue = plantDiversityModifier * smallGreenSurfaceRatio * ScoreModifier.diversityFlowersModifier;
         float grassValue = plantDiversityModifier * grassSurfaceRatio * ScoreModifier.diversityGrassModifier;

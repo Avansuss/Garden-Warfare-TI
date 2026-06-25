@@ -11,20 +11,18 @@ public class GridManager : MonoBehaviour
     private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
     
+    private GridToScore gridToScore;
+
     public Vector2Int Size;
     public bool DisableGrid;
-    
-    public GameObject inactiveObject;
-    public GameObject emptyObject;
-    public GameObject grassObject;
-    public GameObject rockObject;
-    public GameObject waterObject;
-
     private Vector3 _origin;
     private GridOverlay _gridOverlay;
     private Camera _cam;
     
     
+
+    public List<GameObject> lstGridObjects;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,6 +48,7 @@ public class GridManager : MonoBehaviour
         tiles = new();
         tileObjects = new();
         oldtiles = new();
+        gridToScore = new();
         
         for (int x = 0; x < Size.x; x++)
         {
@@ -96,23 +95,16 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void PassGridTilesToScore()
+    {
+        gridToScore.SetScore(tiles);
+    }
+
     public GameObject TileTypeToObject(GridTileType type)
     {
-        switch (type)
-        {
-            case GridTileType.Inactive:
-                return inactiveObject;
-            case GridTileType.Empty:
-                return emptyObject;
-            case GridTileType.Grass:
-                return grassObject;
-            case GridTileType.Rock:
-                return rockObject;
-            case GridTileType.Water:
-                return waterObject;
-            default:
-                return emptyObject;
-        }
+        if ((int)type >= lstGridObjects.Count) return null;
+
+        return lstGridObjects[(int)type];
     }
 
     /// <summary>
