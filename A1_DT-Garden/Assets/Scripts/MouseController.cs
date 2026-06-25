@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DrawingTypes;
 using Grid;
 using Unity.Mathematics;
@@ -17,6 +18,8 @@ public class MouseController : MonoBehaviour
     private DrawingType drawingType = DrawingType.Triangle;
     private Vector2 initCamPos;
     private Vector3 dragOrigin;
+
+    private GameObject[] squareTile = new GameObject[4];
 
     private bool blockClick = false;
     
@@ -77,9 +80,7 @@ public class MouseController : MonoBehaviour
                 // Don't update the position outside of the bounds
                 if (WithinBounds(coordinate.Position))
                 {
-                    currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                    coordinate.Position.y = 1.001f;
-                    currentTileObj.transform.position = coordinate.Position;
+                    TileFollowCursor(coordinate);
                 }
 
                 if (mouse.leftButton.wasPressedThisFrame)
@@ -109,6 +110,26 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    private void TileFollowCursor(Coordinate coordinate)
+    {
+        switch (drawingType)
+        {
+            case DrawingType.Square:
+                for (int i = 0; i < 4; i++)
+                {
+                    squareTile[i].transform.eulerAngles = new Vector3(0, i * 90, 0);
+                    coordinate.Position.y = 1.001f;
+                    squareTile[i].transform.position = coordinate.Position;
+                }
+                break;
+            case DrawingType.Triangle:
+                currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
+                coordinate.Position.y = 1.001f;
+                currentTileObj.transform.position = coordinate.Position;
+                break;
+        }
+    }
+
     /// <summary>
     /// Prevents drawing tiles when the mouse is over a UI element
     /// </summary>
@@ -128,6 +149,7 @@ public class MouseController : MonoBehaviour
     {
         // 0 = single square, 1 = single triangle
         drawingType = chosenDrawingType;
+        SetCursor(currentTileType);
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
@@ -167,9 +189,28 @@ public class MouseController : MonoBehaviour
     private void SetCursor(GridTileType type)
     {
         Destroy(currentTileObj);
-        currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
-        currentTileObj.transform.position = GetGridSnappedMousePos().Position;
-        Debug.Log($"Set current tile to {currentTileType} ({currentTileObj.transform.position.x}, {currentTileObj.transform.position.y})");
+        //currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+        //currentTileObj.transform.position = GetGridSnappedMousePos().Position;
+
+        switch (drawingType)
+        {
+            case DrawingType.Triangle:
+                currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                currentTileObj.transform.position = GetGridSnappedMousePos(false).Position;
+                currentTileObj.transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(false).GetAngle(), 0);
+                break;
+            case DrawingType.Square:
+                for(int i = 0; i < 4; i++)
+                {
+                    Destroy(squareTile[i]);
+                    squareTile[i] = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                    squareTile[i].transform.position = GetGridSnappedMousePos(true).Position;
+                    squareTile[i].transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(true).GetAngle(), 0);
+                }
+                break;
+        }
+
+        //Debug.Log($"Set current tile to {currentTileType} ({currentTileObj.transform.position.x}, {currentTileObj.transform.position.y})");
     }
 
     /// <summary>
