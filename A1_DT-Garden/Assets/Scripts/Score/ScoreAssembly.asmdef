@@ -1,3 +1,6 @@
 {
-	"name": "ScoreAssembly"
+	"name": "ScoreAssembly",
+	"references": [
+		"Unity.TextMeshPro"
+	]
 }
