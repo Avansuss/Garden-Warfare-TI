@@ -20,7 +20,7 @@ public class GridToScore
         gardenAnimalsData = new();
     }
 
-    public ScoreManager CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
+    public GridScorePillars CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
     {
         setSpottedGardenAnimals(questionsAnimal);
         setSoilHandlingValues(answersDropdown);
@@ -32,15 +32,23 @@ public class GridToScore
         scoreModifier = new ScoreModifier(scoreCalculate);
         scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
 
+        var gridScore = new GridScorePillars()
+        {
+            SoilWater = scoreManager.SoilWater(),
+            HealthySoil = scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden),
+            LifeAboveSoil = scoreManager.LifeAboveTheSoil(),
+            PlantDiversity = scoreManager.PlantDiversity(plantAmount)
+        };
+        
         if(doLogging)
         {
-            Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
-            Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden)}"); //fix amount of fertilizer and green waste in garden
-            Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
-            Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
+            Debug.Log($"Soil Water: {gridScore.SoilWater}");
+            Debug.Log($"Healthy Soil: {gridScore.HealthySoil}"); //fix amount of fertilizer and green waste in garden
+            Debug.Log($"Life Above The Soil: {gridScore.LifeAboveSoil}");
+            Debug.Log($"Plant Diversity: {gridScore.PlantDiversity}"); //fix amount of plants in garden
             Debug.Log("Plant Amount: " + plantAmount);
         }
-        return scoreManager;
+        return gridScore;
     }
 
     private void setScores(Dictionary<Coordinate, GridTile> drawnTiles)

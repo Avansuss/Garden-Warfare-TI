@@ -82,8 +82,8 @@ MonoBehaviour:
   MaxStep: 0
   manager: {fileID: 0}
   plantAmount: 0
-  userGardenAnimals: 00000000
-  answersDropdown: 0000
+  userGardenAnimals: 
+  answersDropdown: 
 --- !u!1 &1965408817203962905
 GameObject:
   m_ObjectHideFlags: 0

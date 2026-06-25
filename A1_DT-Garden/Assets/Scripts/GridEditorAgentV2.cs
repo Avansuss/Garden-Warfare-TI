@@ -9,6 +9,10 @@ using UnityEngine;
 public class GridEditorAgentV2 : Agent
 {
     public GridManager manager;
+    public float SoilWater;
+    public float HealthySoil;
+    public float LifeAboveSoil;
+    public float PlantDiversity;
 
     private int step;
     private const int MAXSTEPS = 5000;
@@ -38,10 +42,16 @@ public class GridEditorAgentV2 : Agent
     {
         var tiles = manager.GetGrid();
         var gridSummary = manager.GetGridSummary();
-        _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown);
+        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown);
+        
+        // Score matrix observations
+        sensor.AddObservation(gridScore.SoilWater);
+        sensor.AddObservation(gridScore.HealthySoil);
+        sensor.AddObservation(gridScore.LifeAboveSoil);
+        sensor.AddObservation(gridScore.PlantDiversity);
+        
         
         // How many of each type there are
-        sensor.AddObservation(gridSummary[GridTileType.Grass]);
         sensor.AddObservation(gridSummary[GridTileType.Empty]);
 
         var typesNum = Enum.GetValues(typeof(GridTileType)).Length;
@@ -72,24 +82,29 @@ public class GridEditorAgentV2 : Agent
         
         // Per-step punishment
         AddReward(-0.01f);
-
-        manager.GetGrid().TryGetValue(coord, out var tileBeforeChange);
-        var wasCorrect = tileBeforeChange!.TileType == GridTileType.Grass;
         
         // If the tile placement is correct or not
-        if (manager.SetTile(coord, type, true, true))
-        {
-            var isCorrect = type == GridTileType.Grass;
-            
-            if(!wasCorrect && isCorrect) AddReward(30);
-            else if (wasCorrect && isCorrect) AddReward(-1);
-            else if (!isCorrect && wasCorrect) AddReward(-5);
-            else AddReward(-2); 
-        }
-        else
+        if (!manager.SetTile(coord, type, true, true))
         {
             AddReward(-5);
         }
+        
+        // 4 pillar score evaulation
+        var tiles = manager.GetGrid();
+        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown);
+
+        var fourPillarScore = gridScore.SoilWater *
+                              gridScore.HealthySoil *
+                              gridScore.LifeAboveSoil *
+                              gridScore.PlantDiversity * 0.1f;
+        
+        //For purely visual reasons
+        SoilWater = gridScore.SoilWater;
+        HealthySoil = gridScore.HealthySoil;
+        LifeAboveSoil = gridScore.LifeAboveSoil;
+        PlantDiversity = gridScore.PlantDiversity;
+        
+        AddReward(fourPillarScore);
         
         // Read the number of some tiles in the grid
         var summary = manager.GetGridSummary();
@@ -97,7 +112,6 @@ public class GridEditorAgentV2 : Agent
         // If the whole grid is filled
         if (summary[GridTileType.Empty] == 0)
         {
-            if (summary[GridTileType.Grass] == manager.Size.x * manager.Size.y * 4) AddReward(100);
             AddReward(50);
             EndEpisode();
         }
