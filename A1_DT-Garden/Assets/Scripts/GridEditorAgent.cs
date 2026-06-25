@@ -69,8 +69,8 @@ public class GridEditorAgent : Agent
         // Per-step punishment
         AddReward(-0.01f);
 
-        var tileBeforechange = manager.GetGrid()[coord];
-        var wasCorrect = tileBeforechange == GridTileType.Grass;
+        manager.GetGrid().TryGetValue(coord, out var tileBeforeChange);
+        var wasCorrect = tileBeforeChange == GridTileType.Grass;
         
         // If the tile placement is correct or not
         if (manager.SetTile(coord, type, true, true))
