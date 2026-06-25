@@ -305,6 +305,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1489590116}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1489590118}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!114 &125916728 stripped
 MonoBehaviour:
@@ -344,7 +347,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 260781788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae41638557d81dc4ca8862b5a520490c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8aadfad68a906a042a9c0a1590064058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
 --- !u!4 &260781790
@@ -384,7 +387,7 @@ MonoBehaviour:
   smallGreenScore: 0
   shrubberyScore: 0
   totalSurfaceArea: 0
-  scoreModifier: 0
+  scoreModifierData: 0
   vegetationAmount: 0
 --- !u!1001 &329536670
 PrefabInstance:
@@ -445,6 +448,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 329536672}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 329536674}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &329536671 stripped
 GameObject:
@@ -466,6 +472,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &329536674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329536671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &408323886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -525,6 +547,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 408323888}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 408323890}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &408323887 stripped
 GameObject:
@@ -546,6 +571,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &408323890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408323887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1 &412281585
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,6 +877,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 615314050}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 615314052}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &615314049 stripped
 GameObject:
@@ -857,6 +901,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &615314052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615314049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &934388257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -916,6 +976,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 934388259}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 934388261}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &934388258 stripped
 GameObject:
@@ -937,6 +1000,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &934388261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934388258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &1207858574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -996,6 +1075,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1207858576}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1207858578}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &1207858575 stripped
 GameObject:
@@ -1017,6 +1099,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1207858578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207858575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &1369956948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1076,6 +1174,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1369956950}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1369956952}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &1369956949 stripped
 GameObject:
@@ -1097,6 +1198,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1369956952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369956949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1 &1377770696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1243,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d03ebdfdacc36443ab9b06f0699770b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  inpfPlantAmount: {fileID: 0}
   mouseController: {fileID: 412281590}
+  gridManager: {fileID: 0}
+  pnlQuestions: {fileID: 0}
+  questionsToggle: []
+  questionsDropdowns: []
 --- !u!4 &1377770698
 Transform:
   m_ObjectHideFlags: 0
@@ -1162,6 +1284,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1489590118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489590112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &1807607208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1221,6 +1359,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1807607210}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1807607212}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &1807607209 stripped
 GameObject:
@@ -1242,6 +1383,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1807607212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807607209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1001 &1998873929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1301,6 +1458,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1998873931}
+    - targetCorrespondingSourceObject: {fileID: 4808897658938386068, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1998873933}
   m_SourcePrefab: {fileID: 100100000, guid: 0614b7d8e7ef8b36cb8790f942bbdff1, type: 3}
 --- !u!1 &1998873930 stripped
 GameObject:
@@ -1322,6 +1482,22 @@ MonoBehaviour:
   DecisionPeriod: 10
   DecisionStep: 0
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1998873933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998873930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Agent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

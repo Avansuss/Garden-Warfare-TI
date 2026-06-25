@@ -11,7 +11,7 @@ public class GridEditorAgent : Agent
     public GridManager manager;
 
     private int step;
-    private const int MAXSTEPS = 1200;
+    private const int MAXSTEPS = 5000;
     private static readonly Section[] TriangleSections = 
         { Section.North, Section.East, Section.South, Section.West };
     
@@ -33,15 +33,9 @@ public class GridEditorAgent : Agent
         
         // How many of each type there are
         sensor.AddObservation(gridSummary[GridTileType.Grass]);
-        sensor.AddObservation(gridSummary[GridTileType.Rock]);
-        sensor.AddObservation(gridSummary[GridTileType.Water]);
         sensor.AddObservation(gridSummary[GridTileType.Empty]);
-        
-        // Remaining steps
-        sensor.AddObservation(MAXSTEPS - step);
 
         var typesNum = Enum.GetValues(typeof(GridTileType)).Length;
-        
         // dictionaries can be prone to not being the same order, which is critical for this observation
         for (int x = 0; x < manager.Size.x; x++)
         {
@@ -63,8 +57,9 @@ public class GridEditorAgent : Agent
         var posX = actions.DiscreteActions[0];
         var posY = actions.DiscreteActions[1];
         GridTileType type = (GridTileType)(actions.DiscreteActions[2] + 2);
+        var section = (Section)actions.DiscreteActions[3];
         
-        var coord = new Coordinate(posX, posY, Section.Full);
+        var coord = new Coordinate(posX, posY, section);
         
         // Per-step punishment
         AddReward(-0.01f);
@@ -77,7 +72,7 @@ public class GridEditorAgent : Agent
         {
             var isCorrect = type == GridTileType.Grass;
             
-            if(!wasCorrect && isCorrect) AddReward(10);
+            if(!wasCorrect && isCorrect) AddReward(30);
             else if (wasCorrect && isCorrect) AddReward(-1);
             else if (!isCorrect && wasCorrect) AddReward(-5);
             else AddReward(-2); 
@@ -89,11 +84,11 @@ public class GridEditorAgent : Agent
         
         // Read the number of some tiles in the grid
         var summary = manager.GetGridSummary();
-        AddReward(-.1f * summary[GridTileType.Empty]);
 
         // If the whole grid is filled
         if (summary[GridTileType.Empty] == 0)
         {
+            if (summary[GridTileType.Grass] == manager.Size.x * manager.Size.y * 4) AddReward(100);
             AddReward(50);
             EndEpisode();
         }

@@ -3139,6 +3139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseController
   manager: {fileID: 1176453872}
+  CanDraw: 1
 --- !u!1 &418795371
 GameObject:
   m_ObjectHideFlags: 0
@@ -7679,6 +7680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   Size: {x: 5, y: 3}
+  DisableGrid: 0
   lstGridObjects:
   - {fileID: 7659006563712087241, guid: 30cf3273c055afdebbc003768f667297, type: 3}
   - {fileID: 7659006563712087241, guid: 81164f80a74e393468aede9ba80a91d3, type: 3}
@@ -13407,3 +13409,4 @@ SceneRoots:
   - {fileID: 722749774}
   - {fileID: 561942031}
   - {fileID: 1377770698}
+  - {fileID: 1016838989}
