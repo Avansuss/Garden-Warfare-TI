@@ -7,7 +7,7 @@ namespace Grid
         Grass = 2,
         Pond = 3,
         SwimmingPool = 4,
-        Tiles = 5,
+        StoneTiles = 5,
         PermeableTiles = 6,
         Gravel = 7,
         RootFabric = 8,

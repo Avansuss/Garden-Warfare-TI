@@ -56,7 +56,7 @@ public class GridToScore
         scoreData.Grass = tileCounts[(int)GridTileType.Grass];
         scoreData.AreaPond = tileCounts[(int)GridTileType.Pond];
         scoreData.AreaSwimmingPool = tileCounts[(int)GridTileType.SwimmingPool];
-        scoreData.AreaTiles = tileCounts[(int)GridTileType.Tiles];
+        scoreData.AreaTiles = tileCounts[(int)GridTileType.StoneTiles];
         scoreData.PermeableTiles = tileCounts[(int)GridTileType.PermeableTiles];
         scoreData.Gravel = tileCounts[(int)GridTileType.Gravel];
         scoreData.RootBarrierFabric = tileCounts[(int)GridTileType.RootFabric];
