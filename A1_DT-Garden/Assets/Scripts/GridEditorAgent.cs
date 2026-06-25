@@ -32,10 +32,10 @@ public class GridEditorAgent : Agent
         var gridSummary = manager.GetGridSummary();
         
         // How many of each type there are
-        sensor.AddObservation(gridSummary[GridTileType.Grass]);
-        sensor.AddObservation(gridSummary[GridTileType.Rock]);
-        sensor.AddObservation(gridSummary[GridTileType.Water]);
-        sensor.AddObservation(gridSummary[GridTileType.Empty]);
+        //sensor.AddObservation(gridSummary[GridTileType.Grass]);
+        //sensor.AddObservation(gridSummary[GridTileType.Rock]);
+        //sensor.AddObservation(gridSummary[GridTileType.Water]);
+        //sensor.AddObservation(gridSummary[GridTileType.Empty]);
         
         // Remaining steps
         sensor.AddObservation(MAXSTEPS - step);
