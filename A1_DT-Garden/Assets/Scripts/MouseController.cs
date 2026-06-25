@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class MouseController : MonoBehaviour
 {
     public GridManager manager;
+    public bool CanDraw;
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
@@ -24,7 +25,7 @@ public class MouseController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
-        SetcurrentTile(GridTileType.Grass);
+        if(CanDraw) SetcurrentTile(GridTileType.Grass);
         
         cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
     }
@@ -32,36 +33,36 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // No mouse controls if its outside of the game window
-        Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
-        bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
-        if (!isOutside)
+        // Camera zoom
+        if (math.abs(mouse.scroll.value.y) > 0)
         {
-            // Camera zoom
-            if (math.abs(mouse.scroll.value.y) > 0)
+            ZoomOrthoToMouse(mouse.scroll.value.y);
+        }
+        
+        // Camera move
+        if (mouse.middleButton.wasPressedThisFrame)
+        {
+            dragOrigin = ScreenToWorld(mouse.position.value);
+        }
+        if (mouse.middleButton.isPressed)
+        {
+            Vector3 current = ScreenToWorld(mouse.position.value);
+            Vector3 delta = dragOrigin - current;
+            cam.transform.position += delta;
+            // Recalculate so next frame's delta is relative, not cumulative
+            dragOrigin = ScreenToWorld(mouse.position.value);
+        }
+        else
+        {
+            // No mouse controls if its outside of the game window
+            Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
+            bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+            if (!isOutside && CanDraw)
             {
-                ZoomOrthoToMouse(mouse.scroll.value.y);
-            }
-            
-            // Camera move
-            if (mouse.middleButton.wasPressedThisFrame)
-            {
-                dragOrigin = ScreenToWorld(mouse.position.value);
-            }
-            if (mouse.middleButton.isPressed)
-            {
-                Vector3 current = ScreenToWorld(mouse.position.value);
-                Vector3 delta = dragOrigin - current;
-                cam.transform.position += delta;
-                // Recalculate so next frame's delta is relative, not cumulative
-                dragOrigin = ScreenToWorld(mouse.position.value);
-            }
-            else
-            {
-                if(blockClick) return;
+                if (blockClick) return;
 
                 Coordinate coordinate = new Coordinate();
-                switch(drawingType)
+                switch (drawingType)
                 {
                     case DrawingType.Square:
                         coordinate = GetGridSnappedMousePos(true);
@@ -92,10 +93,16 @@ public class MouseController : MonoBehaviour
 
                 if (mouse.leftButton.isPressed)
                 {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
                     manager.SetTile(coordinate, currentTileType, redraw: true);
                 }
                 else if (mouse.rightButton.isPressed)
                 {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
                     manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
                 }
             }
