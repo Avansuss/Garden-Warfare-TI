@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Model: {fileID: 5022602860645237092, guid: d90bdf849f0195b12953ca524d58e7f4, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: GridEditorAgent
+  m_BehaviorName: GridEditorAgentV1
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1

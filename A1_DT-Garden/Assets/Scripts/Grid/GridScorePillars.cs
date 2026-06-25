@@ -1,6 +1,6 @@
 namespace Grid
 {
-    public struct GridScorePillars
+    public struct GridScorePillars 
     {
         public float SoilWater;
         public float HealthySoil;
