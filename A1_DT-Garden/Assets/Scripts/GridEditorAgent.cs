@@ -33,8 +33,8 @@ public class GridEditorAgent : Agent
         
         // How many of each type there are
         sensor.AddObservation(gridSummary[GridTileType.Grass]);
-        sensor.AddObservation(gridSummary[GridTileType.Rock]);
-        sensor.AddObservation(gridSummary[GridTileType.Water]);
+        sensor.AddObservation(gridSummary[GridTileType.StoneTiles]);
+        sensor.AddObservation(gridSummary[GridTileType.Pond]);
         sensor.AddObservation(gridSummary[GridTileType.Empty]);
         
         // Remaining steps
