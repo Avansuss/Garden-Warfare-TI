@@ -6,35 +6,48 @@ using UnityEngine;
 
 public class GridToScore
 {
-    Dictionary<Coordinate, GridTile> tiles;
     ScoreData scoreData;
     GardenAnimalsData gardenAnimalsData;
     ScoreCalculation scoreCalculate;
     ScoreModifier scoreModifier;
     ScoreManager scoreManager;
-
+    FertilizerType fertilizerType;
+    GreenWasteLeftInGarden greenWasteLeftInGarden;
 
     public GridToScore()
     {
         scoreData = new();
         gardenAnimalsData = new();
-
-        TempSetGardenAnimals();
-
     }
 
-    public void SetScore(Dictionary<Coordinate, GridTile> drawnTiles)
+    public void CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown)
     {
-        this.tiles = drawnTiles;
-        var differentTiles = this.tiles.Values.GroupBy(tile => tile.TileType);
+        setSpottedGardenAnimals(questionsAnimal);
+        setSoilHandlingValues(answersDropdown);
+        setScores(drawnTiles);
 
+        Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
+
+        scoreCalculate = new ScoreCalculation(scoreData);
+        scoreModifier = new ScoreModifier(scoreCalculate);
+        scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
+
+        Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
+        Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden)}"); //fix amount of fertilizer and green waste in garden
+        Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
+        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
+        Debug.Log("Plant Amount: " + plantAmount);
+    }
+
+    private void setScores(Dictionary<Coordinate, GridTile> drawnTiles)
+    {
         int maxEnumValue = System.Enum.GetValues(typeof(GridTileType)).Cast<int>().Max();
         int[] tileCounts = new int[maxEnumValue + 1];
 
-        foreach(var tile in this.tiles.Values)
+        foreach (var tile in drawnTiles.Values)
         {
             int index = (int)tile.TileType;
-            if(index >= 0 && index < tileCounts.Length)
+            if (index >= 0 && index < tileCounts.Length)
             {
                 tileCounts[index]++;
             }
@@ -58,26 +71,24 @@ public class GridToScore
         scoreData.Shrub = tileCounts[(int)GridTileType.Bush];
         scoreData.PickingGarden = tileCounts[(int)GridTileType.PickingGarden];
         scoreData.BigTree = tileCounts[(int)GridTileType.Tree];
-
-
-        Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
-
-        scoreCalculate = new ScoreCalculation(scoreData);
-        
-        scoreModifier = new ScoreModifier(scoreCalculate);
-        scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
-
-        Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
-        Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half)}"); //fix amount of fertilizer and green waste in garden
-        Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
-        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(11)}"); //fix amount of plants in garden
     }
 
-    private void TempSetGardenAnimals()
+    private void setSpottedGardenAnimals(bool[] userGardenAnimals)
     {
-        gardenAnimalsData.SpottedBeesAndButterflies = true;
-        gardenAnimalsData.SpottedBirds = true;
-        gardenAnimalsData.SpottedSpiders = true;
-        gardenAnimalsData.SpottedOtherAnimals = true;
+        foreach (var animal in userGardenAnimals)
+        {
+            Debug.Log("User Garden Animals: " + animal);
+        }
+
+        gardenAnimalsData.SpottedBeesAndButterflies = userGardenAnimals[0];
+        gardenAnimalsData.SpottedBirds = userGardenAnimals[1];
+        gardenAnimalsData.SpottedSpiders = userGardenAnimals[2];
+        gardenAnimalsData.SpottedOtherAnimals = userGardenAnimals[3];
+    }
+
+    private void setSoilHandlingValues(byte[] answersDropdown)
+    {
+        fertilizerType = (FertilizerType)answersDropdown[0];
+        greenWasteLeftInGarden = (GreenWasteLeftInGarden)answersDropdown[1];
     }
 }
