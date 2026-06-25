@@ -20,7 +20,7 @@ public class GridToScore
         gardenAnimalsData = new();
     }
 
-    public void CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown)
+    public ScoreManager CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
     {
         setSpottedGardenAnimals(questionsAnimal);
         setSoilHandlingValues(answersDropdown);
@@ -32,11 +32,15 @@ public class GridToScore
         scoreModifier = new ScoreModifier(scoreCalculate);
         scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
 
-        Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
-        Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden)}"); //fix amount of fertilizer and green waste in garden
-        Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
-        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
-        Debug.Log("Plant Amount: " + plantAmount);
+        if(doLogging)
+        {
+            Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
+            Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden)}"); //fix amount of fertilizer and green waste in garden
+            Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
+            Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
+            Debug.Log("Plant Amount: " + plantAmount);
+        }
+        return scoreManager;
     }
 
     private void setScores(Dictionary<Coordinate, GridTile> drawnTiles)
