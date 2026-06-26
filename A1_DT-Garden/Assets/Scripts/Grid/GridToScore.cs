@@ -11,13 +11,26 @@ public class GridToScore
     ScoreCalculation scoreCalculate;
     ScoreModifier scoreModifier;
     ScoreManager scoreManager;
+    ScoreVisualizer scoreVisualizer;
     FertilizerType fertilizerType;
     GreenWasteLeftInGarden greenWasteLeftInGarden;
+
 
     public GridToScore()
     {
         scoreData = new();
         gardenAnimalsData = new();
+
+        // find UImanager
+        GameObject uiManagerObject = GameObject.Find("UIManager");
+        if (uiManagerObject == null) return;
+        
+        scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
+        if (scoreVisualizer == null)
+        {
+            Debug.LogError("ScoreVisualizer component not found on UIManager GameObject.");
+        }
+
     }
 
     public GridScorePillars CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
@@ -49,7 +62,7 @@ public class GridToScore
             Debug.Log("Plant Amount: " + plantAmount);
         }
         
-        float[] calculatedPillars = new float[4] { soilWaterValue, soilHealth, animalFriendliness, plantDiversity } ;
+        float[] calculatedPillars = new float[4] { gridScore.SoilWater, gridScore.HealthySoil, gridScore.LifeAboveSoil, gridScore.PlantDiversity } ;
 
         scoreVisualizer.VisualizeScore(calculatedPillars);
         return gridScore;
