@@ -42,7 +42,7 @@ public class GridEditorAgentV2 : Agent
     {
         var tiles = manager.GetGrid();
         var gridSummary = manager.GetGridSummary();
-        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown);
+        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown, doLogging:false);
         
         // Score matrix observations
         sensor.AddObservation(gridScore.SoilWater);
@@ -91,7 +91,7 @@ public class GridEditorAgentV2 : Agent
         
         // 4 pillar score evaulation
         var tiles = manager.GetGrid();
-        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown);
+        var gridScore = _gridToScore.CalculateScore(tiles, plantAmount, userGardenAnimals, answersDropdown, doLogging:false);
 
         var fourPillarScore = gridScore.SoilWater *
                               gridScore.HealthySoil *

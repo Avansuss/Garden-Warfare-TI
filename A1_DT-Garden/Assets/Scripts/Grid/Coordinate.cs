@@ -86,14 +86,13 @@ namespace Grid
         {
             if (obj is not Coordinate other) return false;
             return Position.x == other.Position.x &&
-                   Position.y == other.Position.y &&
                    Position.z == other.Position.z &&
                    Section == other.Section;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Position.x, Position.y, Position.z, Section);
+            return HashCode.Combine(Position.x, Position.z, Section);
         }
     }
 }
