@@ -303,75 +303,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 673260283b4c25d168ed3d22678a0c89, type: 3}
---- !u!1 &260781788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 260781790}
-  - component: {fileID: 260781789}
-  - component: {fileID: 260781791}
-  m_Layer: 0
-  m_Name: ScoreManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &260781789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 260781788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aadfad68a906a042a9c0a1590064058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
---- !u!4 &260781790
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 260781788}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &260781791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 260781788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70f142f492d856f4b8088fd01e90a603, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScoreTester
-  soilWaterScore: 0
-  healthySoilScore: 0
-  animalFriendlinessScore: 0
-  plantDiversityScore: 0
-  hardeningScore: 0
-  permeabilityScore: 0
-  notHardenedWithoutPlantsScore: 0
-  smallGreenScore: 0
-  shrubberyScore: 0
-  totalSurfaceArea: 0
-  scoreModifierData: 0
-  vegetationAmount: 0
 --- !u!1001 &329536670
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -980,6 +911,7 @@ MonoBehaviour:
   pnlQuestions: {fileID: 0}
   questionsToggle: []
   questionsDropdowns: []
+  lblExplanation: {fileID: 0}
 --- !u!4 &1377770698
 Transform:
   m_ObjectHideFlags: 0
@@ -1115,7 +1047,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 412281588}
   - {fileID: 111794622}
-  - {fileID: 260781790}
   - {fileID: 561942031}
   - {fileID: 1377770698}
   - {fileID: 125916727}

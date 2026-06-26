@@ -28,7 +28,8 @@ public class GridToScore
         scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
         if (scoreVisualizer == null)
         {
-            Debug.LogError("ScoreVisualizer component not found on UIManager GameObject.");
+            // this is no breaking null anymore and thus does not need to throw an error.
+            Debug.LogWarning("ScoreVisualizer component not found on UIManager GameObject.");
         }
 
     }
@@ -64,7 +65,7 @@ public class GridToScore
         
         float[] calculatedPillars = new float[4] { gridScore.SoilWater, gridScore.HealthySoil, gridScore.LifeAboveSoil, gridScore.PlantDiversity } ;
 
-        scoreVisualizer.VisualizeScore(calculatedPillars);
+        scoreVisualizer?.VisualizeScore(calculatedPillars);
         return gridScore;
     }
 

@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
     public void Start()
     {
         //inpfText = inpfPlantAmount.GetComponent<TMP_Text>();
-        inpfPlantAmount.onValueChanged.AddListener(delegate { OnTextChanged(); });
+        inpfPlantAmount?.onValueChanged.AddListener(delegate { OnTextChanged(); });
     }
 
     /// <summary>
