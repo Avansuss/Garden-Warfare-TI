@@ -32,8 +32,15 @@ public class MouseController : MonoBehaviour
 
         if (cam && manager)
         {
-            Debug.LogWarning("gridmanager has not been set on mouse controller!");
             cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+        }
+        else if (!manager)
+        {
+            Debug.LogWarning("gridmanager has not been set on mouse controller!");
+        }
+        else
+        {
+            Debug.LogWarning("main camera has not been set on mouse controller (somehow)");
         }
     }
 
