@@ -1,0 +1,362 @@
+[
+  {
+    "x": 0.5,
+    "z": 0.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 0.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 0.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 0.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 1.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 1.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 1.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 1.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 2.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 2.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 2.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 0.5,
+    "z": 2.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 0.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 0.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 0.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 0.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 1.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 1.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 1.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 1.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 2.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 2.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 2.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 1.5,
+    "z": 2.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 0.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 0.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 0.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 0.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 1.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 1.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 1.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 1.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 2.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 2.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 2.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 2.5,
+    "z": 2.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 0.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 0.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 0.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 0.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 1.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 1.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 1.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 1.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 2.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 2.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 2.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 3.5,
+    "z": 2.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 0.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 0.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 0.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 0.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 1.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 1.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 1.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 1.5,
+    "section": 4,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 2.5,
+    "section": 1,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 2.5,
+    "section": 2,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 2.5,
+    "section": 3,
+    "tileType": 12
+  },
+  {
+    "x": 4.5,
+    "z": 2.5,
+    "section": 4,
+    "tileType": 12
+  }
+]
