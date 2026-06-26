@@ -21,7 +21,6 @@ public class GridJsonExporter : MonoBehaviour
         }
 
         string json = JsonConvert.SerializeObject(gridTiles, Formatting.Indented);
-        //string json = JsonConvert.SerializeObject(new Vector3(1, 1));
 
         Debug.Log(json);
 
@@ -43,19 +42,5 @@ public class GridJsonExporter : MonoBehaviour
                 break;
             }
         }
-        //System.IO.File.WriteAllText(Application.dataPath + "/ExportedGardens/Garden.json", json);
-        //System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "\\Garden.json", json);
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
