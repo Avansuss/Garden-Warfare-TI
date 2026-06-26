@@ -7,21 +7,16 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public Dictionary<Coordinate, GridTile> tiles;
+    public List<GameObject> lstGridObjects;
+    public bool DisableGrid;
+    public Vector2Int Size;
     
     private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
     
     private GridToScore gridToScore;
-
-    public Vector2Int Size;
-    public bool DisableGrid;
     private Vector3 _origin;
     private GridOverlay _gridOverlay;
-    private Camera _cam;
-    
-    
-
-    public List<GameObject> lstGridObjects;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -90,6 +90,10 @@ namespace Grid
                    Section == other.Section;
         }
 
+        /// <summary>
+        /// Needed for the dictionary lookup to properly work and function quicker
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(Position.x, Position.z, Section);

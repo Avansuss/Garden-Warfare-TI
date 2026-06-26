@@ -16,7 +16,7 @@ public class GridEditorAgentV2 : Agent
 
     private int step;
     private const int MAXSTEPS = 5000;
-    private static readonly Section[] TriangleSections = 
+    private Section[] _triangleSections = 
         { Section.North, Section.East, Section.South, Section.West };
 
     // Score calculation stuff
@@ -60,7 +60,7 @@ public class GridEditorAgentV2 : Agent
         {
             for (int y = 0; y < manager.Size.y; y++)
             {
-                foreach(var section in TriangleSections)
+                foreach(var section in _triangleSections)
                 {
                     var coord = new Coordinate(x, y, section);
                     tiles.TryGetValue(coord, out var type);
