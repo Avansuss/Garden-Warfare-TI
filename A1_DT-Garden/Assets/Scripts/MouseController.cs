@@ -189,8 +189,6 @@ public class MouseController : MonoBehaviour
     private void SetCursor(GridTileType type)
     {
         Destroy(currentTileObj);
-        //currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
-        //currentTileObj.transform.position = GetGridSnappedMousePos().Position;
 
         switch (drawingType)
         {
@@ -209,8 +207,6 @@ public class MouseController : MonoBehaviour
                 }
                 break;
         }
-
-        //Debug.Log($"Set current tile to {currentTileType} ({currentTileObj.transform.position.x}, {currentTileObj.transform.position.y})");
     }
 
     /// <summary>

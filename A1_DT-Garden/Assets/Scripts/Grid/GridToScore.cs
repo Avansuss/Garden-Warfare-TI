@@ -11,6 +11,7 @@ public class GridToScore
     ScoreCalculation scoreCalculate;
     ScoreModifier scoreModifier;
     ScoreManager scoreManager;
+    ScoreVisualizer scoreVisualizer;
     FertilizerType fertilizerType;
     GreenWasteLeftInGarden greenWasteLeftInGarden;
 
@@ -18,6 +19,17 @@ public class GridToScore
     {
         scoreData = new();
         gardenAnimalsData = new();
+
+        // find UImanager
+        GameObject uiManagerObject = GameObject.Find("UIManager");
+        if (uiManagerObject == null) return;
+        
+        scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
+        if (scoreVisualizer == null)
+        {
+            Debug.LogError("ScoreVisualizer component not found on UIManager GameObject.");
+        }
+
     }
 
     public void CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown)
@@ -26,17 +38,26 @@ public class GridToScore
         setSoilHandlingValues(answersDropdown);
         setScores(drawnTiles);
 
-        Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
+        //Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
 
         scoreCalculate = new ScoreCalculation(scoreData);
         scoreModifier = new ScoreModifier(scoreCalculate);
         scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
 
-        Debug.Log($"Soil Water: {scoreManager.SoilWater()}");
-        Debug.Log($"Healthy Soil: {scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden)}"); //fix amount of fertilizer and green waste in garden
-        Debug.Log($"Life Above The Soil: {scoreManager.LifeAboveTheSoil()}");
-        Debug.Log($"Plant Diversity: {scoreManager.PlantDiversity(plantAmount)}"); //fix amount of plants in garden
-        Debug.Log("Plant Amount: " + plantAmount);
+        float soilWaterValue = scoreManager.SoilWater();
+        float soilHealth = scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden);
+        float animalFriendliness = scoreManager.LifeAboveTheSoil();
+        float plantDiversity = scoreManager.PlantDiversity(plantAmount);
+
+        Debug.Log($"Soil Water Value: {soilWaterValue}");
+        Debug.Log($"Soil Health: {soilHealth}");
+        Debug.Log($"Animal Friendliness: {animalFriendliness}");
+        Debug.Log($"Plant Diversity: {plantDiversity}");
+
+        float[] calculatedPillars = new float[4] { soilWaterValue, soilHealth, animalFriendliness, plantDiversity } ;
+
+        scoreVisualizer.VisualizeScore(calculatedPillars);
+
     }
 
     private void setScores(Dictionary<Coordinate, GridTile> drawnTiles)

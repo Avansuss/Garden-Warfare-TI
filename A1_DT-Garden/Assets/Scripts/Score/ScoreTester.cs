@@ -21,11 +21,12 @@ public class ScoreTester : MonoBehaviour
 
     private ScoreData scoreData = new ScoreData();
     private GardenAnimalsData gardenAnimalsData = new GardenAnimalsData();
+    //private ScoreVisualizer scoreVisualizer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //scoreManager = GetComponent<ScoreManager>();
+        //scoreVisualizer = GetComponent<ScoreVisualizer>();
 
         scoreData = setValues();
         gardenAnimalsData = SetGardenAnimals();
@@ -98,6 +99,10 @@ public class ScoreTester : MonoBehaviour
             healthySoilScore = scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);
             animalFriendlinessScore = scoreManager.LifeAboveTheSoil();
             plantDiversityScore = scoreManager.PlantDiversity(13);
+
+            //float[] calculatedValues = new float[4] { soilWaterScore, healthySoilScore, animalFriendlinessScore, plantDiversityScore };
+
+            //scoreVisualizer.VisualizeScore(calculatedValues);
         }
     }
 }

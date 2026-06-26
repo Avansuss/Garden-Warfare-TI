@@ -12,6 +12,7 @@ public class ScoreModifier
         this.Modifier = _scoreCalculation.VegetationAmount / _scoreCalculation.TotalSurfaceArea;
     }
 
+    //P1
     public readonly float HardeningScoreModifier = 0f;
     public readonly float PermeabilityScoreModifier = 2f;
     public readonly float NotHardenedWithoutPlantsModifier = 3f;
@@ -19,8 +20,6 @@ public class ScoreModifier
     public readonly float GrassModifier = 5f;
     public readonly float ShrubberyModifier = 10f;
     public readonly float BigTreeModifier = 15f;
-
-    //P2 and P3
 
     //P3
     public readonly float BeesAndButterfliesModifier = 2.5f;
