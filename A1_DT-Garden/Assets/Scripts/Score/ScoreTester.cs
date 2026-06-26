@@ -21,12 +21,12 @@ public class ScoreTester : MonoBehaviour
 
     private ScoreData scoreData = new ScoreData();
     private GardenAnimalsData gardenAnimalsData = new GardenAnimalsData();
-    //private ScoreVisualizer scoreVisualizer;
+    private ScoreVisualizer scoreVisualizer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //scoreVisualizer = GetComponent<ScoreVisualizer>();
+        scoreVisualizer = GetComponent<ScoreVisualizer>();
 
         scoreData = setValues();
         gardenAnimalsData = SetGardenAnimals();
@@ -102,7 +102,7 @@ public class ScoreTester : MonoBehaviour
 
             float[] calculatedValues = new float[4] { soilWaterScore, healthySoilScore, animalFriendlinessScore, plantDiversityScore };
 
-            //scoreVisualizer.VisualizeScore(calculatedValues);
+            scoreVisualizer.VisualizeScore(calculatedValues);
         }
     }
 }
