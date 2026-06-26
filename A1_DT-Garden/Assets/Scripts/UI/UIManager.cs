@@ -29,7 +29,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pnlQuestions;
     [SerializeField] private Toggle[] questionsToggle;
     [SerializeField] private TMP_Dropdown[] questionsDropdowns;
-    
+    [SerializeField] private TMP_Text lblExplanation;
+
     private bool[] questionsAnimals = new bool[4];
     private byte[] answersDropdown = new byte[2];
 
@@ -39,11 +40,11 @@ public class UIManager : MonoBehaviour
         inpfPlantAmount.onValueChanged.AddListener(delegate { OnTextChanged(); });
     }
 
+    /// <summary>
+    /// If the input field text sees something that isn't a number, it will remove it and only keep the numbers in the input field.
+    /// </summary>
     public void OnTextChanged()
     {
-        Debug.Log(inpfPlantAmount.text);
-        //[^0-9]+
-
         if (Regex.IsMatch(inpfPlantAmount.text, "[^0-9]+"))
         {
             Debug.Log("Non-numeric characters detected. Removing them.");
@@ -102,7 +103,6 @@ public class UIManager : MonoBehaviour
         gridManager.PassGridTilesToScore(plantAmount, questionsAnimals, answersDropdown);
     }
 
-
     public void OpenQuestions()
     {
         pnlQuestions.SetActive(true);
@@ -111,5 +111,34 @@ public class UIManager : MonoBehaviour
     public void CloseQuestions()
     {
         pnlQuestions.SetActive(false);
+    }
+
+    public void ShowPillarOnEnter(int pillarIndex)
+    {
+        string pillar = "";
+
+        switch (pillarIndex)
+        {
+            case 1:
+                pillar = "Water doorloop";
+                break;
+            case 2:
+                pillar = "Gezondheid van het bodemleven";
+                break;
+            case 3:
+                pillar = "Diervriendelijkheid van de tuin";
+                break;
+            case 4:
+                pillar = "Diversiteit van planten";
+                break;
+        }
+
+        string pillarInfo = $"Pijler {pillarIndex}: {pillar}";
+        lblExplanation.text = pillarInfo;
+    }
+
+    public void HidePillarOnExit()
+    {
+        lblExplanation.text = "";
     }
 }

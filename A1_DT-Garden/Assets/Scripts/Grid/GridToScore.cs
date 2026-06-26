@@ -1,6 +1,7 @@
 using Grid;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridToScore
@@ -25,7 +26,7 @@ public class GridToScore
         setSoilHandlingValues(answersDropdown);
         setScores(drawnTiles);
 
-        Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
+        //Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
 
         scoreCalculate = new ScoreCalculation(scoreData);
         scoreModifier = new ScoreModifier(scoreCalculate);
@@ -47,6 +48,10 @@ public class GridToScore
             Debug.Log($"Plant Diversity: {gridScore.PlantDiversity}"); //fix amount of plants in garden
             Debug.Log("Plant Amount: " + plantAmount);
         }
+        
+        float[] calculatedPillars = new float[4] { soilWaterValue, soilHealth, animalFriendliness, plantDiversity } ;
+
+        scoreVisualizer.VisualizeScore(calculatedPillars);
         return gridScore;
     }
 

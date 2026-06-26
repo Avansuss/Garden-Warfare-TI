@@ -39,8 +39,8 @@ public class ScoreManager
                          ScoreData.BigTree * ScoreModifier.BigTreeModifier;
 
         float soilWaterValue = (float)Math.Round(surfaceAreaWaterValue / this.ScoreCalculate.TotalSurfaceArea, 2);
-
-        return soilWaterValue >= 0 ? soilWaterValue : 0;
+        
+        return scoreBoundaryCheck(soilWaterValue);
     }
 
     //P2
@@ -83,7 +83,7 @@ public class ScoreManager
 
         float healthySoilValue = (float)Math.Round(soilValue * ScoreModifier.Modifier, 2);
 
-        return healthySoilValue >= 0 ? healthySoilValue : 0;
+        return scoreBoundaryCheck(healthySoilValue);
     }
 
     //P3
@@ -106,7 +106,7 @@ public class ScoreManager
 
         float lifeAboveSoilValue = (float)Math.Round(beesButterflyScore + birdsScore + spiderScore + otherAnimalsScore, 2);
 
-        return lifeAboveSoilValue >= 0 ? lifeAboveSoilValue : 0;
+        return scoreBoundaryCheck(lifeAboveSoilValue);
     }
 
     //P4
@@ -131,7 +131,28 @@ public class ScoreManager
 
         float plantDiversityValue = (float)Math.Round(smallGreenValue + grassValue + shrubberyValue + bigTreeValue, 2);
 
-        return plantDiversityValue >= 0 ? plantDiversityValue : 0;
+        return scoreBoundaryCheck(plantDiversityValue);
+    }
+
+    /// <summary>
+    /// Checks if score is within the boundaries of 0 and 10. If not, it will return the closest boundary value.
+    /// </summary>
+    /// <param name="score"></param>
+    /// <returns></returns>
+    private float scoreBoundaryCheck(float score)
+    {
+        if (score < 0)
+        {
+            return 0;
+        }
+        else if (score > 10)
+        {
+            return 10;
+        }
+        else
+        {
+            return score;
+        }
     }
 
 }
