@@ -1,0 +1,56 @@
+{
+    "GridEditorAgent": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-0.onnx",
+                "reward": null,
+                "creation_time": 1782388233.563288,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-0.pt"
+                ]
+            },
+            {
+                "steps": 22462,
+                "file_path": "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-22462.onnx",
+                "reward": -24475.607421875,
+                "creation_time": 1782393109.273259,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-22462.pt"
+                ]
+            },
+            {
+                "steps": 499887,
+                "file_path": "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-499887.onnx",
+                "reward": -5493.7101491292315,
+                "creation_time": 1782395944.69939,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-499887.pt"
+                ]
+            },
+            {
+                "steps": 676695,
+                "file_path": "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-676695.onnx",
+                "reward": -4515.5601806640625,
+                "creation_time": 1782397080.636834,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-676695.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 676695,
+            "file_path": "results/Iteration1.1.10/GridEditorAgent.onnx",
+            "reward": -4515.5601806640625,
+            "creation_time": 1782397080.636834,
+            "auxillary_file_paths": [
+                "results/Iteration1.1.10/GridEditorAgent/GridEditorAgent-676695.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

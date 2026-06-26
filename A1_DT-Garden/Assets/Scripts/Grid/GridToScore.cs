@@ -15,6 +15,7 @@ public class GridToScore
     FertilizerType fertilizerType;
     GreenWasteLeftInGarden greenWasteLeftInGarden;
 
+
     public GridToScore()
     {
         scoreData = new();
@@ -27,12 +28,13 @@ public class GridToScore
         scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
         if (scoreVisualizer == null)
         {
-            Debug.LogError("ScoreVisualizer component not found on UIManager GameObject.");
+            // this is no breaking null anymore and thus does not need to throw an error.
+            Debug.LogWarning("ScoreVisualizer component not found on UIManager GameObject.");
         }
 
     }
 
-    public void CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown)
+    public GridScorePillars CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
     {
         setSpottedGardenAnimals(questionsAnimal);
         setSoilHandlingValues(answersDropdown);
@@ -44,20 +46,27 @@ public class GridToScore
         scoreModifier = new ScoreModifier(scoreCalculate);
         scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
 
-        float soilWaterValue = scoreManager.SoilWater();
-        float soilHealth = scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden);
-        float animalFriendliness = scoreManager.LifeAboveTheSoil();
-        float plantDiversity = scoreManager.PlantDiversity(plantAmount);
+        var gridScore = new GridScorePillars()
+        {
+            SoilWater = scoreManager.SoilWater(),
+            HealthySoil = scoreManager.HealthySoil(fertilizerType, greenWasteLeftInGarden),
+            LifeAboveSoil = scoreManager.LifeAboveTheSoil(),
+            PlantDiversity = scoreManager.PlantDiversity(plantAmount)
+        };
+        
+        if(doLogging)
+        {
+            Debug.Log($"Soil Water: {gridScore.SoilWater}");
+            Debug.Log($"Healthy Soil: {gridScore.HealthySoil}"); //fix amount of fertilizer and green waste in garden
+            Debug.Log($"Life Above The Soil: {gridScore.LifeAboveSoil}");
+            Debug.Log($"Plant Diversity: {gridScore.PlantDiversity}"); //fix amount of plants in garden
+            Debug.Log("Plant Amount: " + plantAmount);
+        }
+        
+        float[] calculatedPillars = new float[4] { gridScore.SoilWater, gridScore.HealthySoil, gridScore.LifeAboveSoil, gridScore.PlantDiversity } ;
 
-        Debug.Log($"Soil Water Value: {soilWaterValue}");
-        Debug.Log($"Soil Health: {soilHealth}");
-        Debug.Log($"Animal Friendliness: {animalFriendliness}");
-        Debug.Log($"Plant Diversity: {plantDiversity}");
-
-        float[] calculatedPillars = new float[4] { soilWaterValue, soilHealth, animalFriendliness, plantDiversity } ;
-
-        scoreVisualizer.VisualizeScore(calculatedPillars);
-
+        scoreVisualizer?.VisualizeScore(calculatedPillars);
+        return gridScore;
     }
 
     private void setScores(Dictionary<Coordinate, GridTile> drawnTiles)
