@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class ScoreVisualizer : MonoBehaviour
 {
     [SerializeField] private GameObject[] scoreGraphs;
-    [SerializeField] private GameObject pnlParent;
     [SerializeField] private TMP_Text[] lblScores;
 
     public void VisualizeScore(float[] calculatedPillars)
