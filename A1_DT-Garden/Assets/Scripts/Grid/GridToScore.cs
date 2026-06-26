@@ -11,6 +11,7 @@ public class GridToScore
     ScoreCalculation scoreCalculate;
     ScoreModifier scoreModifier;
     ScoreManager scoreManager;
+    ScoreVisualizer scoreVisualizer;
     FertilizerType fertilizerType;
     GreenWasteLeftInGarden greenWasteLeftInGarden;
 
@@ -18,6 +19,17 @@ public class GridToScore
     {
         scoreData = new();
         gardenAnimalsData = new();
+
+        // find UImanager
+        GameObject uiManagerObject = GameObject.Find("UIManager");
+        if (uiManagerObject == null) return;
+        
+        scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
+        if (scoreVisualizer == null)
+        {
+            Debug.LogError("ScoreVisualizer component not found on UIManager GameObject.");
+        }
+
     }
 
     public void CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown)
@@ -26,6 +38,7 @@ public class GridToScore
         setSoilHandlingValues(answersDropdown);
         setScores(drawnTiles);
 
+        //Debug.Log($"Amount of ponds: {scoreData.AreaPond}");
 
         scoreCalculate = new ScoreCalculation(scoreData);
         scoreModifier = new ScoreModifier(scoreCalculate);
