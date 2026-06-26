@@ -29,13 +29,13 @@ public class GridJsonExporter : MonoBehaviour
         {
             if (i > 20)
             {
-                Debug.Log("GARDEN LIMIT OF 20 EXCEEDED (or you ran into a bug, idk... :T)\nI'm not gonna export this garden, sorry.");
+                Debug.Log("Garden limit of 20 exceeded. No export made to prevent potential infinite looping");
                 break;
             }
             string path = "/ExportedGardens/Garden" + i + ".json";
             if (File.Exists(Application.dataPath + path))
             {
-                Debug.Log(path + " ALREADY TAKEN");
+                Debug.Log(path + " already taken");
             }
             else
             {
