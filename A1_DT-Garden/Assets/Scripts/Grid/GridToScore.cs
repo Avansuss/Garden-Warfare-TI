@@ -23,20 +23,13 @@ public class GridToScore
 
         // find UImanager
         GameObject uiManagerObject = GameObject.Find("UIManager");
-        if (uiManagerObject == null) return;
         
-        scoreVisualizer = uiManagerObject.GetComponent<ScoreVisualizer>();
-        if (scoreVisualizer == null)
-        {
-            // this is no breaking null anymore and thus does not need to throw an error.
-            Debug.LogWarning("ScoreVisualizer component not found on UIManager GameObject.");
-        }
-
+        scoreVisualizer = uiManagerObject?.GetComponent<ScoreVisualizer>();
     }
 
     public GridScorePillars CalculateScore(Dictionary<Coordinate, GridTile> drawnTiles, int plantAmount, bool[] questionsAnimal, byte[] answersDropdown, bool doLogging=true)
     {
-        setSpottedGardenAnimals(questionsAnimal);
+        setSpottedGardenAnimals(questionsAnimal, doLogging);
         setSoilHandlingValues(answersDropdown);
         setScores(drawnTiles);
 
@@ -53,6 +46,12 @@ public class GridToScore
             LifeAboveSoil = scoreManager.LifeAboveTheSoil(),
             PlantDiversity = scoreManager.PlantDiversity(plantAmount)
         };
+        
+        //NaN check
+        if (float.IsNaN(gridScore.SoilWater)) gridScore.SoilWater = 0;
+        if (float.IsNaN(gridScore.HealthySoil)) gridScore.HealthySoil = 0;
+        if (float.IsNaN(gridScore.LifeAboveSoil)) gridScore.LifeAboveSoil = 0;
+        if (float.IsNaN(gridScore.PlantDiversity)) gridScore.PlantDiversity = 0;
         
         if(doLogging)
         {
@@ -103,11 +102,11 @@ public class GridToScore
         scoreData.BigTree = tileCounts[(int)GridTileType.Tree];
     }
 
-    private void setSpottedGardenAnimals(bool[] userGardenAnimals)
+    private void setSpottedGardenAnimals(bool[] userGardenAnimals, bool doLogging=true)
     {
         foreach (var animal in userGardenAnimals)
         {
-            Debug.Log("User Garden Animals: " + animal);
+           if(doLogging) Debug.Log("User Garden Animals: " + animal);
         }
 
         gardenAnimalsData.SpottedBeesAndButterflies = userGardenAnimals[0];

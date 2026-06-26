@@ -12,7 +12,7 @@ public class GridEditorAgentV1 : Agent
 
     private int step;
     private const int MAXSTEPS = 5000;
-    private static readonly Section[] TriangleSections = 
+    private Section[] _triangleSections = 
         { Section.North, Section.East, Section.South, Section.West };
     
     private void Start()
@@ -41,7 +41,7 @@ public class GridEditorAgentV1 : Agent
         {
             for (int y = 0; y < manager.Size.y; y++)
             {
-                foreach(var section in TriangleSections)
+                foreach(var section in _triangleSections)
                 {
                     var coord = new Coordinate(x, y, section);
                     gridData.TryGetValue(coord, out var type);
