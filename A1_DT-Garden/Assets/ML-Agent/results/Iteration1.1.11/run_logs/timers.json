@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1782401385",
+        "python_version": "3.10.12 (main, Jul  5 2023, 18:54:27) [GCC 11.2.0]",
+        "command_line_arguments": "/home/tomsom/.conda/envs/mlagents/bin/mlagents-learn config/ppo/GridEditorAgent.yaml --run-id=Iteration1.1.11.2 --resume",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.2.2+cu121",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1782401397"
+    },
+    "total": 12.36595522800053,
+    "count": 1,
+    "self": 0.0046397940004681,
+    "children": {
+        "run_training.setup": {
+            "total": 0.01265764999880048,
+            "count": 1,
+            "self": 0.01265764999880048
+        },
+        "TrainerController.start_learning": {
+            "total": 12.348657784001261,
+            "count": 1,
+            "self": 0.0002623090003908146,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 12.348381998999685,
+                    "count": 1,
+                    "self": 12.348381998999685
+                },
+                "trainer_threads": {
+                    "total": 7.320013537537307e-07,
+                    "count": 1,
+                    "self": 7.320013537537307e-07
+                },
+                "TrainerController._save_models": {
+                    "total": 1.2743999832309783e-05,
+                    "count": 1,
+                    "self": 1.2743999832309783e-05
+                }
+            }
+        }
+    }
+}

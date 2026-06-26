@@ -1,9 +1,13 @@
+using DrawingTypes;
 using Grid;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using DrawingTypes;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,11 +18,51 @@ public class UIManager : MonoBehaviour
     //triangle https://www.flaticon.com/free-icon/bleach_481099
     //square https://www.flaticon.com/free-icon/stop_545666
 
+    [SerializeField] private TMP_InputField inpfPlantAmount;
+
     private GridTileType chosenGridTileType = GridTileType.Inactive;
     private DrawingType chosenDrawingType = DrawingType.Triangle;
+    private int plantAmount = 0;
 
-    [SerializeField]
-    private MouseController mouseController;
+    [SerializeField] private MouseController mouseController;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private GameObject pnlQuestions;
+    [SerializeField] private Toggle[] questionsToggle;
+    [SerializeField] private TMP_Dropdown[] questionsDropdowns;
+    [SerializeField] private TMP_Text lblExplanation;
+
+    private bool[] questionsAnimals = new bool[4];
+    private byte[] answersDropdown = new byte[2];
+
+    public void Start()
+    {
+        //inpfText = inpfPlantAmount.GetComponent<TMP_Text>();
+        inpfPlantAmount?.onValueChanged.AddListener(delegate { OnTextChanged(); });
+    }
+
+    /// <summary>
+    /// If the input field text sees something that isn't a number, it will remove it and only keep the numbers in the input field.
+    /// </summary>
+    public void OnTextChanged()
+    {
+        if (Regex.IsMatch(inpfPlantAmount.text, "[^0-9]+"))
+        {
+            Debug.Log("Non-numeric characters detected. Removing them.");
+            inpfPlantAmount.text = Regex.Replace(inpfPlantAmount.text, "[^0-9]+", "");
+        }
+        else
+        {
+            if (int.TryParse(inpfPlantAmount.text, out int plantAmount))
+            {
+                this.plantAmount = plantAmount;
+            }
+            else
+            {
+                Debug.LogWarning("Failed to parse plant amount from input field.");
+            }
+        }
+
+    }
 
     public void SelectDrawingType(int drawingID)
     {
@@ -40,20 +84,61 @@ public class UIManager : MonoBehaviour
     public void SelectTileType(int textureID)
     {
         chosenGridTileType = (GridTileType)textureID;
+                
+        mouseController.SetTileType(chosenGridTileType);
+    }
 
-        switch (chosenGridTileType)
+    public void SetTileScore()
+    {
+        for(int i = 0; i < questionsToggle.Length; i++)
         {
-            case GridTileType.Grass:
-                Debug.Log("Selected grass tile type");
+            questionsAnimals[i] = questionsToggle[i].isOn;
+        }
+
+        for(int i = 0; i < questionsDropdowns.Length; i++)
+        {
+            answersDropdown[i] = (byte)questionsDropdowns[i].value;
+        }
+
+        gridManager.PassGridTilesToScore(plantAmount, questionsAnimals, answersDropdown);
+    }
+
+    public void OpenQuestions()
+    {
+        pnlQuestions.SetActive(true);
+    }
+
+    public void CloseQuestions()
+    {
+        pnlQuestions.SetActive(false);
+    }
+
+    public void ShowPillarOnEnter(int pillarIndex)
+    {
+        string pillar = "";
+
+        switch (pillarIndex)
+        {
+            case 1:
+                pillar = "Water doorloop";
                 break;
-            case GridTileType.Rock:
-                Debug.Log("Selected rocky tile type");
+            case 2:
+                pillar = "Gezondheid van het bodemleven";
                 break;
-            case GridTileType.Water:
-                Debug.Log("Selected water tile type");
+            case 3:
+                pillar = "Diervriendelijkheid van de tuin";
+                break;
+            case 4:
+                pillar = "Diversiteit van planten";
                 break;
         }
-        
-        mouseController.SetTileType(chosenGridTileType);
+
+        string pillarInfo = $"Pijler {pillarIndex}: {pillar}";
+        lblExplanation.text = pillarInfo;
+    }
+
+    public void HidePillarOnExit()
+    {
+        lblExplanation.text = "";
     }
 }

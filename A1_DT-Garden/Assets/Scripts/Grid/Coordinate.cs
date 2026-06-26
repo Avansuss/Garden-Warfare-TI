@@ -78,17 +78,25 @@ namespace Grid
         }
 
         /// <summary>
-        /// Used to compare coordinates since floating point imprecision cannot do a more direct approach
+        /// Used to compare coordinates since floating point imprecision cannot do a more direct approach. Edited override of base Equals
         /// </summary>
-        /// <param name="coord">the coordinate to compare against</param>
+        /// <param name="obj">the object to compare against</param>
         /// <returns></returns>
-        public bool IsEqualTo(Coordinate coord)
+        public override bool Equals(object obj)
         {
-            var position = coord.Position;
-            return Mathf.Approximately(position.x, this.Position.x) &&
-                Mathf.Approximately(position.y, this.Position.y) &&
-                Mathf.Approximately(position.z, this.Position.z) &&
-                coord.Section == this.Section;
+            if (obj is not Coordinate other) return false;
+            return Position.x == other.Position.x &&
+                   Position.z == other.Position.z &&
+                   Section == other.Section;
+        }
+
+        /// <summary>
+        /// Needed for the dictionary lookup to properly work and function quicker
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Position.x, Position.z, Section);
         }
     }
 }

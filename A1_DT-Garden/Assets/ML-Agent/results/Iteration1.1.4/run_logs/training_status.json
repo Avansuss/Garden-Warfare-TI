@@ -1,0 +1,56 @@
+{
+    "GridEditorAgent": {
+        "checkpoints": [
+            {
+                "steps": 499977,
+                "file_path": "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-499977.onnx",
+                "reward": 33893.333333333336,
+                "creation_time": 1782299459.6766841,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-499977.pt"
+                ]
+            },
+            {
+                "steps": 999945,
+                "file_path": "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-999945.onnx",
+                "reward": 35986.666666666664,
+                "creation_time": 1782300530.6444929,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-999945.pt"
+                ]
+            },
+            {
+                "steps": 1499982,
+                "file_path": "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-1499982.onnx",
+                "reward": 36700.0,
+                "creation_time": 1782301594.5704625,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-1499982.pt"
+                ]
+            },
+            {
+                "steps": 1793088,
+                "file_path": "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-1793088.onnx",
+                "reward": 35804.444444444445,
+                "creation_time": 1782302400.6567163,
+                "auxillary_file_paths": [
+                    "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-1793088.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1793088,
+            "file_path": "results/Iteration1.1.4/GridEditorAgent.onnx",
+            "reward": 35804.444444444445,
+            "creation_time": 1782302400.6567163,
+            "auxillary_file_paths": [
+                "results/Iteration1.1.4/GridEditorAgent/GridEditorAgent-1793088.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

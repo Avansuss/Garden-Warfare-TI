@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DrawingTypes;
 using Grid;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ using UnityEngine.InputSystem;
 public class MouseController : MonoBehaviour
 {
     public GridManager manager;
+    public bool CanDraw;
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
@@ -17,6 +19,8 @@ public class MouseController : MonoBehaviour
     private Vector2 initCamPos;
     private Vector3 dragOrigin;
 
+    private GameObject[] squareTile = new GameObject[4];
+
     private bool blockClick = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -24,44 +28,55 @@ public class MouseController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         mouse = Mouse.current;
-        SetcurrentTile(GridTileType.Grass);
-        
-        cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+        if(CanDraw) SetcurrentTile(GridTileType.Grass);
+
+        if (cam && manager)
+        {
+            cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+        }
+        else if (!manager)
+        {
+            Debug.LogWarning("gridmanager has not been set on mouse controller!");
+        }
+        else
+        {
+            Debug.LogWarning("main camera has not been set on mouse controller (somehow)");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // No mouse controls if its outside of the game window
-        Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
-        bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
-        if (!isOutside)
+        // Camera zoom
+        if (math.abs(mouse.scroll.value.y) > 0)
         {
-            // Camera zoom
-            if (math.abs(mouse.scroll.value.y) > 0)
+            ZoomOrthoToMouse(mouse.scroll.value.y);
+        }
+        
+        // Camera move
+        if (mouse.middleButton.wasPressedThisFrame)
+        {
+            dragOrigin = ScreenToWorld(mouse.position.value);
+        }
+        if (mouse.middleButton.isPressed)
+        {
+            Vector3 current = ScreenToWorld(mouse.position.value);
+            Vector3 delta = dragOrigin - current;
+            cam.transform.position += delta;
+            // Recalculate so next frame's delta is relative, not cumulative
+            dragOrigin = ScreenToWorld(mouse.position.value);
+        }
+        else
+        {
+            // No mouse controls if its outside of the game window
+            Vector2 view = cam.ScreenToViewportPoint( mouse.position.value );
+            bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+            if (!isOutside && CanDraw)
             {
-                ZoomOrthoToMouse(mouse.scroll.value.y);
-            }
-            
-            // Camera move
-            if (mouse.middleButton.wasPressedThisFrame)
-            {
-                dragOrigin = ScreenToWorld(mouse.position.value);
-            }
-            if (mouse.middleButton.isPressed)
-            {
-                Vector3 current = ScreenToWorld(mouse.position.value);
-                Vector3 delta = dragOrigin - current;
-                cam.transform.position += delta;
-                // Recalculate so next frame's delta is relative, not cumulative
-                dragOrigin = ScreenToWorld(mouse.position.value);
-            }
-            else
-            {
-                if(blockClick) return;
+                if (blockClick) return;
 
                 Coordinate coordinate = new Coordinate();
-                switch(drawingType)
+                switch (drawingType)
                 {
                     case DrawingType.Square:
                         coordinate = GetGridSnappedMousePos(true);
@@ -76,9 +91,7 @@ public class MouseController : MonoBehaviour
                 // Don't update the position outside of the bounds
                 if (WithinBounds(coordinate.Position))
                 {
-                    currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                    coordinate.Position.y = 1.001f;
-                    currentTileObj.transform.position = coordinate.Position;
+                    TileFollowCursor(coordinate);
                 }
 
                 if (mouse.leftButton.wasPressedThisFrame)
@@ -92,13 +105,39 @@ public class MouseController : MonoBehaviour
 
                 if (mouse.leftButton.isPressed)
                 {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
                     manager.SetTile(coordinate, currentTileType, redraw: true);
                 }
                 else if (mouse.rightButton.isPressed)
                 {
+                    // Make the mouse coord relative
+                    var relativeCoord = manager.transform.position;
+                    coordinate.Position -= relativeCoord;
                     manager.SetTile(coordinate, GridTileType.Empty, redraw: true);
                 }
             }
+        }
+    }
+
+    private void TileFollowCursor(Coordinate coordinate)
+    {
+        switch (drawingType)
+        {
+            case DrawingType.Square:
+                for (int i = 0; i < 4; i++)
+                {
+                    squareTile[i].transform.eulerAngles = new Vector3(0, i * 90, 0);
+                    coordinate.Position.y = 1.001f;
+                    squareTile[i].transform.position = coordinate.Position;
+                }
+                break;
+            case DrawingType.Triangle:
+                currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
+                coordinate.Position.y = 1.001f;
+                currentTileObj.transform.position = coordinate.Position;
+                break;
         }
     }
 
@@ -121,6 +160,7 @@ public class MouseController : MonoBehaviour
     {
         // 0 = single square, 1 = single triangle
         drawingType = chosenDrawingType;
+        SetCursor(currentTileType);
     }
 
     private Vector3 ScreenToWorld(Vector2 screenPos)
@@ -160,9 +200,24 @@ public class MouseController : MonoBehaviour
     private void SetCursor(GridTileType type)
     {
         Destroy(currentTileObj);
-        currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
-        currentTileObj.transform.position = GetGridSnappedMousePos().Position;
-        Debug.Log($"Set current tile to {currentTileType} ({currentTileObj.transform.position.x}, {currentTileObj.transform.position.y})");
+
+        switch (drawingType)
+        {
+            case DrawingType.Triangle:
+                currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                currentTileObj.transform.position = GetGridSnappedMousePos(false).Position;
+                currentTileObj.transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(false).GetAngle(), 0);
+                break;
+            case DrawingType.Square:
+                for(int i = 0; i < 4; i++)
+                {
+                    Destroy(squareTile[i]);
+                    squareTile[i] = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                    squareTile[i].transform.position = GetGridSnappedMousePos(true).Position;
+                    squareTile[i].transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(true).GetAngle(), 0);
+                }
+                break;
+        }
     }
 
     /// <summary>

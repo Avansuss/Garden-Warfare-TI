@@ -16,73 +16,93 @@ public class ScoreTester : MonoBehaviour
     [SerializeField] private float smallGreenScore;
     [SerializeField] private float shrubberyScore;
     [SerializeField] private float totalSurfaceArea;
-    [SerializeField] private float scoreModifier;
+    [SerializeField] private float scoreModifierData;
     [SerializeField] private float vegetationAmount;
 
-    private ScoreManager scoreManager;
-    
+    private ScoreData scoreData = new ScoreData();
+    private GardenAnimalsData gardenAnimalsData = new GardenAnimalsData();
+    //private ScoreVisualizer scoreVisualizer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        scoreManager = GetComponent<ScoreManager>();
+        //scoreVisualizer = GetComponent<ScoreVisualizer>();
 
-        setValues();
-        setLocalVar();
-        showValues();
+        scoreData = setValues();
+        gardenAnimalsData = SetGardenAnimals();
+
+        ScoreCalculation scoreCalculate = new ScoreCalculation(scoreData);
+        ScoreModifier scoreModifier = new ScoreModifier(scoreCalculate);
+        ScoreManager scoreManager = new ScoreManager(scoreData, scoreCalculate, scoreModifier, gardenAnimalsData);
+
+        showScores(scoreCalculate, scoreModifier);
+        
+        showValues(scoreCalculate, scoreManager);
     }
 
-    private void setValues()
+    private ScoreData setValues()
     {
-        Score.AreaPond = 1f;
-        Score.AreaSwimmingPool = 2f;
-        Score.AreaPavement = 3f;
+        scoreData.AreaPond = 1f;
+        scoreData.AreaSwimmingPool = 2f;
+        scoreData.AreaTiles = 3f;
 
-        Score.PermeableTiles = 3f;
-        Score.Gravel = 4f;
+        scoreData.PermeableTiles = 3f;
+        scoreData.Gravel = 4f;
 
-        Score.RootBarrierFabric = 5f;
-        Score.ArtificialGrass = 6f;
-        Score.Trampoline = 7f;
-        Score.PlayGround = 8f;
+        scoreData.RootBarrierFabric = 5f;
+        scoreData.ArtificialGrass = 6f;
+        scoreData.Trampoline = 7f;
+        scoreData.PlayGround = 8f;
 
-        Score.Flowers = 9f;
-        Score.TreeBark = 10f;
-        Score.VegetableGarden = 11f;
+        scoreData.Flowers = 9f;
+        scoreData.WoodChips = 10f;
+        scoreData.VegetableGarden = 11f;
 
-        Score.Grass = 12f;
+        scoreData.Grass = 12f;
 
-        Score.Hedge = 13f;
-        Score.Shrub = 14f;
-        Score.PickingGarden = 15f;
+        scoreData.Hedge = 13f;
+        scoreData.Shrub = 14f;
+        scoreData.PickingGarden = 15f;
 
-        Score.BigTree = 16f;
+        scoreData.BigTree = 16f;
 
-        GardenAnimals.SpottedBeesAndButterflies = true;
-        GardenAnimals.SpottedBirds = true;
-        GardenAnimals.SpottedSpiders = true;
-        GardenAnimals.SpottedOtherAnimals = true;
+        return scoreData;
     }
 
-    private void setLocalVar()
+    private GardenAnimalsData SetGardenAnimals()
     {
-        this.hardeningScore = ScoreCalculate.HardeningScore;
-        this.permeabilityScore = ScoreCalculate.PermeabilityScore;
-        this.notHardenedWithoutPlantsScore = ScoreCalculate.NotHardenedWithoutPlantsScore;
-        this.smallGreenScore = ScoreCalculate.SmallGreenScore;
-        this.shrubberyScore = ScoreCalculate.ShrubberyScore;
-        this.totalSurfaceArea = ScoreCalculate.TotalSurfaceArea;
-        this.scoreModifier = ScoreModifier.Modifier;
-        this.vegetationAmount = ScoreCalculate.VegetationAmount;
+        gardenAnimalsData.SpottedBeesAndButterflies = true;
+        gardenAnimalsData.SpottedBirds = true;
+        gardenAnimalsData.SpottedSpiders = true;
+        gardenAnimalsData.SpottedOtherAnimals = true;
+
+        return gardenAnimalsData;
     }
 
-    private void showValues()
+    private void showScores(ScoreCalculation scoreCalculate, ScoreModifier scoreModifier)
     {
-        if (ScoreCalculate.AllScoresFilled)
+        this.hardeningScore = scoreCalculate.HardeningScore;
+        this.permeabilityScore = scoreCalculate.PermeabilityScore;
+        this.notHardenedWithoutPlantsScore = scoreCalculate.NotHardenedWithoutPlantsScore;
+        this.smallGreenScore = scoreCalculate.SmallGreenScore;
+        this.shrubberyScore = scoreCalculate.ShrubberyScore;
+        this.totalSurfaceArea = scoreCalculate.TotalSurfaceArea;
+        this.scoreModifierData = scoreModifier.Modifier;
+        this.vegetationAmount = scoreCalculate.VegetationAmount;
+    }
+
+    private void showValues(ScoreCalculation scoreCalculation, ScoreManager scoreManager)
+    {
+        if (scoreCalculation.AllScoresFilled)
         {
             soilWaterScore = scoreManager.SoilWater();
             healthySoilScore = scoreManager.HealthySoil(FertilizerType.Organic, GreenWasteLeftInGarden.Half);
             animalFriendlinessScore = scoreManager.LifeAboveTheSoil();
             plantDiversityScore = scoreManager.PlantDiversity(13);
+
+            //float[] calculatedValues = new float[4] { soilWaterScore, healthySoilScore, animalFriendlinessScore, plantDiversityScore };
+
+            //scoreVisualizer.VisualizeScore(calculatedValues);
         }
     }
 }

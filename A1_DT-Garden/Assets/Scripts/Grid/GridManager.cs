@@ -1,30 +1,49 @@
 using System;
 using System.Collections.Generic;
 using Grid;
-using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    Dictionary<Coordinate, GridTile> tiles;
+    public Dictionary<Coordinate, GridTile> tiles;
+    public List<GameObject> lstGridObjects;
+    public bool DisableGrid;
+    public Vector2Int Size;
     
     private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
     
-    public Vector2Int Size;
-    
-    public GameObject inactiveObject;
-    public GameObject emptyObject;
-    public GameObject grassObject;
-    public GameObject rockObject;
-    public GameObject waterObject;
-    
+    private GridToScore gridToScore;
+    private Vector3 _origin;
+    private GridOverlay _gridOverlay;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (!DisableGrid)
+        {
+            _gridOverlay = this.AddComponent<GridOverlay>();
+            _gridOverlay.GridManager = this;
+        }
+        _origin = transform.position;
+        ResetGrid();
+    }
+
+    public void ResetGrid()
+    {
+        if (tileObjects?.Count > 0)
+        {
+            foreach (var tileObject in tileObjects)
+            {
+                Destroy(tileObject.Value);
+            }
+        }
+        
         tiles = new();
         tileObjects = new();
         oldtiles = new();
+        gridToScore = new();
         
         for (int x = 0; x < Size.x; x++)
         {
@@ -33,9 +52,9 @@ public class GridManager : MonoBehaviour
                 for (int s = 0; s < 5; s++)
                 {
                     Coordinate coord = new(x, y, (Section)s);
-                    if (!FindCoordinate(coord, tiles, out var foundTile) && (Section)s != Section.Full)
+                    if (!tiles.TryGetValue(coord, out _) && (Section)s != Section.Full)
                     {
-                        SetTile(coord, GridTileType.Inactive, redraw:false);
+                        SetTile(coord, GridTileType.Empty, redraw:false);
                     }
                 }
             }
@@ -48,53 +67,59 @@ public class GridManager : MonoBehaviour
     {
         foreach (var tile in tiles)
         {
-            if (FindCoordinate(tile.Key, oldtiles, out var foundTile))
+            if (oldtiles.TryGetValue(tile.Key, out var foundTile))
             {
                 // If the tile did previously exist, skip
-                if (foundTile!.Value.Value.TileType == tile.Value.TileType) continue;
+                if (foundTile.TileType == tile.Value.TileType) continue;
                 
-                // The specific found tile coordinate has to be used due to floating point imprecision
-                oldtiles[foundTile.Value.Key] = tile.Value;
+                oldtiles[tile.Key] = tile.Value;
+                Destroy(tileObjects[tile.Key]);
+                tileObjects.Remove(tile.Key);
             }
             else
             {
                 oldtiles[tile.Key] = tile.Value;
             }
 
-            // Have to do this seperately for the tile objects, due to...floating point imprecision
-            if (FindCoordinate(tile.Key, tileObjects, out var foundObject))
-            {
-                // Otherwise, remove it for the list so a new one can take its place
-                Destroy(tileObjects[foundObject!.Value.Key]);
-                tileObjects.Remove(foundObject.Value.Key);
-            }
-
             // Create the new tile
             var tileObj = Instantiate(TileTypeToObject(tile.Value.TileType), transform, true);
-            tileObj.transform.position = tile.Key.Position;
+            tileObj.transform.position = tile.Key.Position + new Vector3(_origin.x, 0, _origin.z);
             tileObj.transform.eulerAngles = new Vector3(0, tile.Key.GetAngle(), 0);
             
             tileObjects[tile.Key] = tileObj;
         }
     }
 
+    public void PassGridTilesToScore(int plantAmount, bool[] animalQuestions, byte[] answersDropdown)
+    {
+        gridToScore.CalculateScore(tiles, plantAmount, animalQuestions, answersDropdown);
+    }
+
     public GameObject TileTypeToObject(GridTileType type)
     {
-        switch (type)
+        if ((int)type >= lstGridObjects.Count) return null;
+
+        return lstGridObjects[(int)type];
+    }
+
+    /// <summary>
+    /// Shows a summary of how many times each tile exists
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<GridTileType, int> GetGridSummary()
+    {
+        Dictionary<GridTileType, int> summary = new();
+        for (int i = 0; i < Enum.GetNames(typeof(GridTileType)).Length; i++)
         {
-            case GridTileType.Inactive:
-                return inactiveObject;
-            case GridTileType.Empty:
-                return emptyObject;
-            case GridTileType.Grass:
-                return grassObject;
-            case GridTileType.Rock:
-                return rockObject;
-            case GridTileType.Water:
-                return waterObject;
-            default:
-                return emptyObject;
+            summary[(GridTileType)i] = 0;
         }
+        
+        foreach (var tile in tiles)
+        {
+            summary[tile.Value.TileType]++;
+        }
+
+        return summary;
     }
 
     /// <summary>
@@ -107,57 +132,55 @@ public class GridManager : MonoBehaviour
     /// <returns></returns>
     public bool SetTile(Coordinate coordinate, GridTileType type, bool isAi=false, bool redraw=false)
     {
-        coordinate.Position.y = 1;
+        // Tiletype forbidden for AIs
+        if (isAi && type == GridTileType.Inactive) return false;
+        if (isAi && type == GridTileType.Empty) return false;
+        
+        coordinate.Position.y = _origin.y;
         
         // Placement out of bounds
-        if (coordinate.Position.x < 0 || coordinate.Position.x > Size.x || 
-            coordinate.Position.z < 0 || coordinate.Position.z > Size.y)
+        if (coordinate.Position.x < 0 || coordinate.Position.x >= Size.x || 
+            coordinate.Position.z < 0 || coordinate.Position.z >= Size.y)
         {
             return false;
         }
 
-        // Check if tile already occupies a space
-        if (FindCoordinate(coordinate, tiles, out var foundTile))
+        if (coordinate.Section == Section.Full)
         {
-            if (foundTile!.Value.Value.TileType == type) return false;
-            tiles.Remove(foundTile?.Key);
+            var falseNum = 0;
+            for (int direction = 1; direction <= 4; direction++)
+            {
+                var newCoordinate = new Coordinate(coordinate.Position.x, coordinate.Position.z, (Section)direction);
+
+                // Only redraw on the last triangle to avoid redundant updates and flickering
+                if (!SetTile(newCoordinate, type, redraw: direction == 4, isAi:isAi)) falseNum++;
+            }
+
+            // If all tile draw methods fail (none can be drawn on)
+            if (falseNum == 4) return false;
         }
-
-        var tile = new GridTile(coordinate, type);
-
-        // Tiletype forbidden for AIs
-        if (isAi && (tile.TileType == GridTileType.Inactive || tile.TileType == GridTileType.Empty)) return false;
-
-
-        tiles[coordinate] = tile;
-        if (redraw)
+        else
         {
-            RedrawGrid();
+            // Check if tile already occupies a space
+            if (tiles.TryGetValue(coordinate, out var foundTile))
+            {
+                if (isAi && foundTile.TileType != GridTileType.Empty) return false;
+                
+                if (foundTile.TileType == type) return false;
+                tiles.Remove(coordinate);
+            }
+            
+            
+            var tile = new GridTile(coordinate, type);
+            
+            tiles[coordinate] = tile;
+            if (redraw)
+            {
+                RedrawGrid();
+            }
         }
-
         return true;
     }
 
-    /// <summary>
-    /// Used to find a coordinate match since it has floating point imprecision on the vector 3's
-    /// This method uses a workaround that does work with these positions
-    /// </summary>
-    /// <param name="coordinate">The coordinate to look for</param>
-    /// <param name="tile">The found tile that matches the coordinate. Can be null</param>
-    /// <param name="lookupTable"></param>
-    /// <returns></returns>
-    private bool FindCoordinate<T>(Coordinate coordinate, Dictionary<Coordinate, T> lookupTable, out KeyValuePair<Coordinate, T>? tile)
-    {
-        tile = null;
-        foreach (var checkTile in lookupTable)
-        {
-            if (coordinate.IsEqualTo(checkTile.Key))
-            {
-                tile = checkTile;
-                return true;
-            }
-        }
-
-        return false;
-    }
+    public Dictionary<Coordinate, GridTile> GetGrid() => tiles;
 }
