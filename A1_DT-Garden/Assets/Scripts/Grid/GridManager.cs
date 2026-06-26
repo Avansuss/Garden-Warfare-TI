@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    Dictionary<Coordinate, GridTile> tiles;
+    public Dictionary<Coordinate, GridTile> tiles;
     
     private Dictionary<Coordinate, GameObject> tileObjects;
     private Dictionary<Coordinate, GridTile> oldtiles;
