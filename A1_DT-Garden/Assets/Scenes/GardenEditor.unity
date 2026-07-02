@@ -1754,13 +1754,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111794619}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &120554122
 GameObject:
   m_ObjectHideFlags: 0
@@ -8487,7 +8487,7 @@ MonoBehaviour:
   lstGridObjects:
   - {fileID: 7659006563712087241, guid: 30cf3273c055afdebbc003768f667297, type: 3}
   - {fileID: 7659006563712087241, guid: 81164f80a74e393468aede9ba80a91d3, type: 3}
-  - {fileID: 5803311116616926156, guid: 9783dc8f0a4621f9fa5a96b941a4ca84, type: 3}
+  - {fileID: 828213663442014580, guid: 575b31b6ea8443abd92b783b8e1b2e5f, type: 3}
   - {fileID: 7659006563712087241, guid: 630ffa9b693246b498664080b3544f04, type: 3}
   - {fileID: 7659006563712087241, guid: 6ccc369efd728554fa3f19912b460552, type: 3}
   - {fileID: 5803311116616926156, guid: d6c5b132b5fdcbb498a7fd64a77e5dd3, type: 3}
@@ -8495,7 +8495,7 @@ MonoBehaviour:
   - {fileID: 7659006563712087241, guid: b3afaaae7d8fb1a4b84513c9aefbb52c, type: 3}
   - {fileID: 7659006563712087241, guid: ce98850a8328ee746aff0fcdf8560e72, type: 3}
   - {fileID: 7659006563712087241, guid: ed927738fd966e444bfb4bbd139b595a, type: 3}
-  - {fileID: 7659006563712087241, guid: 299a13a139c11a546ad04537a670cc26, type: 3}
+  - {fileID: 4357757648350302694, guid: 69ec3bd97426c4e2f821709194a2cf74, type: 3}
   - {fileID: 7659006563712087241, guid: d323955ad58885c4a987deb552fabd1f, type: 3}
   - {fileID: 7659006563712087241, guid: 9185bb57193c2af41b5c383923969a51, type: 3}
   - {fileID: 7659006563712087241, guid: c8b6fe0d0db72d04987cb3440a4f3043, type: 3}
@@ -8505,6 +8505,7 @@ MonoBehaviour:
   - {fileID: 7659006563712087241, guid: f83a66c3a5ff0e54aa92cdd91263f4a3, type: 3}
   - {fileID: 7659006563712087241, guid: 524537d0ad784094ea03c88670955567, type: 3}
   - {fileID: 7659006563712087241, guid: e0134a889909c2542ac1a82771c25df8, type: 3}
+  - {fileID: 4198777148537345436, guid: e125fe43b78215a97b80ec0ee43e66ca, type: 3}
   DisableGrid: 0
   Size: {x: 5, y: 3}
 --- !u!4 &1176453873
