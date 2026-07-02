@@ -147,7 +147,7 @@ public class UIManager : MonoBehaviour
 
     public void SwitchActiveCamera()
     {
-        pnlSecondCamera.gameObject.SetActive(!pnlSecondCamera.gameObject.activeSelf);
+        mouseController.ResetCamera();
     }
 
 

@@ -16,8 +16,10 @@ public class MouseController : MonoBehaviour
     private GameObject currentTileObj;
     private GridTileType currentTileType;
     private DrawingType drawingType = DrawingType.Triangle;
-    private Vector2 initCamPos;
+    //private Vector2 initCamPos;
     private Vector3 dragOrigin;
+    private Transform initCamPosition;
+    private float initOrthographicSize;
 
     private GameObject[] squareTile = new GameObject[4];
 
@@ -27,11 +29,15 @@ public class MouseController : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
+
         mouse = Mouse.current;
         if(CanDraw) SetcurrentTile(GridTileType.Grass);
 
         if (cam && manager)
         {
+            initCamPosition = cam.transform;
+            initOrthographicSize = cam.orthographicSize;
+
             cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
         }
         else if (!manager)
@@ -58,6 +64,13 @@ public class MouseController : MonoBehaviour
         {
             dragOrigin = ScreenToWorld(mouse.position.value);
         }
+
+        // Camera tilt
+        if (Keyboard.current.altKey.isPressed && mouse.leftButton.isPressed)
+        {
+            tiltCamera();
+        }
+
         if (mouse.middleButton.isPressed)
         {
             Vector3 current = ScreenToWorld(mouse.position.value);
@@ -120,7 +133,6 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-
     private void TileFollowCursor(Coordinate coordinate)
     {
         switch (drawingType)
@@ -185,6 +197,31 @@ public class MouseController : MonoBehaviour
 
         // Limit zoom
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 1, 100);
+    }
+
+    public void ResetCamera()
+    {
+        if (cam && initCamPosition)
+        {
+            cam.transform.position = initCamPosition.position;
+            cam.transform.rotation = initCamPosition.rotation;
+            cam.orthographicSize = initOrthographicSize; // Reset to default size
+        }
+    }
+
+    private void tiltCamera()
+    {
+        float mouseDeltaY = mouse.delta.value.y;
+
+        if (math.abs(mouseDeltaY) > 0)
+        {
+            float tiltSpeed = 0.1f;
+            Vector3 currentRotation = transform.localEulerAngles;
+            float newXRotation = currentRotation.x - (mouseDeltaY * tiltSpeed);
+            newXRotation = Mathf.Clamp(newXRotation, 10f, 80f);
+
+            transform.localEulerAngles = new Vector3(newXRotation, currentRotation.y, currentRotation.z);
+        }
     }
 
     private bool WithinBounds(Vector3 position)
