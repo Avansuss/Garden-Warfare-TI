@@ -88,7 +88,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: d90bdf849f0195b12953ca524d58e7f4, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: c77c35dd5089eca43be381f82bc4445c, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: GridEditorAgentV1
@@ -158,8 +158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc46e9928b566ea183e962fe0b38179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
-  Size: {x: 5, y: 5}
-  DisableGrid: 1
   lstGridObjects:
   - {fileID: 7659006563712087241, guid: 30cf3273c055afdebbc003768f667297, type: 3}
   - {fileID: 7659006563712087241, guid: 81164f80a74e393468aede9ba80a91d3, type: 3}
@@ -181,3 +179,5 @@ MonoBehaviour:
   - {fileID: 7659006563712087241, guid: f83a66c3a5ff0e54aa92cdd91263f4a3, type: 3}
   - {fileID: 7659006563712087241, guid: 524537d0ad784094ea03c88670955567, type: 3}
   - {fileID: 7659006563712087241, guid: e0134a889909c2542ac1a82771c25df8, type: 3}
+  DisableGrid: 1
+  Size: {x: 5, y: 5}
