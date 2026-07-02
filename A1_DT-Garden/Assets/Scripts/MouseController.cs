@@ -129,13 +129,13 @@ public class MouseController : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     squareTile[i].transform.eulerAngles = new Vector3(0, i * 90, 0);
-                    coordinate.Position.y = 1.001f;
+                    coordinate.Position.y = .1f;
                     squareTile[i].transform.position = coordinate.Position;
                 }
                 break;
             case DrawingType.Triangle:
                 currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = 1.001f;
+                coordinate.Position.y = .1f;
                 currentTileObj.transform.position = coordinate.Position;
                 break;
         }
@@ -206,6 +206,7 @@ public class MouseController : MonoBehaviour
             case DrawingType.Triangle:
                 currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
                 currentTileObj.transform.position = GetGridSnappedMousePos(false).Position;
+                currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                 currentTileObj.transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(false).GetAngle(), 0);
                 break;
             case DrawingType.Square:
@@ -214,6 +215,7 @@ public class MouseController : MonoBehaviour
                     Destroy(squareTile[i]);
                     squareTile[i] = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
                     squareTile[i].transform.position = GetGridSnappedMousePos(true).Position;
+                    currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                     squareTile[i].transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(true).GetAngle(), 0);
                 }
                 break;
