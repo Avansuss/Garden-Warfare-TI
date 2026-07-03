@@ -11,6 +11,12 @@ public class MouseController : MonoBehaviour
 {
     public GridManager manager;
     public bool CanDraw;
+
+    public Camera primaryCamera;
+    public Camera secondaryCamera;
+    public float rotateScale;
+    private Vector3 rotatePoint;
+    
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
@@ -18,12 +24,13 @@ public class MouseController : MonoBehaviour
     private DrawingType drawingType = DrawingType.Triangle;
     //private Vector2 initCamPos;
     private Vector3 dragOrigin;
-    private Transform initCamPosition;
-    private float initOrthographicSize;
 
     private GameObject[] squareTile = new GameObject[4];
 
     private bool blockClick = false;
+
+    private InputAction _lAlt;
+    private InputAction _look;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,12 +40,15 @@ public class MouseController : MonoBehaviour
         mouse = Mouse.current;
         if(CanDraw) SetcurrentTile(GridTileType.Grass);
 
+        _lAlt = InputSystem.actions.FindAction("LAlt");
+        _look = InputSystem.actions.FindAction("Look");
+        _lAlt.Enable();
+        _look.Enable();
+
         if (cam && manager)
         {
-            initCamPosition = cam.transform;
-            initOrthographicSize = cam.orthographicSize;
-
-            cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+            cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);
+            rotatePoint = cam.transform.position;
         }
         else if (!manager)
         {
@@ -63,12 +73,6 @@ public class MouseController : MonoBehaviour
         if (mouse.middleButton.wasPressedThisFrame)
         {
             dragOrigin = ScreenToWorld(mouse.position.value);
-        }
-
-        // Camera tilt
-        if (Keyboard.current.altKey.isPressed && mouse.leftButton.isPressed)
-        {
-            tiltCamera();
         }
 
         if (mouse.middleButton.isPressed)
@@ -118,10 +122,18 @@ public class MouseController : MonoBehaviour
 
                 if (mouse.leftButton.isPressed)
                 {
-                    // Make the mouse coord relative
-                    var relativeCoord = manager.transform.position;
-                    coordinate.Position -= relativeCoord;
-                    manager.SetTile(coordinate, currentTileType, redraw: true);
+                    var altValue = _lAlt.ReadValue<float>();
+                    if (altValue > 0)
+                    {
+                        tiltCamera();
+                    }
+                    else
+                    {
+                        // Make the mouse coord relative
+                        var relativeCoord = manager.transform.position;
+                        coordinate.Position -= relativeCoord;
+                        manager.SetTile(coordinate, currentTileType, redraw: true);
+                    }
                 }
                 else if (mouse.rightButton.isPressed)
                 {
@@ -199,29 +211,14 @@ public class MouseController : MonoBehaviour
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 1, 100);
     }
 
-    public void ResetCamera()
-    {
-        if (cam && initCamPosition)
-        {
-            cam.transform.position = initCamPosition.position;
-            cam.transform.rotation = initCamPosition.rotation;
-            cam.orthographicSize = initOrthographicSize; // Reset to default size
-        }
-    }
-
     private void tiltCamera()
     {
-        float mouseDeltaY = mouse.delta.value.y;
-
-        if (math.abs(mouseDeltaY) > 0)
-        {
-            float tiltSpeed = 0.1f;
-            Vector3 currentRotation = transform.localEulerAngles;
-            float newXRotation = currentRotation.x - (mouseDeltaY * tiltSpeed);
-            newXRotation = Mathf.Clamp(newXRotation, 10f, 80f);
-
-            transform.localEulerAngles = new Vector3(newXRotation, currentRotation.y, currentRotation.z);
-        }
+        float mouseDeltaX = _look.ReadValue<Vector2>().x;
+        
+        var deltaRotation = new Vector3(0, mouseDeltaX * rotateScale, 0) * Time.deltaTime;
+        
+        primaryCamera.transform.Rotate(primaryCamera.transform.rotation * deltaRotation);
+        secondaryCamera.transform.RotateAround(rotatePoint, (secondaryCamera.transform.rotation * deltaRotation).y);
     }
 
     private bool WithinBounds(Vector3 position)
@@ -242,6 +239,7 @@ public class MouseController : MonoBehaviour
         {
             case DrawingType.Triangle:
                 currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                currentTileObj.layer = 7;
                 currentTileObj.transform.position = GetGridSnappedMousePos(false).Position;
                 currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                 currentTileObj.transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(false).GetAngle(), 0);
@@ -251,6 +249,7 @@ public class MouseController : MonoBehaviour
                 {
                     Destroy(squareTile[i]);
                     squareTile[i] = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                    currentTileObj.layer = 7;
                     squareTile[i].transform.position = GetGridSnappedMousePos(true).Position;
                     currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                     squareTile[i].transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(true).GetAngle(), 0);

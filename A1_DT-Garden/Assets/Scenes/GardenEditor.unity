@@ -7362,8 +7362,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -729.2737, y: -0.0021286}
-  m_SizeDelta: {x: 1919.3, y: 1080.1}
+  m_AnchoredPosition: {x: -1357.19, y: -294.413}
+  m_SizeDelta: {x: 663.501, y: 491.325}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &885130914
 MonoBehaviour:
@@ -8504,7 +8504,6 @@ MonoBehaviour:
   - {fileID: 7659006563712087241, guid: b66aa65ad642ba8478e6ec5a87d0a6be, type: 3}
   - {fileID: 7659006563712087241, guid: f83a66c3a5ff0e54aa92cdd91263f4a3, type: 3}
   - {fileID: 7659006563712087241, guid: 524537d0ad784094ea03c88670955567, type: 3}
-  - {fileID: 7659006563712087241, guid: e0134a889909c2542ac1a82771c25df8, type: 3}
   - {fileID: 4198777148537345436, guid: e125fe43b78215a97b80ec0ee43e66ca, type: 3}
   DisableGrid: 0
   Size: {x: 5, y: 3}
@@ -10004,8 +10003,6 @@ MonoBehaviour:
   - {fileID: 495999601}
   - {fileID: 2084322052}
   lblExplanation: {fileID: 818992317}
-  topDownCamera: {fileID: 412281587}
-  threeDimensionalCamera: {fileID: 2103551223}
   pnlSecondCamera: {fileID: 885130912}
 --- !u!4 &1377770698
 Transform:
@@ -14725,7 +14722,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 119
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: eb2d927316c046644bc3aa6cca4661a0, type: 2}
   m_TargetDisplay: 0
@@ -14746,7 +14743,7 @@ Transform:
   m_GameObject: {fileID: 2103551220}
   serializedVersion: 2
   m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
-  m_LocalPosition: {x: 4, y: 5, z: -4}
+  m_LocalPosition: {x: 2.5, y: 2.5, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

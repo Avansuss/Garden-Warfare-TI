@@ -30,8 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Toggle[] questionsToggle;
     [SerializeField] private TMP_Dropdown[] questionsDropdowns;
     [SerializeField] private TMP_Text lblExplanation;
-    [SerializeField] private Camera topDownCamera;
-    [SerializeField] private Camera threeDimensionalCamera;
+    
     [SerializeField] private GameObject pnlSecondCamera;
 
     private bool[] questionsAnimals = new bool[4];
@@ -147,8 +146,6 @@ public class UIManager : MonoBehaviour
 
     public void SwitchActiveCamera()
     {
-        mouseController.ResetCamera();
+        pnlSecondCamera.SetActive(!pnlSecondCamera.activeSelf);
     }
-
-
 }
