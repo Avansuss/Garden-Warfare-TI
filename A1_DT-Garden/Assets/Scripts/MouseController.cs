@@ -11,28 +11,41 @@ public class MouseController : MonoBehaviour
 {
     public GridManager manager;
     public bool CanDraw;
+
+    public Camera primaryCamera;
+    public Camera secondaryCamera;
+    public float rotateScale;
+    private Vector3 rotatePoint;
+    
     private Mouse mouse;
     private Camera cam;
     private GameObject currentTileObj;
     private GridTileType currentTileType;
     private DrawingType drawingType = DrawingType.Triangle;
-    private Vector2 initCamPos;
+    //private Vector2 initCamPos;
     private Vector3 dragOrigin;
 
     private GameObject[] squareTile = new GameObject[4];
 
     private bool blockClick = false;
     
+    private InputAction _look;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         cam = GetComponent<Camera>();
+
         mouse = Mouse.current;
         if(CanDraw) SetcurrentTile(GridTileType.Grass);
+        
+        _look = InputSystem.actions.FindAction("Look");
+        _look.Enable();
 
         if (cam && manager)
         {
-            cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);;
+            cam.transform.position = new Vector3(manager.Size.x / 2f, 10, manager.Size.y / 2f);
+            rotatePoint = cam.transform.position;
         }
         else if (!manager)
         {
@@ -58,6 +71,7 @@ public class MouseController : MonoBehaviour
         {
             dragOrigin = ScreenToWorld(mouse.position.value);
         }
+
         if (mouse.middleButton.isPressed)
         {
             Vector3 current = ScreenToWorld(mouse.position.value);
@@ -105,10 +119,17 @@ public class MouseController : MonoBehaviour
 
                 if (mouse.leftButton.isPressed)
                 {
-                    // Make the mouse coord relative
-                    var relativeCoord = manager.transform.position;
-                    coordinate.Position -= relativeCoord;
-                    manager.SetTile(coordinate, currentTileType, redraw: true);
+                    if (Keyboard.current.leftAltKey.isPressed)
+                    {
+                        RotateCameras();
+                    }
+                    else
+                    {
+                        // Make the mouse coord relative
+                        var relativeCoord = manager.transform.position;
+                        coordinate.Position -= relativeCoord;
+                        manager.SetTile(coordinate, currentTileType, redraw: true);
+                    }
                 }
                 else if (mouse.rightButton.isPressed)
                 {
@@ -120,7 +141,6 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-
     private void TileFollowCursor(Coordinate coordinate)
     {
         switch (drawingType)
@@ -129,13 +149,13 @@ public class MouseController : MonoBehaviour
                 for (int i = 0; i < 4; i++)
                 {
                     squareTile[i].transform.eulerAngles = new Vector3(0, i * 90, 0);
-                    coordinate.Position.y = 1.001f;
+                    coordinate.Position.y = .1f;
                     squareTile[i].transform.position = coordinate.Position;
                 }
                 break;
             case DrawingType.Triangle:
                 currentTileObj.transform.eulerAngles = new Vector3(0, coordinate.GetAngle(), 0);
-                coordinate.Position.y = 1.001f;
+                coordinate.Position.y = .1f;
                 currentTileObj.transform.position = coordinate.Position;
                 break;
         }
@@ -187,6 +207,19 @@ public class MouseController : MonoBehaviour
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 1, 100);
     }
 
+    /// <summary>
+    /// Rotate both cameras around the mouse x movement
+    /// </summary>
+    private void RotateCameras()
+    {
+        float mouseX = _look.ReadValue<Vector2>().x;
+        var degrees = mouseX * rotateScale * Time.fixedDeltaTime;
+        primaryCamera.transform.Rotate(Vector3.forward * degrees);
+        
+        // Inverse the rotation on the secondary camera because it is opposite somehow
+        secondaryCamera.transform.RotateAround(rotatePoint, Vector3.up, -degrees);
+    }
+
     private bool WithinBounds(Vector3 position)
     {
         return position.x > 0 && position.x < manager.Size.x &&
@@ -205,7 +238,9 @@ public class MouseController : MonoBehaviour
         {
             case DrawingType.Triangle:
                 currentTileObj = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                currentTileObj.layer = 7;
                 currentTileObj.transform.position = GetGridSnappedMousePos(false).Position;
+                currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                 currentTileObj.transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(false).GetAngle(), 0);
                 break;
             case DrawingType.Square:
@@ -213,7 +248,9 @@ public class MouseController : MonoBehaviour
                 {
                     Destroy(squareTile[i]);
                     squareTile[i] = Instantiate(manager.TileTypeToObject(type), manager.transform, true);
+                    currentTileObj.layer = 7;
                     squareTile[i].transform.position = GetGridSnappedMousePos(true).Position;
+                    currentTileObj.transform.localScale = new Vector3(1, .1f, 1);
                     squareTile[i].transform.eulerAngles = new Vector3(0, GetGridSnappedMousePos(true).GetAngle(), 0);
                 }
                 break;

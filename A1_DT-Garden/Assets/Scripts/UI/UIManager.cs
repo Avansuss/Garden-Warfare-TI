@@ -30,6 +30,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Toggle[] questionsToggle;
     [SerializeField] private TMP_Dropdown[] questionsDropdowns;
     [SerializeField] private TMP_Text lblExplanation;
+    
+    [SerializeField] private GameObject pnlSecondCamera;
 
     private bool[] questionsAnimals = new bool[4];
     private byte[] answersDropdown = new byte[2];
@@ -140,5 +142,10 @@ public class UIManager : MonoBehaviour
     public void HidePillarOnExit()
     {
         lblExplanation.text = "";
+    }
+
+    public void SwitchActiveCamera()
+    {
+        pnlSecondCamera.SetActive(!pnlSecondCamera.activeSelf);
     }
 }
