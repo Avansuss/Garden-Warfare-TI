@@ -28,8 +28,7 @@ public class MouseController : MonoBehaviour
     private GameObject[] squareTile = new GameObject[4];
 
     private bool blockClick = false;
-
-    private InputAction _lAlt;
+    
     private InputAction _look;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,10 +38,8 @@ public class MouseController : MonoBehaviour
 
         mouse = Mouse.current;
         if(CanDraw) SetcurrentTile(GridTileType.Grass);
-
-        _lAlt = InputSystem.actions.FindAction("LAlt");
+        
         _look = InputSystem.actions.FindAction("Look");
-        _lAlt.Enable();
         _look.Enable();
 
         if (cam && manager)
@@ -122,10 +119,9 @@ public class MouseController : MonoBehaviour
 
                 if (mouse.leftButton.isPressed)
                 {
-                    var altValue = _lAlt.ReadValue<float>();
-                    if (altValue > 0)
+                    if (Keyboard.current.leftAltKey.isPressed)
                     {
-                        tiltCamera();
+                        RotateCameras();
                     }
                     else
                     {
@@ -211,14 +207,17 @@ public class MouseController : MonoBehaviour
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 1, 100);
     }
 
-    private void tiltCamera()
+    /// <summary>
+    /// Rotate both cameras around the mouse x movement
+    /// </summary>
+    private void RotateCameras()
     {
-        float mouseDeltaX = _look.ReadValue<Vector2>().x;
+        float mouseX = _look.ReadValue<Vector2>().x;
+        var degrees = mouseX * rotateScale * Time.fixedDeltaTime;
+        primaryCamera.transform.Rotate(Vector3.forward * degrees);
         
-        var deltaRotation =  new Vector3(0, mouseDeltaX * rotateScale, 0) * Time.deltaTime;
-        
-        primaryCamera.transform.eulerAngles = primaryCamera.transform.rotation * deltaRotation;
-        secondaryCamera.transform.RotateAround(rotatePoint, (secondaryCamera.transform.rotation * deltaRotation).y);
+        // Inverse the rotation on the secondary camera because it is opposite somehow
+        secondaryCamera.transform.RotateAround(rotatePoint, Vector3.up, -degrees);
     }
 
     private bool WithinBounds(Vector3 position)
