@@ -215,9 +215,9 @@ public class MouseController : MonoBehaviour
     {
         float mouseDeltaX = _look.ReadValue<Vector2>().x;
         
-        var deltaRotation = new Vector3(0, mouseDeltaX * rotateScale, 0) * Time.deltaTime;
+        var deltaRotation =  new Vector3(0, mouseDeltaX * rotateScale, 0) * Time.deltaTime;
         
-        primaryCamera.transform.Rotate(primaryCamera.transform.rotation * deltaRotation);
+        primaryCamera.transform.eulerAngles = primaryCamera.transform.rotation * deltaRotation;
         secondaryCamera.transform.RotateAround(rotatePoint, (secondaryCamera.transform.rotation * deltaRotation).y);
     }
 
